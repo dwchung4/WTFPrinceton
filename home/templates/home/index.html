@@ -1,0 +1,53 @@
+{% extends "home/base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+<div class="jumbotron text-center">
+	<div class="page-header">
+	<h1><span class="text-black">What To Fix: Princeton</span></h1>
+	</div>
+
+  <div class="container">
+    <button type="button" class="btn btn-lg btn-default"><span class="glyphicon glyphicon-plus"></span> Create new petition</button>
+  </div>
+</div>
+
+<div class="container">
+	<h1>Petitions</h1>
+	<div class="row">
+		<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+			<div class="input-group">
+      	<input type="text" class="form-control" placeholder="Search for...">
+      	<span class="input-group-btn">
+        <button class="btn btn-default" type="button">Go!</button>
+      </span>
+    </div>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+<div class="panel panel-warning">
+	<div class="panel-heading">
+		<h1 class="panel-title">Open a library for 24 hours please!</h1>
+	</div>
+	<div class="panel-body">
+		There's nowhere I can stay all night to study and my room is my least favorite place to study.. Why is there no 24 hour space?
+	</div>
+</div>
+</div>
+
+<div class="container">
+<div class="panel panel-warning">
+	<div class="panel-heading">
+		<h1 class="panel-title">Better toilet paper..?</h1>
+	</div>
+	<div class="panel-body">
+		I mean we pay 50k for tuition and we have to use this crap?
+	</div>
+</div>
+</div>
+
+
+{% endblock %}
