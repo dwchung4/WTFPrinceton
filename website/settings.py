@@ -25,6 +25,15 @@ SECRET_KEY = "@#e07uco4$1mjh6co_ru#$&!u+0g+l0@9pe=a#@&ddu3iqd9=*"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'cas.backends.CASBackend',
+)
+
+CAS_SERVER_URL = 'https://fed.princeton.edu/cas/'
+CAS_LOGOUT_COMPLETELY = True
+CAS_PROVIDE_URL_TO_LOGOUT = True
+
 # Application definition
 
 INSTALLED_APPS = (
@@ -35,6 +44,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'cas',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -46,6 +56,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'cas.middleware.CASMiddleware',
 )
 
 ROOT_URLCONF = 'website.urls'
