@@ -1,6 +1,5 @@
 from django.conf.urls import url
 from . import views
-import django_cas
 
 app_name = 'home'
 
