@@ -16,12 +16,6 @@ import dj_database_url
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-CAS_SERVER_URL = "https://fed.princeton.edu/cas/"
-CAS_LOGOUT_COMPLETELY = True
-CAS_PROVIDE_URL_TO_LOGOUT = True
-CAS_AUTO_CREATE_USER = False
-CAS_REDIRECT_URL = '/admin/'
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
@@ -41,12 +35,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'cas',
-)
-
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-    'cas.backends.CASBackend',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -58,8 +46,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'django_cas.middleware.CASMiddleware',
-    'cas.middleware.CASMiddleware',
 )
 
 ROOT_URLCONF = 'website.urls'
