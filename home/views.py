@@ -17,4 +17,6 @@ def logout(request):
 def login(request):
 	c = CASClient.CASClient()
 	netid = c.Authenticate()
+	import os
+	print os.environ
 	return render(request, 'home/index.html')
