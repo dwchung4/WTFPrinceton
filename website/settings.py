@@ -38,6 +38,11 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 )
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'django_cas.backends.CASBackend',
+)
+
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -47,6 +52,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'django_cas.middleware.CASMiddleware',
 )
 
 ROOT_URLCONF = 'website.urls'
