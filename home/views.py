@@ -8,4 +8,10 @@ def about(request):
 	return render(request, 'home/about.html')
 
 def contact(request):
-	return render(request, 'home/contact.html')
+	if request.user.is_authenticated():
+		print 'authenticated'
+		print request.user.id
+		return render(request, 'home/contact.html')
+	else:
+		print 'not authenticated'
+		return render(request, 'home/about.html')

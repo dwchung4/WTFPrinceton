@@ -8,9 +8,6 @@ from django.views.generic.base import RedirectView
 urlpatterns = [
 	url(r'^', include('home.urls')),
     url(r'^admin/', admin.site.urls),
-    url(r'^home/', include('home.urls')),
-    url(r'^login/$', 'cas.views.login', name='login'),
-	url(r'^logout/$', 'cas.views.logout', name='logout'),
 ]
 
 if settings.DEBUG:
