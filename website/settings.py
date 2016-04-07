@@ -31,6 +31,9 @@ AUTHENTICATION_BACKENDS = (
 CAS_SERVER_URL = 'https://fed.princeton.edu/cas/'
 CAS_LOGOUT_COMPLETELY = True
 CAS_PROVIDE_URL_TO_LOGOUT = True
+#CAS_EXTRA_LOGIN_PARAMS = {'abcde': True}
+#CAS_IGNORE_REFERER = True
+#CAS_REDIRECT_URL = 'http://www.naver.com'
 
 # Application definition
 

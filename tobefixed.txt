@@ -1,3 +1,0 @@
-1. navbar: when user clicks ‘About’ or ‘Contact’, the whole navbar shifts right slightly
-
-2. remove the white line between ‘What To Fix: Princeton’ and ‘Create new petition’

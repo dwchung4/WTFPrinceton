@@ -9,7 +9,11 @@
 	</div>
 
   <div class="container">
-    <button type="button" class="btn btn-lg btn-default"><span class="glyphicon glyphicon-plus"></span> Create new petition</button>
+  	<a href="{% url 'home:create_petition' %}" class="btn btn-lg btn-default" role="button">
+  		<span class="glyphicon glyphicon-plus">
+  		</span>
+  		Create new petition
+  	</a>
   </div>
 </div>
 
