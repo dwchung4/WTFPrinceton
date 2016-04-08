@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'website.wsgi.application'
 #DATABASES['default'] =  dj_database_url.config(default='postgres://wtfprinceton:wtfprinceton@/wtfprinceton_db')
 #DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
 
-DATABASES = {'default': dj_database_url.config(default=os.environ["DATABASE_URL"])}
+#DATABASES = {'default': dj_database_url.config(default=os.environ["DATABASE_URL"])}
 
 #DATABASES = {'default' : dj_database_url.config() }
 #DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
@@ -101,18 +101,18 @@ DATABASES = {
 """
 #DATABASES = {'default': dj_database_url.config(default='postgres://wtfprinceton:wtfprinceton@localhost:/wtfprinceton_db')}
 
-"""
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'wtfprinceton_db',
-        'USER': 'wtfprinceton',
-        'PASSWORD': 'wtfprinceton',
-        'HOST': 'localhost',
-        'PORT': '',
+        'NAME': 'd8qajk44a19ere',
+        'USER': 'ebrvvrlzfykjpq',
+        'PASSWORD': '8K7FrLGu2C8tTwgwhNHa80cqR1',
+        'HOST': 'ec2-23-21-42-29.compute-1.amazonaws.com',
+        'PORT': '5432',
     }
 }
-"""
+
 
 AUTH_PASSWORD_VALIDATORS = (
     {
