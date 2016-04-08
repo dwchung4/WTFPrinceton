@@ -7,6 +7,8 @@ from .forms import PetitionForm
 from .models import Petition
 from django.template.defaulttags import csrf_token
 import psycopg2
+import urlparse
+import os
 
 def index(request):
 	return render(request, 'home/index.html')
@@ -28,7 +30,15 @@ def create_petition(request):
 				'petition': petition,
 			}
 			try:
-				conn = psycopg2.connect("dbname='wtfprinceton_db' user='wtfprinceton' password='wtfprinceton'")
+				urlparse.uses_netloc.append("postgres")
+				url = urlparse.urlparse(os.environ["DATABASE_URL"])
+				conn = psycopg2.connect(
+				    database=url.path[1:],
+				    user=url.username,
+				    password=url.password,
+				    host=url.hostname,
+				    port=url.port
+				)
 			except:
 				print "unable to connect to the datbase"
 			cur = conn.cursor()
@@ -51,13 +61,21 @@ def my_petitions(request, netid):
 		try:
 			petitions = []
 			try:
-				conn1 = psycopg2.connect("dbname='wtfprinceton_db' user='wtfprinceton' password='wtfprinceton'")
+				urlparse.uses_netloc.append("postgres")
+				url = urlparse.urlparse(os.environ["DATABASE_URL"])
+				conn = psycopg2.connect(
+				    database=url.path[1:],
+				    user=url.username,
+				    password=url.password,
+				    host=url.hostname,
+				    port=url.port
+				)
 			except:
 				print "unable to connect to the database"
-			cur1 = conn1.cursor()
+			cur = conn.cursor()
 			try:
-				cur1.execute("SELECT * FROM petition WHERE netid = %s", (str(netid),))
-				for petition in cur1.fetchall():
+				cur.execute("SELECT * FROM petition WHERE netid = %s", (str(netid),))
+				for petition in cur.fetchall():
 					print petition
 					petitions.append(petition)
 			except:
