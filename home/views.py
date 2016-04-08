@@ -37,7 +37,7 @@ def create_petition(request):
 				    user=url.username,
 				    password=url.password,
 				    host=url.hostname,
-				    port=url.port
+				    port=url.port,
 				)
 			except:
 				print "unable to connect to the datbase"
@@ -68,7 +68,7 @@ def my_petitions(request, netid):
 				    user=url.username,
 				    password=url.password,
 				    host=url.hostname,
-				    port=url.port
+				    port=url.port,
 				)
 			except:
 				print "unable to connect to the database"

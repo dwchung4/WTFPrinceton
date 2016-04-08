@@ -1,0 +1,8 @@
+heroku pg:push wtfprinceton_db HEROKUPOSTGRESQL_WHITE --app wtfprinceton
+heroku pg:pull HEROKU_POSTGRESQL_WHITE d8qajk44a19ere —app wtfprinceton
+DROP DATABASE d8qajk44a19ere;
+
+host: localhost
+database: d8qajk44a19ere
+
+DATABASE_URL=postgres://ebrvvrlzfykjpq:8K7FrLGu2C8tTwgwhNHa80cqR1@ec2-23-21-42-29.compute-1.amazonaws.com:5432/d8qajk44a19ere

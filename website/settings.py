@@ -78,32 +78,6 @@ TEMPLATES = (
 
 WSGI_APPLICATION = 'website.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/1.9/ref/settings/#databases
-
-#DATABASES = {}
-#DATABASES['default'] = dj_database_url.config(default='postgres://ebrvvrlzfykjpq:8K7FrLGu2C8tTwgwhNHa80cqR1@ec2-23-21-42-29.compute-1.amazonaws.com:5432/d8qajk44a19ere')
-
-#DATABASES = {}
-#DATABASES['default'] =  dj_database_url.config(default='postgres://wtfprinceton:wtfprinceton@/wtfprinceton_db')
-#DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
-
-#DATABASES = {'default': dj_database_url.config(default=os.environ["DATABASE_URL"])}
-
-#DATABASES = {'default' : dj_database_url.config() }
-#DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
-
-#DATABASES['default'] = dj_database_url.config()
-
-#db_from_env = dj_database_url.config()
-"""
-DATABASES = {
-    "default": dj_database_url.config(default='postgres://localhost'),
-}
-"""
-#DATABASES = {'default': dj_database_url.config(default='postgres://wtfprinceton:wtfprinceton@localhost:/wtfprinceton_db')}
-
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -114,7 +88,6 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-
 
 AUTH_PASSWORD_VALIDATORS = (
     {
@@ -139,13 +112,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
 
 # Update database configuration with $DATABASE_URL.
 #db_from_env = dj_database_url.config(conn_max_age=500)DATABASES['default'].update(db_from_env)
