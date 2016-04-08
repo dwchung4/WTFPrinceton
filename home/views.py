@@ -12,7 +12,10 @@ import os
 from website import database
 
 def index(request):
-	return render(request, 'home/index.html')
+	if not request.user.is_authenticated():
+		return render(request, 'home/index_visitor.html')
+	else:
+		return render(request, 'home/index.html')
 
 def about(request):
 	return render(request, 'home/about.html')
