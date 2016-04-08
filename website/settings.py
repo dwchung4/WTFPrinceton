@@ -79,7 +79,9 @@ TEMPLATES = (
 
 WSGI_APPLICATION = 'website.wsgi.application'
 
+
 DATABASES = database.set_database()
+
 
 AUTH_PASSWORD_VALIDATORS = (
     {
