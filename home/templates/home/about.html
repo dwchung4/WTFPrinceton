@@ -3,10 +3,69 @@
 
 {% block content %}
 
-<div class="container">
+<div class="jumbotron text-center">
+	<h2>What To Fix: Princeton is here to help change what you care about</h2>
+</div>
+
+<!-- Our mission -->
+<div class="container text-center">
+	<h1>Our mission</h1>
 	<div class="row">
-	<h3><span class="text-black">What To Fix: Princeton is a website where students can make petitions about things on the campus that they think should be changed.</span></h3>
+		<div class="col-lg-8 col-lg-offset-2">
+			<p>
+				WTF:Princeton aims to serve as a platform through which Princeton students
+				can suggest ideas for change to USG and support others' ideas. 
+				By connecting the students amongst themselves and with USG,
+				WTF:Princeton hopes to begin a conversation for change with the whole
+				student body which will hopefully lead to a better campus life for all.
+			</p>
+		</div>
 	</div>
+</div>
+
+<!-- Meet the team -->
+<div class="container text-center">
+	<h1>Meet the team</h1>
+	<div class="row">
+		<!--Ji Won -->
+		<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+			<img src="{% static "images/Jiwon.jpg" %}" class="img-circle img-responsive center-block" alt="Jiwon" style="height:300px"/>
+			<h3>Ji Won Shin</h3>
+			<p>
+				Ji Won is a sophomore in the Computer Science department. She can be contacted
+				at <a href="mailto:jwshin@princeton.edu">jwshin@princeton.edu</a>.
+			</p>
+		</div>
+
+		<!--Daniel -->
+		<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+			<img src="{% static "images/Daniel.jpg" %}" class="img-circle img-responsive center-block" alt="Daniel" style="height:300px"/>
+			<h3>Daniel Dong Wook Chung</h3>	
+			<p>
+				Daniel is a junior in the Computer Science department and is also the project leader for
+				WTF:Princeton. He can be contacted at <a href="mailto:dcfive@princeton.edu">dcfive@princeton.edu</a>. 
+			</p>
+		</div>
+
+		<!--Hun -->
+		<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+			<img src="{% static "images/Hun.jpg" %}" class="img-circle img-responsive center-block" alt="Hun" style="height:300px"/>
+			<h3>Hun Choi</h3>
+			<p>
+				Hun is also a junior in the Computer Science department and is in charge of 
+				what you see on WTF:Princeton! If anything looks ugly, email him at 
+				<a href="hunc@princeton.edu">hunc@princeton.edu</a>.
+			</p>
+		</div>
+	</div>
+</div>
+
+<!-- Contact USG -->
+<div class="container text-center">
+	<h1>Contact USG</h1>
+	<a href="http://princetonusg.com/">USG website</a>
+	<a href="https://twitter.com/princetonusg">USG Twitter</a>
+	<a href="https://www.facebook.com/princetonusg/?fref=ts">USG Facebook</a>
 </div>
 
 {% endblock %}
