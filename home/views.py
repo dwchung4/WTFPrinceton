@@ -51,13 +51,13 @@ def my_petitions(request, netid):
 		try:
 			petitions = []
 			try:
-				conn = psycopg2.connect("dbname='wtfprinceton_db' user='wtfprinceton' password='wtfprinceton'")
+				conn1 = psycopg2.connect("dbname='wtfprinceton_db' user='wtfprinceton' password='wtfprinceton'")
 			except:
 				print "unable to connect to the database"
-			cur = conn.cursor()
+			cur1 = conn1.cursor()
 			try:
-				cur.execute("SELECT * FROM petition WHERE netid = %s", (str(netid),))
-				for petition in cur.fetchall():
+				cur1.execute("SELECT * FROM petition WHERE netid = %s", (str(netid),))
+				for petition in cur1.fetchall():
 					print petition
 					petitions.append(petition)
 			except:
