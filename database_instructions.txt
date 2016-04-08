@@ -1,5 +1,5 @@
 heroku pg:push wtfprinceton_db HEROKUPOSTGRESQL_WHITE --app wtfprinceton
-heroku pg:pull HEROKU_POSTGRESQL_WHITE d8qajk44a19ere —app wtfprinceton
+heroku pg:pull HEROKU_POSTGRESQL_WHITE d8qajk44a19ere -—app wtfprinceton
 DROP DATABASE d8qajk44a19ere;
 
 host: localhost

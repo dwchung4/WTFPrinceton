@@ -9,6 +9,7 @@ from django.template.defaulttags import csrf_token
 import psycopg2
 import urlparse
 import os
+from website import database
 
 def index(request):
 	return render(request, 'home/index.html')
@@ -30,26 +31,7 @@ def create_petition(request):
 				'petition': petition,
 			}
 			try:
-				# On Heroku
-				urlparse.uses_netloc.append("postgres")
-				url = urlparse.urlparse(os.environ["DATABASE_URL"])
-				conn = psycopg2.connect(
-				    database=url.path[1:],
-				    user=url.username,
-				    password=url.password,
-				    host=url.hostname,
-				    port=url.port,
-				)
-				# local
-				"""
-				conn = psycopg2.connect(
-				    database='d8qajk44a19ere',
-				    user='',
-				    password='',
-				    host='localhost',
-				    port='',
-				)
-				"""
+				conn = database.connect()
 			except:
 				print "unable to connect to the datbase"
 			cur = conn.cursor()
@@ -72,26 +54,7 @@ def my_petitions(request, netid):
 		try:
 			petitions = []
 			try:
-				# On Heroku
-				urlparse.uses_netloc.append("postgres")
-				url = urlparse.urlparse(os.environ["DATABASE_URL"])
-				conn = psycopg2.connect(
-				    database=url.path[1:],
-				    user=url.username,
-				    password=url.password,
-				    host=url.hostname,
-				    port=url.port,
-				)
-				# local
-				"""
-				conn = psycopg2.connect(
-				    database='d8qajk44a19ere',
-				    user='',
-				    password='',
-				    host='localhost',
-				    port='',
-				)
-				"""
+				conn = database.connect()
 			except:
 				print "unable to connect to the database"
 			cur = conn.cursor()
