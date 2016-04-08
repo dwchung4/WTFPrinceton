@@ -40,8 +40,8 @@ def create_petition(request):
 				conn.commit()
 			except:
 				print "failed to insert"
-
-			return render(request, 'home/index.html')
+			print 'FORM IS VALID, DATA INSERTED'
+			return render(request, 'home/contact.html')
 		context = {
 			"form": form,
 		}
