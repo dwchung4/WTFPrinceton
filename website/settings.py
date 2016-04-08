@@ -82,9 +82,14 @@ WSGI_APPLICATION = 'website.wsgi.application'
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
 
-DATABASES = {}
-DATABASES['default'] =  dj_database_url.config(default='postgres://wtfprinceton:wtfprinceton@/wtfprinceton_db')
-DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
+#DATABASES = {}
+#DATABASES['default'] =  dj_database_url.config(default='postgres://wtfprinceton:wtfprinceton@/wtfprinceton_db')
+#DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
+
+DATABASES = {'default': dj_database_url.config(default=os.environ["DATABASE_URL"])}
+
+#DATABASES = {'default' : dj_database_url.config() }
+#DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
 
 #DATABASES['default'] = dj_database_url.config()
 
