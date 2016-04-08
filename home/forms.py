@@ -8,4 +8,4 @@ class PetitionForm(forms.ModelForm):
 
     class Meta:
         model = Petition
-        fields = ['title', 'content', 'category']
+        fields = ['title', 'category', 'content']
