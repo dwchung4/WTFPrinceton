@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'cas',
+    'south',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -78,6 +79,8 @@ TEMPLATES = (
 
 WSGI_APPLICATION = 'website.wsgi.application'
 
+# Use this when running on Heroku
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -88,6 +91,20 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
+# Use this when running locally
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'd8qajk44a19ere',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+}
+"""
 
 AUTH_PASSWORD_VALIDATORS = (
     {

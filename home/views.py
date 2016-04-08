@@ -30,6 +30,7 @@ def create_petition(request):
 				'petition': petition,
 			}
 			try:
+				# On Heroku
 				urlparse.uses_netloc.append("postgres")
 				url = urlparse.urlparse(os.environ["DATABASE_URL"])
 				conn = psycopg2.connect(
@@ -39,6 +40,16 @@ def create_petition(request):
 				    host=url.hostname,
 				    port=url.port,
 				)
+				# local
+				"""
+				conn = psycopg2.connect(
+				    database='d8qajk44a19ere',
+				    user='',
+				    password='',
+				    host='localhost',
+				    port='',
+				)
+				"""
 			except:
 				print "unable to connect to the datbase"
 			cur = conn.cursor()
@@ -61,6 +72,7 @@ def my_petitions(request, netid):
 		try:
 			petitions = []
 			try:
+				# On Heroku
 				urlparse.uses_netloc.append("postgres")
 				url = urlparse.urlparse(os.environ["DATABASE_URL"])
 				conn = psycopg2.connect(
@@ -70,6 +82,16 @@ def my_petitions(request, netid):
 				    host=url.hostname,
 				    port=url.port,
 				)
+				# local
+				"""
+				conn = psycopg2.connect(
+				    database='d8qajk44a19ere',
+				    user='',
+				    password='',
+				    host='localhost',
+				    port='',
+				)
+				"""
 			except:
 				print "unable to connect to the database"
 			cur = conn.cursor()
