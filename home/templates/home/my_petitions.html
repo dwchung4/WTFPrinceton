@@ -1,0 +1,15 @@
+{% extends "home/base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="container-fluid songs-container">
+
+	{% for petition in petitions %}
+		<h3>Title: {{ petition.2 }}</h3>
+		<h3>Content: {{ petition.3 }}</h3>
+		<h3>Category: {{ petition.4}}</h3>
+	{% endfor %}
+
+</div>
+
+{% endblock %}

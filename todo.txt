@@ -35,3 +35,7 @@ Work with the database. Save petitions in the database, so that when user logs i
 9. Dong Wook
 
 On the main page, display the most recent petitions. Will have to somehow find the most recent petitions from the database.
+
+10. Hun
+
+Add favicon.

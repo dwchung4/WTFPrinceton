@@ -81,16 +81,33 @@ WSGI_APPLICATION = 'website.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
+
+DATABASES = {}
+DATABASES['default'] =  dj_database_url.config(default='postgres://wtfprinceton:wtfprinceton@/wtfprinceton_db')
+DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
+
+#DATABASES['default'] = dj_database_url.config()
+
+#db_from_env = dj_database_url.config()
+"""
+DATABASES = {
+    "default": dj_database_url.config(default='postgres://localhost'),
+}
+"""
+#DATABASES = {'default': dj_database_url.config(default='postgres://wtfprinceton:wtfprinceton@localhost:/wtfprinceton_db')}
+
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'wtfprinceton_db',
-        'USER': 'postgres',
-        'PASSWORD': '',
+        'USER': 'wtfprinceton',
+        'PASSWORD': 'wtfprinceton',
         'HOST': 'localhost',
         'PORT': '',
     }
 }
+"""
 
 AUTH_PASSWORD_VALIDATORS = (
     {
