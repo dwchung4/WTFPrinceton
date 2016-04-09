@@ -33,7 +33,6 @@ def create_petition(request):
 		return HttpResponseRedirect('../login/')
 	else:
 		form = PetitionForm(request.POST or None)
-		print form
 		if form.is_valid():
 			petition = form.save(commit=False)
 			context = {
@@ -70,7 +69,6 @@ def my_petitions(request, netid):
 			try:
 				cur.execute("SELECT * FROM petition WHERE netid = %s", (str(netid),))
 				for petition in cur.fetchall():
-					print petition
 					petitions.append(petition)
 			except:
 				print "failed to get petitions"
