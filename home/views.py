@@ -13,10 +13,20 @@ from website import database
 from datetime import datetime, timedelta
 
 def index(request):
-	return render(request, 'home/index.html')
+	if request.user.is_authenticated():
+		return render(request, 'home/index.html', {
+			'netid': request.user,
+		})
+	else:
+		return render(request, 'home/index_visitor.html')
 
 def about(request):
-	return render(request, 'home/about.html')
+	if request.user.is_authenticated():
+		return render(request, 'home/about.html', {
+			'netid': request.user,
+		})
+	else:
+		return render(request, 'home/about_visitor.html')
 
 def create_petition(request):
 	if not request.user.is_authenticated():
@@ -42,6 +52,7 @@ def create_petition(request):
 			return HttpResponseRedirect('../')
 		context = {
 			"form": form,
+			"netid": request.user,
 		}
 		return render(request, 'home/create_petition.html', context)
 
@@ -67,4 +78,5 @@ def my_petitions(request, netid):
 			petitions = []
 		return render(request, 'home/my_petitions.html', {
 			'petitions': petitions,
+			'netid': request.user,
 		})

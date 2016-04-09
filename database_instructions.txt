@@ -1,11 +1,12 @@
 * To upload your local database to Heroku database:
 
-heroku pg:push wtfprinceton_db HEROKUPOSTGRESQL_WHITE --app wtfprinceton
+heroku pg:reset DATABASE_URL --app wtfprinceton
+heroku pg:push d8qajk44a19ere DATABASE_URL --app wtfprinceton
 
 * To download Heroku database to your local database:
     - To pull, you have to first remove the existing database in your laptop using the command ‘DROP DATABASE d8qajk44a19ere;’ in psql
 
-heroku pg:pull HEROKU_POSTGRESQL_WHITE d8qajk44a19ere --app wtfprinceton
+heroku pg:pull DATABASE_URL d8qajk44a19ere --app wtfprinceton
 
 _____________________________________________________________
 

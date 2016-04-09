@@ -2,6 +2,39 @@
 {% load staticfiles %}
 
 {% block content %}
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="{% url 'home:index' %}"><span class="glyphicon glyphicon-home" ></span> WTF</a>
+    </div>
+    <div id="navbar" class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="{% url 'home:about' %}">About</a></li>
+        <li><a href="http://princetonusg.com/">USG</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <a href="{% url 'home:my_petitions' netid %}">
+            <span class="glyphicon glyphicon-th-list"></span>&nbsp; My Petitions
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'home:logout' %}">
+            <span class="glyphicon glyphicon-off"></span>&nbsp; Logout
+          </a>
+        </li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</nav>
+
 <div class="container-fluid">
 
     <div class="row">
