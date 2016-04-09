@@ -10,6 +10,7 @@ import psycopg2
 import urlparse
 import os
 from website import database
+from datetime import datetime, timedelta
 
 def index(request):
 	return render(request, 'home/index.html')
@@ -22,6 +23,7 @@ def create_petition(request):
 		return HttpResponseRedirect('../login/')
 	else:
 		form = PetitionForm(request.POST or None)
+		print form
 		if form.is_valid():
 			petition = form.save(commit=False)
 			context = {
@@ -33,11 +35,11 @@ def create_petition(request):
 				print "unable to connect to the datbase"
 			cur = conn.cursor()
 			try:
-				cur.execute("INSERT INTO petition(netid, title, content, category, is_archived) VALUES (%s, %s, %s, %s, %s)", (str(request.user), str(petition.title), str(petition.content), str(petition.category), 'false',))
+				cur.execute("INSERT INTO petition(netid, title, content, category, is_archived, expiration) VALUES (%s, %s, %s, %s, %s, %s)", (str(request.user), str(petition.title), str(petition.content), str(petition.category), 'false', datetime.now()+timedelta(days=30),))
 				conn.commit()
 			except:
 				print "failed to insert"
-			return render(request, 'home/index.html')
+			return HttpResponseRedirect('../')
 		context = {
 			"form": form,
 		}
