@@ -12,16 +12,10 @@ import os
 from website import database
 
 def index(request):
-	if not request.user.is_authenticated():
-		return render(request, 'home/index_visitor.html')
-	else:
-		return render(request, 'home/index.html')
+	return render(request, 'home/index.html')
 
 def about(request):
 	return render(request, 'home/about.html')
-
-def contact(request):
-	return render(request, 'home/contact.html')
 
 def create_petition(request):
 	if not request.user.is_authenticated():
@@ -43,8 +37,7 @@ def create_petition(request):
 				conn.commit()
 			except:
 				print "failed to insert"
-			print 'FORM IS VALID, DATA INSERTED'
-			return render(request, 'home/contact.html')
+			return render(request, 'home/index.html')
 		context = {
 			"form": form,
 		}
