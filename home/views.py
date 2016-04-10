@@ -13,6 +13,8 @@ from website import database
 from datetime import datetime, timedelta
 
 def index(request):
+	print 'index: ',
+	print request
 	petitions = []
 	query = request.GET.get("q")
 	if query:
@@ -44,6 +46,8 @@ def index(request):
 			return render(request, 'home/index_visitor.html')
 
 def about(request):
+	print 'about: ',
+	print request
 	if request.user.is_authenticated():
 		return render(request, 'home/about.html', {
 			'netid': request.user,
@@ -52,6 +56,8 @@ def about(request):
 		return render(request, 'home/about_visitor.html')
 
 def create_petition(request):
+	print 'create_petition: ',
+	print request
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect('../login/')
 	else:
@@ -83,6 +89,8 @@ def create_petition(request):
 		return render(request, 'home/create_petition.html', context)
 
 def my_petitions(request, netid):
+	print 'my_petitions: ',
+	print request
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect('../login/')
 	else:
