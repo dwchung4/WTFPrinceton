@@ -21,7 +21,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-          <a href="{% url 'home:login' %}">
+          <a href="{% url 'home:login' "" %}">
             <span class="glyphicon glyphicon-off"></span>&nbsp; Login
           </a>
         </li>
@@ -36,7 +36,7 @@
   </div>
 
   <div class="container">
-    <a href="{% url 'home:create_petition' %}" class="btn btn-lg btn-default" role="button">
+    <a href="{% url 'home:login' "create_petition" %}" class="btn btn-lg btn-default" role="button">
       <span class="glyphicon glyphicon-plus">
       </span>
       Create new petition

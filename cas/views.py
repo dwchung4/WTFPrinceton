@@ -159,12 +159,7 @@ def login(request, next_page=None, required=False, gateway=False):
 
     """
 
-    print 'CAS LOGIN: ',
-    print request
-    print request.__dict__
-    print next_page
-    print required
-    print gateway
+    next_page = '../../../'+next_page
 
     if not next_page:
         next_page = _redirect_url(request)
