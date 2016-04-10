@@ -12,7 +12,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="{% url 'home:index' %}"><span class="glyphicon glyphicon-home" ></span> WTF</a>
+      <a class="navbar-brand" href="{% url 'home:index' "" %}"><span class="glyphicon glyphicon-home" ></span> WTF</a>
     </div>
     <div id="navbar" class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
@@ -58,7 +58,7 @@
 	<div class="row">
 		<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 			<div class="input-group">
-        <form class = "form-inline" role="search" method="get" action="{% url 'home:index' %}">
+        <form class = "form-inline" role="search" method="get" action="{% url 'home:index' "" %}">
           <div class="form-group">
               <input type="text" class="form-control" name="q" value="{{ request.GET.q }}" placeholder="Search for..." size="50">
           </div>
@@ -94,11 +94,20 @@
 </div>
 
 {% for petition in petitions %}
-  <h3>Netid: {{ petition.1 }}</h3>
-  <h3>Title: {{ petition.2 }}</h3>
-  <h3>Content: {{ petition.3 }}</h3>
-  <h3>Category: {{ petition.4 }}</h3>
-  <h3>Expiration: {{ petition.6 }}</h3>
+  <h5>Netid: {{ petition.1 }}</h5>
+  <h5>Title: {{ petition.2 }}</h5>
+  <h5>Content: {{ petition.3 }}</h5>
+  <h5>Category: {{ petition.4 }}</h5>
+  <h5>Expiration: {{ petition.6 }}</h5>
+  <h5>{{ petition.7 }} votes</h5>
+
+
+  <form>
+    <a href="{% url 'home:index' petition.0 %}" class="btn btn-default" role="button">Vote</a>
+  </form>
+
+  </br>
+  </br>
 {% endfor %}
 
 </body>
