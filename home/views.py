@@ -24,7 +24,8 @@ def index(request):
 			print "unable to connect to the database"
 		cur = conn.cursor()
 		formattedquery = '%'+query+'%'
-		cur.execute("SELECT DISTINCT * FROM petition WHERE (title LIKE %s OR content LIKE %s OR netid LIKE %s) \
+		cur.execute("SELECT DISTINCT * FROM petition WHERE (LOWER(title) LIKE LOWER(%s) \
+			OR LOWER(content) LIKE LOWER(%s) OR LOWER(netid) LIKE LOWER(%s)) \
 			AND is_archived = 'false' ORDER BY expiration;", (formattedquery, formattedquery, formattedquery,))
 		for petition in cur.fetchall():
 			petitions.append(petition)
