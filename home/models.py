@@ -3,11 +3,20 @@ from django.db import models
 from datetime import datetime, timedelta
 
 class Petition(models.Model):
+	categories = (
+		('Academics', 'Academics'),
+		('Dining', 'Dining'),
+		('Housing and Facilities', 'Housing and Facilities'),
+		('Services', 'Services'),
+		('Student Activities', 'Student Activities'),
+		('General', 'General')
+	)
+
 	id = models.AutoField(primary_key=True)
 	netid = models.ForeignKey(User)
 	title = models.CharField(max_length=100)
 	content = models.TextField()
-	category = models.CharField(max_length=20)
+	category = models.CharField(max_length=30, choices=categories)
 	is_archived = models.BooleanField()
 	expiration = models.DateTimeField()
 	vote = models.IntegerField()

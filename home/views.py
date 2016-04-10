@@ -95,7 +95,7 @@ def my_petitions(request, netid):
 		petitions = []
 		conn = database.connect()
 		cur = conn.cursor()
-		cur.execute("SELECT * FROM petition WHERE netid = %s", (str(netid),))
+		cur.execute("SELECT * FROM petition WHERE netid = %s ORDER BY expiration", (str(netid),))
 		for petition in cur.fetchall():
 			petitions.append(petition)
 		return render(request, 'home/my_petitions.html', {
