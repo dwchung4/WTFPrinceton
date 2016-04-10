@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 from .forms import PetitionForm
@@ -13,12 +13,35 @@ from website import database
 from datetime import datetime, timedelta
 
 def index(request):
-	if request.user.is_authenticated():
-		return render(request, 'home/index.html', {
-			'netid': request.user,
-		})
+	petitions = []
+	query = request.GET.get("q")
+	if query:
+		try:
+			conn = database.connect()
+		except:
+			print "unable to connect to the database"
+		cur = conn.cursor()
+		formattedquery = '%'+query+'%'
+		cur.execute("SELECT DISTINCT * FROM petition WHERE (title LIKE %s OR content LIKE %s OR netid LIKE %s) \
+			AND is_archived = 'false' ORDER BY expiration;", (formattedquery, formattedquery, formattedquery,))
+		for petition in cur.fetchall():
+			petitions.append(petition)
+		if request.user.is_authenticated():
+			return render(request, 'home/index.html', {
+				'petitions': petitions,
+				'netid': request.user,
+			})
+		else:
+			return render(request, 'home/index_visitor.html', {
+				'petitions': petitions,
+			})
 	else:
-		return render(request, 'home/index_visitor.html')
+		if request.user.is_authenticated():
+			return render(request, 'home/index.html', {
+				'netid': request.user,
+			})
+		else:
+			return render(request, 'home/index_visitor.html')
 
 def about(request):
 	if request.user.is_authenticated():
@@ -44,7 +67,11 @@ def create_petition(request):
 				print "unable to connect to the datbase"
 			cur = conn.cursor()
 			try:
-				cur.execute("INSERT INTO petition(netid, title, content, category, is_archived, expiration) VALUES (%s, %s, %s, %s, %s, %s)", (str(request.user), str(petition.title), str(petition.content), str(petition.category), 'false', datetime.now()+timedelta(days=30),))
+				expiration = datetime.now()+timedelta(days=30)
+				cur.execute("INSERT INTO petition(netid, title, content, category, is_archived, expiration, vote) \
+					VALUES (%s, %s, %s, %s, %s, %s, %s)",
+					(str(request.user), str(petition.title), str(petition.content), str(petition.category),
+					'false', expiration, 0,))
 				conn.commit()
 			except:
 				print "failed to insert"

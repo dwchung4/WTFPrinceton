@@ -10,6 +10,7 @@ class Petition(models.Model):
 	category = models.CharField(max_length=20)
 	is_archived = models.BooleanField()
 	expiration = models.DateTimeField()
+	vote = models.IntegerField()
 
 	def __str__(self):
 		return self.title

@@ -37,7 +37,11 @@
 
 <div class="jumbotron text-center">
 	<div class="page-header">
-	<h1><span class="text-black">What To Fix: Princeton</span></h1>
+    <h1>
+      <span class="text-black">
+        What To Fix: Princeton
+      </span>
+    </h1>
 	</div>
 
   <div class="container">
@@ -54,36 +58,53 @@
 	<div class="row">
 		<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 			<div class="input-group">
-      	<input type="text" class="form-control" placeholder="Search for...">
-      	<span class="input-group-btn">
-        <button class="btn btn-default" type="button">Go!</button>
-      </span>
-    </div>
+        <form class = "form-inline" role="search" method="get" action="{% url 'home:index' %}">
+          <div class="form-group">
+              <input type="text" class="form-control" name="q" value="{{ request.GET.q }}" placeholder="Search for..." size="50">
+          </div>
+          <button type="submit" class="btn btn-default">Go!</button>
+        </form>
+      </div>
 		</div>
 	</div>
 </div>
 
+</br>
+
+{% if petitions %}
+  {% for petition in petitions %}
+    <h3>Netid: {{ petition.1 }}</h3>
+    <h3>Title: {{ petition.2 }}</h3>
+    <h3>Content: {{ petition.3 }}</h3>
+    <h3>Category: {{ petition.4 }}</h3>
+    <h3>Expiration: {{ petition.6 }}</h3>
+  {% endfor %}
+
+{% else %}
+
 <div class="container">
-<div class="panel panel-warning">
-	<div class="panel-heading">
-		<h1 class="panel-title">Open a library for 24 hours please!</h1>
-	</div>
-	<div class="panel-body">
-		There's nowhere I can stay all night to study and my room is my least favorite place to study.. Why is there no 24 hour space?
-	</div>
-</div>
+  <div class="panel panel-warning">
+    <div class="panel-heading">
+      <h1 class="panel-title">Open a library for 24 hours please!</h1>
+    </div>
+    <div class="panel-body">
+      There's nowhere I can stay all night to study and my room is my least favorite place to study.. Why is there no 24 hour space?
+    </div>
+  </div>
 </div>
 
 <div class="container">
-<div class="panel panel-warning">
-	<div class="panel-heading">
-		<h1 class="panel-title">Better toilet paper..?</h1>
-	</div>
-	<div class="panel-body">
-		I mean we pay 50k for tuition and we have to use this crap?
-	</div>
+  <div class="panel panel-warning">
+   <div class="panel-heading">
+    <h1 class="panel-title">Better toilet paper..?</h1>
+   </div>
+   <div class="panel-body">
+    I mean we pay 50k for tuition and we have to use this crap?
+   </div>
+  </div>
 </div>
-</div>
+
+{% endif %}
 
 </body>
 </html>
