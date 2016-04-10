@@ -2,7 +2,6 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404
-from django.db.models import Q
 from .forms import PetitionForm
 from .models import Petition
 from django.template.defaulttags import csrf_token
@@ -39,12 +38,27 @@ def index(request):
 				'petitions': petitions,
 			})
 	else:
+		petitions = []
+		try:
+			conn = database.connect()
+		except:
+			print "unable to connect to the database"
+		cur = conn.cursor()
+		try:
+			cur.execute("SELECT * FROM petition ORDER BY expiration;")
+			for petition in cur.fetchall():
+				petitions.append(petition)
+		except:
+			print "failed to get petitions"
 		if request.user.is_authenticated():
 			return render(request, 'home/index.html', {
 				'netid': request.user,
+				'petitions': petitions,
 			})
 		else:
-			return render(request, 'home/index_visitor.html')
+			return render(request, 'home/index_visitor.html', {
+				'petitions': petitions,
+			})
 
 def about(request):
 	print 'about: ',

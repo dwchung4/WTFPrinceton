@@ -71,17 +71,6 @@
 
 </br>
 
-{% if petitions %}
-  {% for petition in petitions %}
-    <h3>Netid: {{ petition.1 }}</h3>
-    <h3>Title: {{ petition.2 }}</h3>
-    <h3>Content: {{ petition.3 }}</h3>
-    <h3>Category: {{ petition.4 }}</h3>
-    <h3>Expiration: {{ petition.6 }}</h3>
-  {% endfor %}
-
-{% else %}
-
 <div class="container">
   <div class="panel panel-warning">
     <div class="panel-heading">
@@ -104,7 +93,13 @@
   </div>
 </div>
 
-{% endif %}
+{% for petition in petitions %}
+  <h3>Netid: {{ petition.1 }}</h3>
+  <h3>Title: {{ petition.2 }}</h3>
+  <h3>Content: {{ petition.3 }}</h3>
+  <h3>Category: {{ petition.4 }}</h3>
+  <h3>Expiration: {{ petition.6 }}</h3>
+{% endfor %}
 
 </body>
 </html>
