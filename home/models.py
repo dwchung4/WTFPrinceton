@@ -5,13 +5,11 @@ from datetime import datetime, timedelta
 class Petition(models.Model):
 	categories = (
 		('Academics', 'Academics'),
-		('Athletics & Recreation', 'Athletics & Recreation'),
-		('Community Issues', 'Community Issues'),
 		('Dining', 'Dining'),
-		('Housing & Facilities', 'Housing & Facilities'),
+		('Housing and Facilities', 'Housing and Facilities'),
+		('Services', 'Services'),
 		('Student Activities', 'Student Activities'),
-		('Student Services', 'Student Services'),
-		('Other', 'Other')
+		('General', 'General')
 	)
 
 	id = models.AutoField(primary_key=True)

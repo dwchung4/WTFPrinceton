@@ -5,7 +5,6 @@ heroku pg:push d8qajk44a19ere DATABASE_URL --app wtfprinceton
 
 * To download Heroku database to your local database:
     - To pull, you have to first remove the existing database in your laptop using the command ‘DROP DATABASE d8qajk44a19ere;’ in psql
-OR in Terminal ‘dropdb d8qajk44a19ere’
 
 heroku pg:pull DATABASE_URL d8qajk44a19ere --app wtfprinceton
 

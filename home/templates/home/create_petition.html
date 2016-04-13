@@ -3,10 +3,6 @@
 
 {% block content %}
 
-<div class='jumbotron text-center'>
-<h1>Suggest your idea!</h1>
-</div>
-
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container">
     <div class="navbar-header">
@@ -40,11 +36,13 @@
 </nav>
 
 <div class="container-fluid">
+
     <div class="row">
-        <div class="col-sm-12 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
+
+        <div class="col-sm-12 col-md-7">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <h3>Create a New Petition!</h3>
+                    <h3>Create a New Petition</h3>
                     <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         {% for field in form %}
