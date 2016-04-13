@@ -1,3 +1,6 @@
 body {
 	padding-top: 50px;
 }
+
+.panel-default > .panel-heading-custom {
+background: #FFA500; color: #fff; }

@@ -71,27 +71,65 @@
 
 </br>
 
+
+<!-- space for sections to be added later -->
+
+
+<!-- display petitions -->
 <div class="container">
-  <div class="panel panel-warning">
-    <div class="panel-heading">
-      <h1 class="panel-title">Open a library for 24 hours please!</h1>
+  <div class='row'>
+    <!-- votes and expiration-->
+    <div class='col-lg-1'>
+      <a href='#'><span class='glyphicon glyphicon-thumbs-up' style='font-size:300%' aria-hidden='true'></span></a>
+      <h5>47/100</h5>
+
+      <h6>Expires in:</h6>
+      <p>10 days</p>
     </div>
-    <div class="panel-body">
-      There's nowhere I can stay all night to study and my room is my least favorite place to study.. Why is there no 24 hour space?
+
+    <!-- petition info -->
+    <div class='col-lg-11'>
+      <div class="panel panel-default
+      ">
+        <div class="panel-heading panel-heading-custom">
+          <h1 class="panel-title">Insert title!</h1>
+          <p>By insertID</p>
+        </div>
+        <div class="panel-body">
+            Insert content here
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- comments -->
+  <div class='row'>
+    <div class='col-lg-offset-1 col-lg-11'>
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Write a comment!">
+        <span class="input-group-btn">
+        <button class="btn btn-default" type="button">Comment</button>
+      </span>
+     </div>
+    </div>
+  </div>
+
+  <div class='row'>
+    <div class='col-lg-offset-1 col-lg-1'>
+    <button href='#comments' type="button" class="btn btn-default" data-toggle='collapse'>View other comments <span class='caret'></span></button>
+    </div>
+  </div>
+  <div class='row'>
+    <div class='col-lg-offset-1 col-lg-11 collapse' id='comments'>
+    <ul class="list-group">
+    <li class="list-group-item">Cras justo odio</li>
+    <li class="list-group-item">Dapibus ac facilisis in</li>
+    <li class="list-group-item">Morbi leo risus</li>
+    </ul>
     </div>
   </div>
 </div>
 
-<div class="container">
-  <div class="panel panel-warning">
-   <div class="panel-heading">
-    <h1 class="panel-title">Better toilet paper..?</h1>
-   </div>
-   <div class="panel-body">
-    I mean we pay 50k for tuition and we have to use this crap?
-   </div>
-  </div>
-</div>
 
 {% for petition in petitions %}
   <h5>Netid: {{ petition.1 }}</h5>
