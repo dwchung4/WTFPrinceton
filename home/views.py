@@ -90,7 +90,14 @@ def create_petition(request):
 		}
 		return render(request, 'home/create_petition.html', context)
 
-def my_petitions(request, netid):
+def my_petitions(request, netid, vote):
+	if vote:
+		conn = database.connect()
+		cur = conn.cursor()
+		cur.execute("UPDATE petition SET vote = vote+1 WHERE id = %s;", (vote,))
+		conn.commit()
+		return HttpResponseRedirect('../'+netid)
+
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect('../login/')
 	else:

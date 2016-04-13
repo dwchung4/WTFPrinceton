@@ -9,5 +9,5 @@ urlpatterns = [
     url(r'^login/(?P<next_page>[0-9a-z_/]*)$', 'cas.views.login', name='login'),
 	url(r'^logout/$', 'cas.views.logout', name='logout'),
 	url(r'^create_petition/$', views.create_petition, name='create_petition'),
-	url(r'^(?P<netid>[0-9a-z]+)/$', views.my_petitions, name='my_petitions'),
+	url(r'^(?P<netid>[0-9a-z]+)/(?P<vote>[0-9]*)$', views.my_petitions, name='my_petitions'),
 ]
