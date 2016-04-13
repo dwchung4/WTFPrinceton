@@ -35,15 +35,75 @@
   </div>
 </nav>
 
+<div class='jumbotron text-center'>
+<h1>Petitions {{netid}}@ has written!</h1>
+
+</div>
+
 <div class="container-fluid songs-container">
 
-	{% for petition in petitions %}
-		<h3>Title: {{ petition.2 }}</h3>
-		<h3>Content: {{ petition.3 }}</h3>
-		<h3>Category: {{ petition.4 }}</h3>
-		<h3>Expiration: {{ petition.6 }}</h3>
-	{% endfor %}
+{% if not petitions %}
+<h1 align='center'>This user has written no petitions. :(</h1>
+{%else%}
+	<!-- display petitions -->
+{% for petition in petitions %}
+<div class="container">
+  <div class='row'>
+    <!-- votes and expiration-->
+    <div class='col-lg-1'>
+      <a href='{% url 'home:index' petition.0 %}'><span class='glyphicon glyphicon-thumbs-up' style='font-size:300%' aria-hidden='true'></span></a>
+      <h5>{{ petition.7 }}/100</h5>
 
+      <h6>Expires in:</h6>
+      <p># days</p>
+    </div>
+
+    <!-- petition info -->
+    <div class='col-lg-11'>
+      <div class="panel panel-default
+      ">
+        <div class="panel-heading panel-heading-custom">
+          <h1 class="panel-title">{{ petition.2 }}</h1>
+          <p>By {{ petition.1 }}</p>
+        </div>
+        <div class="panel-body">
+            {{ petition.3 }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- comments -->
+  <div class='row'>
+    <div class='col-lg-offset-1 col-lg-11'>
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Write a comment!">
+        <span class="input-group-btn">
+        <button class="btn btn-default" type="button">Comment</button>
+      </span>
+     </div>
+    </div>
+  </div>
+
+  <div class='row'>
+    <div class='col-lg-offset-1 col-lg-1'>
+    <button href='#comments' type="button" class="btn btn-default" data-toggle='collapse'>View other comments <span class='caret'></span></button>
+    </div>
+  </div>
+  <div class='row'>
+    <div class='col-lg-offset-1 col-lg-11 collapse' id='comments'>
+    <ul class="list-group">
+    <li class="list-group-item">Cras justo odio</li>
+    <li class="list-group-item">Dapibus ac facilisis in</li>
+    <li class="list-group-item">Morbi leo risus</li>
+    </ul>
+    </div>
+  </div>
+</div>
+
+</br>
+{% endfor %}
+{%endif%}
 </div>
 
 {% endblock %}
