@@ -76,15 +76,17 @@
 
 
 <!-- display petitions -->
+{% for petition in petitions %}
+
 <div class="container">
   <div class='row'>
     <!-- votes and expiration-->
     <div class='col-lg-1'>
-      <a href='#'><span class='glyphicon glyphicon-thumbs-up' style='font-size:300%' aria-hidden='true'></span></a>
-      <h5>47/100</h5>
+      <a href='{% url 'home:index' petition.0 %}'><span class='glyphicon glyphicon-thumbs-up' style='font-size:300%' aria-hidden='true'></span></a>
+      <h5>{{ petition.7 }}/100</h5>
 
       <h6>Expires in:</h6>
-      <p>10 days</p>
+      <p># days</p>
     </div>
 
     <!-- petition info -->
@@ -92,11 +94,11 @@
       <div class="panel panel-default
       ">
         <div class="panel-heading panel-heading-custom">
-          <h1 class="panel-title">Insert title!</h1>
-          <p>By insertID</p>
+          <h1 class="panel-title">{{ petition.2 }}</h1>
+          <p>By {{ petition.1 }}</p>
         </div>
         <div class="panel-body">
-            Insert content here
+            {{ petition.3 }}
         </div>
       </div>
     </div>
@@ -130,22 +132,8 @@
   </div>
 </div>
 
+</br>
 
-{% for petition in petitions %}
-  <h5>Netid: {{ petition.1 }}</h5>
-  <h5>Title: {{ petition.2 }}</h5>
-  <h5>Content: {{ petition.3 }}</h5>
-  <h5>Category: {{ petition.4 }}</h5>
-  <h5>Expiration: {{ petition.6 }}</h5>
-  <h5>{{ petition.7 }} votes</h5>
-
-
-  <form>
-    <a href="{% url 'home:index' petition.0 %}" class="btn btn-default" role="button">Vote</a>
-  </form>
-
-  </br>
-  </br>
 {% endfor %}
 
 </body>
