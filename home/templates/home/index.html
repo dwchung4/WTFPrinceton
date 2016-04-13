@@ -86,7 +86,11 @@
       <h5>{{ petition.7 }}/100</h5>
 
       <h6>Expires in:</h6>
-      <p># days</p>
+      {% if petition.9 == 'days' %}
+        <p>{{ petition.8 }} days</p>
+      {% else %}
+        <p> {{ petition.8 }} hours</p>
+      {% endif %}
     </div>
 
     <!-- petition info -->

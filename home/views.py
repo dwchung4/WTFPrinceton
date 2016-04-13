@@ -29,7 +29,23 @@ def index(request, vote):
 			OR LOWER(content) LIKE LOWER(%s) OR LOWER(netid) LIKE LOWER(%s)) \
 			AND is_archived = 'false' ORDER BY expiration;", (formattedquery, formattedquery, formattedquery,))
 		for petition in cur.fetchall():
-			petitions.append(petition)
+			now = datetime.now()
+			timeleft = petition[6].replace(tzinfo=None)-now
+			print timeleft
+			days = timeleft.days
+			if days == 0:
+				hours = timeleft.total_seconds() // 3600
+				petitionlist = list(petition)
+				petitionlist.append(hours)
+				petitionlist.append("hours")
+				petition = tuple(petitionlist)
+				petitions.append(petition)
+			else:
+				petitionlist = list(petition)
+				petitionlist.append(days)
+				petitionlist.append("days")
+				petition = tuple(petitionlist)
+				petitions.append(petition)
 		if request.user.is_authenticated():
 			return render(request, 'home/index.html', {
 				'petitions': petitions,
@@ -44,7 +60,23 @@ def index(request, vote):
 		cur = conn.cursor()
 		cur.execute("SELECT * FROM petition ORDER BY expiration;")
 		for petition in cur.fetchall():
-			petitions.append(petition)
+			now = datetime.now()
+			timeleft = petition[6].replace(tzinfo=None)-now
+			print timeleft
+			days = timeleft.days
+			if days == 0:
+				hours = timeleft.total_seconds() // 3600
+				petitionlist = list(petition)
+				petitionlist.append(hours)
+				petitionlist.append("hours")
+				petition = tuple(petitionlist)
+				petitions.append(petition)
+			else:
+				petitionlist = list(petition)
+				petitionlist.append(days)
+				petitionlist.append("days")
+				petition = tuple(petitionlist)
+				petitions.append(petition)
 		if request.user.is_authenticated():
 			return render(request, 'home/index.html', {
 				'netid': request.user,
@@ -97,7 +129,23 @@ def my_petitions(request, netid):
 		cur = conn.cursor()
 		cur.execute("SELECT * FROM petition WHERE netid = %s ORDER BY expiration", (str(netid),))
 		for petition in cur.fetchall():
-			petitions.append(petition)
+			now = datetime.now()
+			timeleft = petition[6].replace(tzinfo=None)-now
+			print timeleft
+			days = timeleft.days
+			if days == 0:
+				hours = timeleft.total_seconds() // 3600
+				petitionlist = list(petition)
+				petitionlist.append(hours)
+				petitionlist.append("hours")
+				petition = tuple(petitionlist)
+				petitions.append(petition)
+			else:
+				petitionlist = list(petition)
+				petitionlist.append(days)
+				petitionlist.append("days")
+				petition = tuple(petitionlist)
+				petitions.append(petition)
 		return render(request, 'home/my_petitions.html', {
 			'petitions': petitions,
 			'netid': netid,

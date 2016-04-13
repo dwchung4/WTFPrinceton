@@ -53,9 +53,13 @@
     <div class='col-lg-1'>
       <a href='{% url 'home:index' petition.0 %}'><span class='glyphicon glyphicon-thumbs-up' style='font-size:300%' aria-hidden='true'></span></a>
       <h5>{{ petition.7 }}/100</h5>
-
+      
       <h6>Expires in:</h6>
-      <p># days</p>
+      {% if petition.9 == 'days' %}
+        <p>{{ petition.8 }} days</p>
+      {% else %}
+        <p> {{ petition.8 }} hours</p>
+      {% endif %}
     </div>
 
     <!-- petition info -->

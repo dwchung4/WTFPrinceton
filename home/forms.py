@@ -9,6 +9,6 @@ class PetitionForm(forms.ModelForm):
     class Meta:
         model = Petition
         widgets = {
-          'content': forms.Textarea(attrs={'rows':'14','cols':'50','style':'resize:none'}),
+          'content': forms.Textarea(attrs={'rows':'16','cols':'45','style':'resize:none'}),
         }
         fields = ['title', 'category', 'content']
