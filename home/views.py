@@ -100,5 +100,5 @@ def my_petitions(request, netid):
 			petitions.append(petition)
 		return render(request, 'home/my_petitions.html', {
 			'petitions': petitions,
-			'netid': request.user,
+			'netid': netid,
 		})
