@@ -31,16 +31,19 @@
 </nav>
 
 <div class="jumbotron text-center">
+  <div class='cover panel center-block ' id='box'>
   <div class="page-header">
-    <h1><span class="text-black"><a href="{% url 'home:index' "" %}" style='color:inherit; text-decoration: inherit;'>What To Fix: Princeton</a></span></h1>
+    <h1><span class="text-black"><a href="{% url 'home:index' "" %}" style='color:white; text-decoration: inherit;'>What To Fix: Princeton</a></span></h1>
   </div>
 
   <div class="container">
-    <a href="{% url 'home:login' "create_petition" %}" class="btn btn-lg btn-default" role="button">
+    <a href="{% url 'home:create_petition' %}" class="btn btn-lg btn-default" role="button">
       <span class="glyphicon glyphicon-plus">
       </span>
       Create new petition
     </a>
+  </div>
+  <div class='spacer'></div>
   </div>
 </div>
 
