@@ -77,11 +77,11 @@
 <!-- display petitions -->
 {% for petition in petitions %}
 
-<div class="container">
+<div class="container" style=''>
   <div class='row'>
     <!-- votes and expiration-->
     <div class='col-lg-1 col-md-1 col-sm-1 col-xs-2'>
-      <a href='{% url 'home:index' petition.0 %}'><span class='glyphicon glyphicon-thumbs-up' style='font-size:300%;font-size: 5vw' aria-hidden='true'></span></a>
+      <a href='{% url 'home:index' petition.0 %}'><span class='glyphicon glyphicon-thumbs-up' style='font-size:300%;font-size: 4vw' aria-hidden='true'></span></a>
       <h5>{{ petition.7 }}/100</h5>
 
       <h6>Expires in:</h6>
