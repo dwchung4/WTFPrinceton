@@ -36,8 +36,9 @@
 </nav>
 
 <div class="jumbotron text-center">
+  <div class='cover panel center-block ' id='box'>
 	<div class="page-header">
-    <h1><span class="text-black"><a href="{% url 'home:index' "" %}" style='color:inherit; text-decoration: inherit;'>What To Fix: Princeton</a></span></h1>
+    <h1><span class="text-black"><a href="{% url 'home:index' "" %}" style='color:white; text-decoration: inherit;'>What To Fix: Princeton</a></span></h1>
 	</div>
 
   <div class="container">
@@ -46,6 +47,8 @@
   		</span>
   		Create new petition
   	</a>
+  </div>
+  <div class='spacer'></div>
   </div>
 </div>
 
@@ -56,7 +59,7 @@
 			<div class="input-group">
         <form class = "form-inline" role="search" method="get" action="{% url 'home:index' "" %}">
           <div class="form-group">
-              <input type="text" class="form-control" name="q" value="{{ request.GET.q }}" placeholder="Search for..." size="50">
+              <input type="text" class="form-control" name="q" value="{{ request.GET.q }}" placeholder="Search for..." size="50" autofocus>
           </div>
           <button type="submit" class="btn btn-default pull-right">Search</button>
         </form>
