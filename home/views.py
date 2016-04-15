@@ -9,25 +9,25 @@ import os
 from website import database
 from datetime import datetime, timedelta
 
-def index(request, petitionid):
-	if petitionid:
-		if request.META.get('HTTP_REFERER') == None:
-			return HttpResponseRedirect('../')
-		conn = database.connect()
-		cur = conn.cursor()
-		cur.execute("UPDATE petition SET vote = vote+1 WHERE id = %s;", (petitionid,))
-		conn.commit()
-		return HttpResponseRedirect('../')
-
+def index(request, sort):
 	petitions = []
 	query = request.GET.get("q")
 	if query:
 		conn = database.connect()
 		cur = conn.cursor()
 		formattedquery = '%'+query+'%'
-		cur.execute("SELECT DISTINCT * FROM petition WHERE (LOWER(title) LIKE LOWER(%s) \
-			OR LOWER(content) LIKE LOWER(%s) OR LOWER(netid) LIKE LOWER(%s)) \
-			AND is_archived = 'false' ORDER BY expiration;", (formattedquery, formattedquery, formattedquery,))
+		if not sort:
+			cur.execute("SELECT DISTINCT * FROM petition WHERE LOWER(title) LIKE LOWER(%s) \
+				OR LOWER(content) LIKE LOWER(%s) OR LOWER(netid) LIKE LOWER(%s) \
+				ORDER BY expiration;", (formattedquery, formattedquery, formattedquery,))
+		elif sort == 'top':
+			cur.execute("SELECT DISTINCT * FROM petition WHERE LOWER(title) LIKE LOWER(%s) \
+				OR LOWER(content) LIKE LOWER(%s) OR LOWER(netid) LIKE LOWER(%s) \
+				ORDER BY vote DESC;", (formattedquery, formattedquery, formattedquery,))
+		else:
+			cur.execute("SELECT DISTINCT * FROM petition WHERE LOWER(title) LIKE LOWER(%s) \
+				OR LOWER(content) LIKE LOWER(%s) OR LOWER(netid) LIKE LOWER(%s) \
+				ORDER BY vote;", (formattedquery, formattedquery, formattedquery,))
 		for petition in cur.fetchall():
 			petition = remainingTime(petition)
 			petitions.append(petition)
@@ -43,7 +43,12 @@ def index(request, petitionid):
 	else:
 		conn = database.connect()
 		cur = conn.cursor()
-		cur.execute("SELECT * FROM petition ORDER BY expiration;")
+		if not sort:
+			cur.execute("SELECT * FROM petition ORDER BY expiration;")
+		elif sort == 'top':
+			cur.execute("SELECT * FROM petition ORDER BY vote DESC;")
+		else:
+			cur.execute("SELECT * FROM petition ORDER BY expiration;")
 		for petition in cur.fetchall():
 			petition = remainingTime(petition)
 			petitions.append(petition)
@@ -78,10 +83,10 @@ def create_petition(request):
 			conn = database.connect()
 			cur = conn.cursor()
 			expiration = datetime.now()+timedelta(hours=1)
-			cur.execute("INSERT INTO petition(netid, title, content, category, is_archived, expiration, vote) \
+			cur.execute("INSERT INTO petition(netid, title, content, category, status, expiration, vote) \
 				VALUES (%s, %s, %s, %s, %s, %s, %s)",
 				(str(request.user), str(petition.title), str(petition.content), str(petition.category),
-				'false', expiration, 0,))
+				'active', expiration, 0,))
 			conn.commit()
 			return HttpResponseRedirect('../')
 		context = {
@@ -90,16 +95,7 @@ def create_petition(request):
 		}
 		return render(request, 'home/create_petition.html', context)
 
-def my_petitions(request, netid, petitionid):
-	if petitionid:
-		if request.META.get('HTTP_REFERER') == None:
-			return HttpResponseRedirect('../')
-		conn = database.connect()
-		cur = conn.cursor()
-		cur.execute("UPDATE petition SET vote = vote+1 WHERE id = %s;", (petitionid,))
-		conn.commit()
-		return HttpResponseRedirect('../'+netid)
-
+def my_petitions(request, netid):
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect('../login/'+str(netid))
 	else:
@@ -118,7 +114,7 @@ def my_petitions(request, netid, petitionid):
 
 def remainingTime(petition):
 	now = datetime.now()
-	timeleft = petition[6].replace(tzinfo=None)-now
+	timeleft = petition[5].replace(tzinfo=None)-now
 	days = timeleft.days
 	if days == 0:
 		hours = timeleft.total_seconds()//3600
@@ -152,3 +148,20 @@ def delete_petition(request, petitionid):
 			cur.execute("DELETE FROM petition WHERE id = %s", (petitionid,))
 			conn.commit()
 	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def vote(request, petitionid, netid):
+	print 'hello'
+	if request.META.get('HTTP_REFERER') == None:
+		print 'wrong'
+		return HttpResponseRedirect('../')
+	print 'hi'
+	conn = database.connect()
+	cur = conn.cursor()
+	cur.execute("UPDATE petition SET vote = vote+1 WHERE id = %s;", (petitionid,))
+	conn.commit()
+	if netid:
+		print 'redirect to personal page'
+		return HttpResponseRedirect('../'+netid)
+	else:
+		print 'redirect to main page'
+		return HttpResponseRedirect('../../../../')

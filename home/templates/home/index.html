@@ -21,7 +21,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-          <a href="{% url 'home:my_petitions' netid "" %}">
+          <a href="{% url 'home:my_petitions' netid %}">
             <span class="glyphicon glyphicon-th-list"></span>&nbsp; My Petitions
           </a>
         </li>
@@ -57,7 +57,7 @@
 	<div class="row">
 		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 			<div class="input-group">
-        <form class = "form-inline" role="search" method="get" action="{% url 'home:index' "" %}">
+        <form class = "form-inline" role="search" method="get" action="{% url 'home:index' "search" %}">
           <div class="form-group">
               <input type="text" class="form-control" name="q" value="{{ request.GET.q }}" placeholder="Search for..." size="50" autofocus>
           </div>
@@ -70,6 +70,24 @@
 
 </br>
 
+<!-- sort -->
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <p>Currently active petitions:</p>
+      <p>
+        <a href='{% url 'home:index' "" %}' class='btn btn-xs btn-primary' role='button'>
+          Recent
+        </a>
+        <a href='{% url 'home:index' "top" %}' class='btn btn-xs btn-primary' role='button'>
+          Top
+        </a>
+      </p>
+    </div>
+  </div>
+</div>
+
+</br>
 
 <!-- space for sections to be added later -->
 
@@ -81,8 +99,8 @@
   <div class='row'>
     <!-- votes and expiration-->
     <div class='col-lg-1 col-md-1 col-sm-1 col-xs-2'>
-      <a href='{% url 'home:index' petition.0 %}'><span class='glyphicon glyphicon-thumbs-up' style='font-size:300%;font-size: 4vw' aria-hidden='true'></span></a>
-      <h5>{{ petition.7 }}/100</h5>
+      <a href='{% url 'home:vote' petition.0 "" %}'><span class='glyphicon glyphicon-thumbs-up' style='font-size:300%;font-size: 4vw' aria-hidden='true'></span></a>
+      <h5>{{ petition.6 }}/100</h5>
 
       <h6>Expires in:</h6>
       {% if petition.9 == 'days' %}
@@ -99,21 +117,17 @@
       <div class="panel panel-default">
         <div class="panel-heading panel-heading-custom">
 
-          <!-- edit, delete buttons -->
+          <!-- delete button -->
           {% if netid == petition.1 %}
             <button href=#{{ petition.0 }} type='button' class='btn btn-default pull-right' data-toggle='collapse'>
               <span class="glyphicon glyphicon-remove">
               </span>
             </button>
-            <button href='#' type='button' class='btn btn-default pull-right' data-toggle='collapse'>
-              <span class="glyphicon glyphicon-edit">
-              </span>
-            </button>
           {% endif %}
-          
+
           <h1 class="panel-title">{{ petition.2 }}</h1>
           <p>
-            By <a href='{% url 'home:my_petitions' petition.1 "" %}' style='color:inherit;'>{{ petition.1 }}</a>
+            By <a href='{% url 'home:my_petitions' petition.1 %}' style='color:inherit;'>{{ petition.1 }}</a>
           </p>
         </div>
         <div class="panel-body">

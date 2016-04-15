@@ -52,7 +52,7 @@
   <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
       <div class="input-group">
-        <form class = "form-inline" role="search" method="get" action="{% url 'home:index' "" %}">
+        <form class = "form-inline" role="search" method="get" action="{% url 'home:index' "search" %}">
           <div class="form-group">
               <input type="text" class="form-control" name="q" value="{{ request.GET.q }}" placeholder="Search for..." size="50" autofocus>
           </div>
@@ -73,7 +73,7 @@
     <!-- votes and expiration-->
     <div class='col-lg-1 col-md-1 col-sm-1 col-xs-2'>
       <a href='{% url 'home:login' "" %}'><span class='glyphicon glyphicon-thumbs-up' style='font-size:300%;font-size: 5vw' aria-hidden='true'></span></a>
-      <h5>{{ petition.7 }}/100</h5>
+      <h5>{{ petition.6 }}/100</h5>
 
       <h6>Expires in:</h6>
       {% if petition.9 == 'days' %}
