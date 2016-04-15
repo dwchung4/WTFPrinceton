@@ -84,7 +84,7 @@
             </button>
           {% endif %}
 
-          <p>By {{ petition.1 }}</p>
+          <p>By <a href='{% url 'home:my_petitions' petition.1 "" %}' style='color:inherit;'>{{ petition.1 }}</a></p>
         </div>
         <div class="panel-body">
             {{ petition.3 }}

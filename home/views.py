@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 def index(request, petitionid):
 	if petitionid:
 		if request.META.get('HTTP_REFERER') == None:
-			return HttpResponseForbidden()
+			return HttpResponseRedirect('../')
 		conn = database.connect()
 		cur = conn.cursor()
 		cur.execute("UPDATE petition SET vote = vote+1 WHERE id = %s;", (petitionid,))
@@ -93,7 +93,7 @@ def create_petition(request):
 def my_petitions(request, netid, petitionid):
 	if petitionid:
 		if request.META.get('HTTP_REFERER') == None:
-			return HttpResponseForbidden()
+			return HttpResponseRedirect('../')
 		conn = database.connect()
 		cur = conn.cursor()
 		cur.execute("UPDATE petition SET vote = vote+1 WHERE id = %s;", (petitionid,))
@@ -142,7 +142,7 @@ def remainingTime(petition):
 
 def delete_petition(request, petitionid):
 	if request.META.get('HTTP_REFERER') == None:
-		return HttpResponseForbidden()
+		return HttpResponseRedirect('../')
 	conn = database.connect()
 	cur = conn.cursor()
 	cur.execute("SELECT netid FROM petition WHERE id = %s", (petitionid,))
