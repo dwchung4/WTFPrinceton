@@ -1,18 +1,18 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
-from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
 from .forms import PetitionForm
 from .models import Petition
-from django.template.defaulttags import csrf_token
 import psycopg2
-import urlparse
 import os
 from website import database
 from datetime import datetime, timedelta
 
 def index(request, petitionid):
 	if petitionid:
+		if request.META.get('HTTP_REFERER') == None:
+			return HttpResponseForbidden()
 		conn = database.connect()
 		cur = conn.cursor()
 		cur.execute("UPDATE petition SET vote = vote+1 WHERE id = %s;", (petitionid,))
@@ -67,7 +67,7 @@ def about(request):
 
 def create_petition(request):
 	if not request.user.is_authenticated():
-		return HttpResponseRedirect('../login/')
+		return HttpResponseRedirect('../login/create_petition')
 	else:
 		form = PetitionForm(request.POST or None)
 		if form.is_valid():
@@ -92,6 +92,8 @@ def create_petition(request):
 
 def my_petitions(request, netid, petitionid):
 	if petitionid:
+		if request.META.get('HTTP_REFERER') == None:
+			return HttpResponseForbidden()
 		conn = database.connect()
 		cur = conn.cursor()
 		cur.execute("UPDATE petition SET vote = vote+1 WHERE id = %s;", (petitionid,))
@@ -99,7 +101,7 @@ def my_petitions(request, netid, petitionid):
 		return HttpResponseRedirect('../'+netid)
 
 	if not request.user.is_authenticated():
-		return HttpResponseRedirect('../login/')
+		return HttpResponseRedirect('../login/'+str(netid))
 	else:
 		petitions = []
 		conn = database.connect()
@@ -110,7 +112,7 @@ def my_petitions(request, netid, petitionid):
 			petitions.append(petition)
 		return render(request, 'home/my_petitions.html', {
 			'petitions': petitions,
-			'netid': netid,
+			'netid': str(netid),
 			'user': str(request.user),
 		})
 
@@ -138,7 +140,9 @@ def remainingTime(petition):
 		petition = tuple(petitionlist)
 	return petition
 
-def delete_petition(request, petitionid, dest):
+def delete_petition(request, petitionid):
+	if request.META.get('HTTP_REFERER') == None:
+		return HttpResponseForbidden()
 	conn = database.connect()
 	cur = conn.cursor()
 	cur.execute("SELECT netid FROM petition WHERE id = %s", (petitionid,))
@@ -147,8 +151,4 @@ def delete_petition(request, petitionid, dest):
 		if str(id) == str(request.user):
 			cur.execute("DELETE FROM petition WHERE id = %s", (petitionid,))
 			conn.commit()
-	if dest == 'index':
-		return HttpResponseRedirect('../../')
-	else:
-		dest = '../../'+str(request.user)
-		return HttpResponseRedirect(dest)
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

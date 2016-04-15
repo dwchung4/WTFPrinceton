@@ -21,7 +21,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-          <a href="{% url 'home:my_petitions' netid "" %}">
+          <a href="{% url 'home:my_petitions' user "" %}">
             <span class="glyphicon glyphicon-th-list"></span>&nbsp; My Petitions
           </a>
         </li>
@@ -78,6 +78,10 @@
               <span class="glyphicon glyphicon-remove">
               </span>
             </button>
+            <button href='#' type='button' class='btn btn-default pull-right' data-toggle='collapse'>
+              <span class="glyphicon glyphicon-edit">
+              </span>
+            </button>
           {% endif %}
 
           <p>By {{ petition.1 }}</p>
@@ -90,7 +94,7 @@
       <!-- delete_petition confirmation -->
       <div class='collapse' id={{ petition.0 }}>
         <p>Please confirm that you want to delete this petition</p>
-        <a href='{% url 'home:delete_petition' petition.0 "my_petitions" %}' class='btn btn-default' role='button'>
+        <a href='{% url 'home:delete_petition' petition.0%}' class='btn btn-default' role='button'>
           <span class='glyphicon glyphicon-ok-circle' style='font-size: 1.5vw'>
           </span>
         </a>
