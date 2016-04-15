@@ -23,12 +23,9 @@ class Petition(models.Model):
 	expiration = models.DateTimeField()
 	vote = models.IntegerField()
 
-	def __str__(self):
-		return self.title
+	class Meta:
+		db_table = 'petition'
 
 class Comment(models.Model):
 	petition = models.ForeignKey(Petition)
 	content = models.CharField(max_length=500)
-
-	def __str__(self):
-		return self.content
