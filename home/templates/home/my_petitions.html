@@ -71,12 +71,37 @@
       ">
         <div class="panel-heading panel-heading-custom">
           <h1 class="panel-title">{{ petition.2 }}</h1>
+
+          <!-- edit, delete buttons -->
+          {% if netid == user %}
+            <button href=#{{ petition.0 }} type='button' class='btn btn-default pull-right' data-toggle='collapse'>
+              <span class="glyphicon glyphicon-remove">
+              </span>
+            </button>
+          {% endif %}
+
           <p>By {{ petition.1 }}</p>
         </div>
         <div class="panel-body">
             {{ petition.3 }}
         </div>
       </div>
+
+      <!-- delete_petition confirmation -->
+      <div class='collapse' id={{ petition.0 }}>
+        <p>Please confirm that you want to delete this petition</p>
+        <a href='{% url 'home:delete_petition' petition.0 "my_petitions" %}' class='btn btn-default' role='button'>
+          <span class='glyphicon glyphicon-ok-circle' style='font-size: 1.5vw'>
+          </span>
+        </a>
+        <button href=#{{ petition.0 }} type='button' class='btn btn-default' data-toggle='collapse'>
+          <span class='glyphicon glyphicon-remove-circle' style='font-size: 1.5vw'>
+          </span>
+        </button>
+        </br>
+        </br>
+      </div>
+
     </div>
   </div>
 

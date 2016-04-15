@@ -11,11 +11,11 @@ import os
 from website import database
 from datetime import datetime, timedelta
 
-def index(request, vote):
-	if vote:
+def index(request, petitionid):
+	if petitionid:
 		conn = database.connect()
 		cur = conn.cursor()
-		cur.execute("UPDATE petition SET vote = vote+1 WHERE id = %s;", (vote,))
+		cur.execute("UPDATE petition SET vote = vote+1 WHERE id = %s;", (petitionid,))
 		conn.commit()
 		return HttpResponseRedirect('../')
 
@@ -34,7 +34,7 @@ def index(request, vote):
 		if request.user.is_authenticated():
 			return render(request, 'home/index.html', {
 				'petitions': petitions,
-				'netid': request.user,
+				'netid': str(request.user),
 			})
 		else:
 			return render(request, 'home/index_visitor.html', {
@@ -49,7 +49,7 @@ def index(request, vote):
 			petitions.append(petition)
 		if request.user.is_authenticated():
 			return render(request, 'home/index.html', {
-				'netid': request.user,
+				'netid': str(request.user),
 				'petitions': petitions,
 			})
 		else:
@@ -60,7 +60,7 @@ def index(request, vote):
 def about(request):
 	if request.user.is_authenticated():
 		return render(request, 'home/about.html', {
-			'netid': request.user,
+			'netid': str(request.user),
 		})
 	else:
 		return render(request, 'home/about_visitor.html')
@@ -86,15 +86,15 @@ def create_petition(request):
 			return HttpResponseRedirect('../')
 		context = {
 			"form": form,
-			"netid": request.user,
+			"netid": str(request.user),
 		}
 		return render(request, 'home/create_petition.html', context)
 
-def my_petitions(request, netid, vote):
-	if vote:
+def my_petitions(request, netid, petitionid):
+	if petitionid:
 		conn = database.connect()
 		cur = conn.cursor()
-		cur.execute("UPDATE petition SET vote = vote+1 WHERE id = %s;", (vote,))
+		cur.execute("UPDATE petition SET vote = vote+1 WHERE id = %s;", (petitionid,))
 		conn.commit()
 		return HttpResponseRedirect('../'+netid)
 
@@ -111,6 +111,7 @@ def my_petitions(request, netid, vote):
 		return render(request, 'home/my_petitions.html', {
 			'petitions': petitions,
 			'netid': netid,
+			'user': str(request.user),
 		})
 
 def remainingTime(petition):
@@ -136,3 +137,18 @@ def remainingTime(petition):
 		petitionlist.append("days")
 		petition = tuple(petitionlist)
 	return petition
+
+def delete_petition(request, petitionid, dest):
+	conn = database.connect()
+	cur = conn.cursor()
+	cur.execute("SELECT netid FROM petition WHERE id = %s", (petitionid,))
+	if cur.rowcount != 0:
+		id = cur.fetchone()[0]
+		if str(id) == str(request.user):
+			cur.execute("DELETE FROM petition WHERE id = %s", (petitionid,))
+			conn.commit()
+	if dest == 'index':
+		return HttpResponseRedirect('../')
+	else:
+		dest = '../../'+str(request.user)
+		return HttpResponseRedirect(dest)
