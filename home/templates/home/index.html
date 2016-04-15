@@ -98,7 +98,6 @@
     <div class='col-lg-11 col-md-11 col-sm-11 col-xs-10'>
       <div class="panel panel-default">
         <div class="panel-heading panel-heading-custom">
-          <h1 class="panel-title">{{ petition.2 }}</h1>
 
           <!-- edit, delete buttons -->
           {% if netid == petition.1 %}
@@ -111,7 +110,8 @@
               </span>
             </button>
           {% endif %}
-
+          
+          <h1 class="panel-title">{{ petition.2 }}</h1>
           <p>
             By <a href='{% url 'home:my_petitions' petition.1 "" %}' style='color:inherit;'>{{ petition.1 }}</a>
           </p>
