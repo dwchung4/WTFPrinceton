@@ -65,6 +65,25 @@
 
 </br>
 
+<!-- sort -->
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <p>Currently active petitions:</p>
+      <p>
+        <a href='{% url 'home:index' "" %}' class='btn btn-xs btn-primary' role='button'>
+          Recent
+        </a>
+        <a href='{% url 'home:index' "top" %}' class='btn btn-xs btn-primary' role='button'>
+          Top
+        </a>
+      </p>
+    </div>
+  </div>
+</div>
+
+</br>
+
 <!-- display petitions -->
 {% for petition in petitions %}
 
