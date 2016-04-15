@@ -148,7 +148,7 @@ def delete_petition(request, petitionid, dest):
 			cur.execute("DELETE FROM petition WHERE id = %s", (petitionid,))
 			conn.commit()
 	if dest == 'index':
-		return HttpResponseRedirect('../')
+		return HttpResponseRedirect('../../')
 	else:
 		dest = '../../'+str(request.user)
 		return HttpResponseRedirect(dest)
