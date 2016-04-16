@@ -44,8 +44,9 @@
 <div class="container-fluid songs-container">
 
 {% if not petitions %}
-<h1 align='center'>This user has written no petitions. :(</h1>
+  <h1 align='center'>This user has written no petitions. :(</h1>
 {%else%}
+
 	<!-- display petitions -->
 {% for petition in petitions %}
 <div class="container">
@@ -53,16 +54,33 @@
     <!-- votes and expiration-->
     <div class='col-lg-1'>
       <a href='{% url 'home:vote' petition.0 petition.1 %}'><span class='glyphicon glyphicon-thumbs-up' style='font-size:300%' aria-hidden='true'></span></a>
-      <h5>{{ petition.6 }}/100</h5>
+      <h5>{{ petition.6 }}/10</h5>
 
-      <h6>Expires in:</h6>
-      {% if petition.9 == 'days' %}
-        <p>{{ petition.8 }} days</p>
-      {% elif petition.9 == 'hours' %}
-        <p> {{ petition.8 }} hours</p>
+      {% if petition.7 == "Pending" %}
+
+        <h5>Pending</h5>
+
+      {% elif petition.7 == "Active" %}
+
+        <h6>Expires in:</h6>
+        {% if petition.9 == 'days' %}
+          <p>{{ petition.8 }} days</p>
+        {% elif petition.9 == 'hours' %}
+          <p> {{ petition.8 }} hours</p>
+        {% else %}
+          <p> {{ petition.8 }} min</p>
+        {% endif %}
+
+      {% elif petition.7 == "Expired" %}
+
+        <h5>Expired</h5>
+
       {% else %}
-        <p> {{ petition.8 }} min</p>
+
+        <h6>Completed</h6>
+
       {% endif %}
+
     </div>
 
     <!-- petition info -->
