@@ -1,41 +1,14 @@
-1. Hun
+1. Messages
+- When search field is empty
+- When a petition has been submitted successfully
+- When some fields are empty when creating a new petition
 
-navbar: when user clicks ‘About’ or ‘Contact’, the whole navbar shifts to the right slightly. Needs to be fixed.
+2. About page: improve “Contact USG” section
 
-2. Hun
+3. May be create “How to use” page?
 
-remove the white line between ‘What To Fix: Princeton’ and ‘Create new petition’ on the main page (index.html)
+4. Make commenting possible
 
-3. Hun
+5. Buttons to sort by recent, category, expired, etc.
 
-Update ‘About’ page. I think it will be good if we explain in the About page how this website works and how you can contribute. May be we can put example petitions (Open a library for 24 hours please! and Better toilet paper…?) in ‘About’ section too.
-
-4. Hun
-
-Update ‘Contact’ page. Put a bunch of USG contact infos.
-
-5. Hun
-
-Update create_petition page. Make a textbox where user can write his petition idea.
-
-6. Ji Won
-
-Make it redirect to the page that we want after CAS login. For example, when user clicks “Create new petition” button and is redirected to CAS login, after the login, we want the user to be directed to the page where he can write a new petition, not back to the main page. Similar cases when user was reading a petition and logs in to write a comment. We want the user to be directed back to the same petition page.
-
-Right now, CAS login works based on the package here (https://github.com/kstateome/django-cas). However, to make redirection possible, I think we need to incorporate the package into our project and modify the code, instead of just downloading and using the package. Then you will have to first understand how the package works and modify some parts of it.
-
-7. Ji Won
-
-Right now the navbar has both ‘Login’ and ‘Logout’ buttons all the time. However, once user logs in, it is enough to show just ‘Logout’ button. Also, when user has not logged in yet, it is enough to just show ‘Login’ button.
-
-8. Dong Wook
-
-Work with the database. Save petitions in the database, so that when user logs in, he can see all previous petitions that he has written (need to create a seperate page for that).
-
-9. Dong Wook
-
-On the main page, display the most recent petitions. Will have to somehow find the most recent petitions from the database.
-
-10. Hun
-
-Add favicon.
+6. Ability to delete/edit own petitions

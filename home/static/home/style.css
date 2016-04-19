@@ -4,3 +4,13 @@ body {
 
 .panel-default > .panel-heading-custom {
 background: #FFA500; color: #fff; }
+
+#box {
+	width:90vw; 
+	margin:auto;
+	background-color: rgba(255,165,0,0.3);
+}
+
+.spacer {
+    margin-top: 20px; /* define margin as you see fit */
+}

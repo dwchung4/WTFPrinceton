@@ -14,21 +14,25 @@ class Petition(models.Model):
 		('Other', 'Other')
 	)
 
+	status = (
+		('Expired', 'Expired'),
+		('Active', 'Active'),
+		('Pending', 'Pending'),
+		('Completed', 'Completed')
+	)
+
 	id = models.AutoField(primary_key=True)
 	netid = models.ForeignKey(User)
 	title = models.CharField(max_length=100)
 	content = models.CharField(max_length=500)
 	category = models.CharField(max_length=30, choices=categories)
-	is_archived = models.BooleanField()
+	status = models.CharField(max_length=30, choices=status)
 	expiration = models.DateTimeField()
 	vote = models.IntegerField()
 
-	def __str__(self):
-		return self.title
+	class Meta:
+		db_table = 'petition'
 
 class Comment(models.Model):
 	petition = models.ForeignKey(Petition)
 	content = models.CharField(max_length=500)
-
-	def __str__(self):
-		return self.content

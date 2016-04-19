@@ -9,13 +9,11 @@ class PetitionForm(forms.ModelForm):
 
     class Meta:
         model = Petition
+
+        # Set the size of content textbox
         widgets = {
-          'content': forms.Textarea(attrs={'rows':'14','cols':'50','style':'resize:none'}),
+          'content': forms.Textarea(attrs={'rows':'16','cols':'45','style':'resize:none'}),
         }
+
         fields = ['title', 'category', 'content']
 
-class CommentForm(forms.ModelForm):
-
-	class Meta:
-		model = Comment
-		fields = ['content']
