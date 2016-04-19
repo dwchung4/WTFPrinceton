@@ -119,6 +119,7 @@ def add_comment(request, id):
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect('../login/')
 	else:
+		print "here"
 		query = request.GET.get("r")
 		if query:
 			conn = database.connect()
