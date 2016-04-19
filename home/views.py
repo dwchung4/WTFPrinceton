@@ -88,6 +88,33 @@ def create_petition(request):
 		}
 		return render(request, 'home/create_petition.html', context)
 
+def add_comment(request, id):
+	if not request.user.is_authenticated():
+		return HttpResponseRedirect('../login/')
+	else:
+		query = request.GET.get("r")
+		if query:
+			conn = database.connect()
+			cur = conn.cursor()
+			formattedquery = '{'+query+'}'
+			cur.execute("UPDATE petition SET comments = comments || %s WHERE id = %s;", (formattedquery, str(id),))
+			conn.commit()
+		petitions = []
+		conn = database.connect()
+		cur = conn.cursor()
+		#cur.execute("UPDATE petition SET comments = comments || '{%s}' WHERE id = %s;", (str(comment.content), str(id),))
+		#conn.commit()
+		cur.execute("SELECT * FROM petition ORDER BY expiration;")
+		#return HttpResponseRedirect('../')
+		for petition in cur.fetchall():
+			petitions.append(petition)
+		context = {
+			"netid": request.user,
+			"petitions": petitions
+		}
+		return render(request, 'home/index.html', context)
+
+
 def my_petitions(request, netid):
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect('../login/')
