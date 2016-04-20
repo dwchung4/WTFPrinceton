@@ -119,7 +119,6 @@ def add_comment(request, id):
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect('../login/')
 	else:
-		print "here"
 		query = request.GET.get("r")
 		if query:
 			conn = database.connect()
@@ -127,6 +126,7 @@ def add_comment(request, id):
 			formattedquery = '{'+query+'}'
 			cur.execute("UPDATE petition SET comments = comments || %s WHERE id = %s;", (formattedquery, str(id),))
 			conn.commit()
+			return HttpResponseRedirect('/')
 		petitions = []
 		conn = database.connect()
 		cur = conn.cursor()

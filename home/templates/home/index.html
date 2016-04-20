@@ -178,7 +178,7 @@
         <form class="form-inline" method="get" action="{% url 'home:add_comment' petition.0 %}">
           {% csrf_token %}
           <div class ="form-group">
-              <input type="text" class="form-control" name="r" value="{{ request.GET.r }}" placeholder="Write a comment!">
+              <input type="text" class="form-control" name="r" value="{{ request.GET.r }}" placeholder="Write a comment!" size="100">
           </div>
           <button type="submit" class="btn btn-success">Comment</button>
         </form>
