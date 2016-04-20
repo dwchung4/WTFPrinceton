@@ -149,8 +149,8 @@ def add_comment(request, id):
 		for petition in cur.fetchall():
 			petitions.append(petition)
 		context = {
-			"netid": request.user,
-			"petitions": petitions
+			'netid': request.user,
+			'petitions': petitions,
 		}
 		return render(request, 'home/index.html', context)
 
@@ -222,7 +222,7 @@ def delete_petition(request, petitionid):
 
 def vote(request, petitionid, netid):
 	if request.META.get('HTTP_REFERER') == None:
-		return HttpResponseRedirect('../')
+		return HttpResponseRedirect('../../')
 
 	conn = database.connect()
 	cur = conn.cursor()
@@ -242,6 +242,6 @@ def vote(request, petitionid, netid):
 			conn.commit()
 
 	if netid:
-		return HttpResponseRedirect('../'+netid)
+		return HttpResponseRedirect('../../my_petitions/'+netid)
 	else:
-		return HttpResponseRedirect('../')
+		return HttpResponseRedirect('../../')

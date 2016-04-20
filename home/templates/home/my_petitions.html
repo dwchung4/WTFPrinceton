@@ -54,6 +54,8 @@
     <!-- votes and expiration-->
     <div class='col-lg-1'>
       <a href='{% url 'home:vote' petition.0 petition.1 %}'><span class='glyphicon glyphicon-thumbs-up' style='font-size:300%' aria-hidden='true'></span></a>
+      <p>{{ petition.0 }}</p>
+      <p>{{ petition.1 }}</p>
       <h5>{{ petition.6 }}/10</h5>
 
       {% if petition.7 == "Pending" %}
