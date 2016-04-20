@@ -101,12 +101,12 @@
       {% elif petition.7 == "Active" %}
 
         <h6>Expires in:</h6>
-        {% if petition.9 == 'days' %}
-          <p>{{ petition.8 }} days</p>
-        {% elif petition.9 == 'hours' %}
-          <p> {{ petition.8 }} hours</p>
+        {% if petition.10 == 'days' %}
+          <p>{{ petition.9 }} days</p>
+        {% elif petition.10 == 'hours' %}
+          <p> {{ petition.9 }} hours</p>
         {% else %}
-          <p> {{ petition.8 }} min</p>
+          <p> {{ petition.9 }} min</p>
         {% endif %}
 
       {% elif petition.7 == "Expired" %}
