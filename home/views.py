@@ -9,6 +9,7 @@ import os
 from website import database
 from datetime import datetime, timedelta
 
+
 def index(request, sort):
 	petitions = []
 	query = request.GET.get("q")
@@ -31,7 +32,7 @@ def index(request, sort):
 
 		for petition in cur.fetchall():
 			petition = addRemainingTime(petition)
-			if petition[8] < 0 and petition[7] == 'Active':
+			if petition[9] < 0 and petition[7] == 'Active':
 				conn1 = database.connect()
 				cur1 = conn1.cursor()
 				cur1.execute("UPDATE petition SET status = 'Expired' WHERE id = %s;", (petition[0],))
@@ -39,16 +40,19 @@ def index(request, sort):
 				tempList = list(petition)
 				tempList[7] = 'Expired'
 				petition = tuple(tempList)
-			petitions.append(petition)
+			if petition[7] == 'Active':
+				petitions.append(petition)
 
 		if request.user.is_authenticated():
 			return render(request, 'home/index.html', {
 				'petitions': petitions,
 				'netid': str(request.user),
+				'sort': sort,
 			})
 		else:
 			return render(request, 'home/index_visitor.html', {
 				'petitions': petitions,
+				'sort': sort
 			})
 	else:
 		conn = database.connect()
@@ -62,7 +66,9 @@ def index(request, sort):
 
 		for petition in cur.fetchall():
 			petition = addRemainingTime(petition)
-			if petition[8] < 0 and petition[7] == 'Active':
+			if petition[9] < 0 and petition[7] == 'Active':
+				print petition[9]
+				print petition[7]
 				conn1 = database.connect()
 				cur1 = conn1.cursor()
 				cur1.execute("UPDATE petition SET status = 'Expired' WHERE id = %s;", (petition[0],))
@@ -70,17 +76,21 @@ def index(request, sort):
 				tempList = list(petition)
 				tempList[7] = 'Expired'
 				petition = tuple(tempList)
-			petitions.append(petition)
+			if petition[7] == 'Active':
+				petitions.append(petition)
 			
 		if request.user.is_authenticated():
 			return render(request, 'home/index.html', {
 				'netid': str(request.user),
 				'petitions': petitions,
+				'sort': sort,
 			})
 		else:
 			return render(request, 'home/index_visitor.html', {
 				'petitions': petitions,
+				'sort': sort,
 			})
+
 
 def about(request):
 	if request.user.is_authenticated():
@@ -89,6 +99,7 @@ def about(request):
 		})
 	else:
 		return render(request, 'home/about_visitor.html')
+
 
 def create_petition(request):
 	if not request.user.is_authenticated():
@@ -114,6 +125,7 @@ def create_petition(request):
 			"netid": str(request.user),
 		}
 		return render(request, 'home/create_petition.html', context)
+
 
 def add_comment(request, id):
 	if not request.user.is_authenticated():
@@ -153,7 +165,7 @@ def my_petitions(request, netid):
 		cur.execute("SELECT * FROM petition WHERE netid = %s ORDER BY expiration", (str(netid),))
 		for petition in cur.fetchall():
 			petition = addRemainingTime(petition)
-			if petition[8] < 0 and petition[7] == 'Active':
+			if petition[9] < 0 and petition[7] == 'Active':
 				conn1 = database.connect()
 				cur1 = conn1.cursor()
 				cur1.execute("UPDATE petition SET status = 'Expired' WHERE id = %s;", (petition[0],))
@@ -167,6 +179,7 @@ def my_petitions(request, netid):
 			'netid': str(netid),
 			'user': str(request.user),
 		})
+
 
 def addRemainingTime(petition):
 	now = datetime.now()
@@ -192,6 +205,7 @@ def addRemainingTime(petition):
 		petition = tuple(petitionlist)
 	return petition
 
+
 def delete_petition(request, petitionid):
 	if request.META.get('HTTP_REFERER') == None:
 		return HttpResponseRedirect('../')
@@ -205,12 +219,13 @@ def delete_petition(request, petitionid):
 			conn.commit()
 	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+
 def vote(request, petitionid, netid):
 	if request.META.get('HTTP_REFERER') == None:
 		return HttpResponseRedirect('../')
+
 	conn = database.connect()
 	cur = conn.cursor()
-
 	cur.execute("SELECT vote FROM petition WHERE id = %s;", (petitionid,))
 	vote = cur.fetchone()[0]
 	now = datetime.now()
@@ -225,7 +240,6 @@ def vote(request, petitionid, netid):
 		if vote == 10:
 			cur.execute("UPDATE petition SET status = 'Pending' WHERE id = %s;", (petitionid,))
 			conn.commit()
-
 
 	if netid:
 		return HttpResponseRedirect('../'+netid)
