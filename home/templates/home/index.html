@@ -103,7 +103,7 @@
             <option value="Other">Other</option>
           </select>
         </div>
-        <button type="submit" class="btn btn=sm btn-primary" role="button">
+        <button type="submit" class="btn btn=sm btn-primary" role="button" style='margin-left: 5px; width:auto; display:inline;'>
           Filter
         </button>
       </form>
@@ -111,6 +111,7 @@
     </div>
   </div>
 </div>
+</br>
 
 <!-- display petitions -->
 {% for petition in petitions %}
@@ -162,11 +163,11 @@
             </button>
           {% endif %}
 
-          <h1 class="panel-title">{{ petition.2 }}</h1>
+          <h1 class="panel-title" style='word-wrap: break-word;'>{{ petition.2 }}</h1>
           By <a href='{% url 'home:my_petitions' petition.1 %}' style='color:inherit;'>{{ petition.1 }}</a> </br>
           <i>{{petition.4}}</i>
         </div>
-        <div class="panel-body">
+        <div class="panel-body" style='word-wrap: break-word;'>
             {{ petition.3 }}
         </div>
       </div>
@@ -224,7 +225,7 @@
   <!-- list of comments-->
   <ul class="list-group col-lg-offset-1 col-lg-11 col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11 col-xs-offset-2 col-xs-10 collapse" id=com{{petition.0}}>
   {% for comment in petition.8  %}
-      <li class="list-group-item">
+      <li class="list-group-item" style='word-wrap: break-word; max-height:100px; overflow:auto'>
           {{comment}}
       </li>
   {% endfor %}
