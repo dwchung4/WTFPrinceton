@@ -109,13 +109,13 @@
       <!-- delete_petition confirmation -->
       <div class='collapse' id={{ petition.0 }}>
         <p>Please confirm that you want to delete this petition</p>
-        <a href='{% url 'home:delete_petition' petition.0%}' class='btn btn-default' role='button'>
+        <a href='{% url 'home:delete_petition' petition.0 %}' class='btn btn-success' role='button'>
           <span class='glyphicon glyphicon-ok-circle' style='font-size: 1.5vw'>
-          </span>
+          </span> Yes, delete this petition
         </a>
-        <button href=#{{ petition.0 }} type='button' class='btn btn-default' data-toggle='collapse'>
+        <button href=#{{ petition.0 }} type='button' class='btn btn-danger' data-toggle='collapse'>
           <span class='glyphicon glyphicon-remove-circle' style='font-size: 1.5vw'>
-          </span>
+          </span> No, don't delete this petition
         </button>
         </br>
         </br>
