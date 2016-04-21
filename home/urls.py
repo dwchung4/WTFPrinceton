@@ -4,7 +4,7 @@ from . import views
 app_name = 'home'
 
 urlpatterns = [
-    url(r'^(?P<sort>[a-zA-Z]*)$', views.index, name='index'),
+    url(r'^$', views.index, name='index'),
     url(r'^about/$', views.about, name='about'),
     url(r'^login/(?P<next_page>[0-9a-z_/]*)$', 'cas.views.login', name='login'),
 	url(r'^logout/$', 'cas.views.logout', name='logout'),

@@ -10,12 +10,29 @@ from website import database
 from datetime import datetime, timedelta
 
 
-def index(request, sort):
+def index(request):
+
+	orderList = ['Recent', 'Top']
+	statusList = ['Active', 'Expired', 'Pending', 'Completed']
+	categoryList = ['All', 'Academics', 'Athletics & Recreation', 'Community Issues', 'Dining', 
+		'Housing & Facilities', 'Student Activities', 'Student Services', 'Other']
+
 	order = request.GET.get("order")
+	if order == None:
+		order = 'Recent'
 	status = request.GET.get("status")
 	if status == None:
 		status = 'Active'
 	category = request.GET.get("category")
+	if category == None:
+		category = 'All'
+
+	orderList.remove(order)
+	orderList.insert(0, order)
+	statusList.remove(status)
+	statusList.insert(0, status)
+	categoryList.remove(category)
+	categoryList.insert(0, category)
 
 	petitions = []
 	query = request.GET.get("q")
@@ -23,18 +40,9 @@ def index(request, sort):
 		conn = database.connect()
 		cur = conn.cursor()
 		formattedquery = '%'+query+'%'
-		if not sort:
-			cur.execute("SELECT DISTINCT * FROM petition WHERE LOWER(title) LIKE LOWER(%s) \
-				OR LOWER(content) LIKE LOWER(%s) OR LOWER(netid) LIKE LOWER(%s) \
-				ORDER BY expiration;", (formattedquery, formattedquery, formattedquery,))
-		elif sort == 'top':
-			cur.execute("SELECT DISTINCT * FROM petition WHERE LOWER(title) LIKE LOWER(%s) \
-				OR LOWER(content) LIKE LOWER(%s) OR LOWER(netid) LIKE LOWER(%s) \
-				ORDER BY vote DESC, expiration;", (formattedquery, formattedquery, formattedquery,))
-		else:
-			cur.execute("SELECT DISTINCT * FROM petition WHERE LOWER(title) LIKE LOWER(%s) \
-				OR LOWER(content) LIKE LOWER(%s) OR LOWER(netid) LIKE LOWER(%s) \
-				ORDER BY vote;", (formattedquery, formattedquery, formattedquery,))
+		cur.execute("SELECT DISTINCT * FROM petition WHERE LOWER(title) LIKE LOWER(%s) \
+			OR LOWER(content) LIKE LOWER(%s) OR LOWER(netid) LIKE LOWER(%s) \
+			ORDER BY expiration DESC;", (formattedquery, formattedquery, formattedquery,))
 
 		for petition in cur.fetchall():
 			petition = addRemainingTime(petition)
@@ -46,19 +54,16 @@ def index(request, sort):
 				tempList = list(petition)
 				tempList[7] = 'Expired'
 				petition = tuple(tempList)
-			if petition[7] == 'Active':
-				petitions.append(petition)
+			petitions.append(petition)
 
 		if request.user.is_authenticated():
 			return render(request, 'home/index.html', {
 				'petitions': petitions,
 				'netid': str(request.user),
-				'sort': sort,
 			})
 		else:
 			return render(request, 'home/index_visitor.html', {
 				'petitions': petitions,
-				'sort': sort
 			})
 	else:
 		conn = database.connect()
@@ -97,12 +102,13 @@ def index(request, sort):
 			return render(request, 'home/index.html', {
 				'netid': str(request.user),
 				'petitions': petitions,
-				'sort': sort,
+				'orderList': orderList,
+				'statusList': statusList,
+				'categoryList': categoryList,
 			})
 		else:
 			return render(request, 'home/index_visitor.html', {
 				'petitions': petitions,
-				'sort': sort,
 			})
 
 

@@ -12,7 +12,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="{% url 'home:index' "" %}"><span class="glyphicon glyphicon-home" ></span> WTF</a>
+      <a class="navbar-brand" href="{% url 'home:index' %}"><span class="glyphicon glyphicon-home" ></span> WTF</a>
     </div>
     <div id="navbar" class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
@@ -39,7 +39,7 @@
 <div class="jumbotron text-center">
   <div class='cover panel center-block ' id='box'>
   	<div class="page-header">
-      <h1><span class="text-black"><a href="{% url 'home:index' "" %}" style='color:white; text-decoration: inherit;'>What To Fix: Princeton</a></span></h1>
+      <h1><span class="text-black"><a href="{% url 'home:index' %}" style='color:white; text-decoration: inherit;'>What To Fix: Princeton</a></span></h1>
   	</div>
 
     <div class="container">
@@ -58,9 +58,9 @@
 	<div class="row">
 		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 			<div class="input-group">
-        <form class = "form-inline" role="search" method="get" action="{% url 'home:index' "search" %}">
+        <form class = "form-inline" role="search" method="get" action="{% url 'home:index' %}">
           <div class="form-group">
-              <input type="text" class="form-control" name="q" value="{{ request.GET.q }}" placeholder="Search for..." size="50" autofocus>
+              <input type="text" class="form-control" name="q" value="{{ request.GET.q }}" placeholder="Search by title, content, and NetID" size="50" autofocus>
           </div>
           <button type="submit" class="btn btn-primary pull-right">Search</button>
         </form>
@@ -77,30 +77,54 @@
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
       <h5>Filters</h5>
 
-      <form class = "form-inline" role="search" method="get" action="{% url 'home:index' "" %}">
+      <form class = "form-inline" role="search" method="get" action="{% url 'home:index' %}">
         <div class="form-group">
           <select class="form-control input-sm" name="order" value="{{ request.GET.order }}" style='margin-left: 5px; width:auto; display:inline-block;'>
-            <option value="Recent">Recent</option>
-            <option value="Top">Top</option>
+            {% if orderList %}
+              <option value={{ orderList.0 }}>{{ orderList.0 }}</option>
+              <option value={{ orderList.1 }}>{{ orderList.1 }}</option>
+            {% else %}
+              <option value="Recent">Recent</option>
+              <option value="Top">Top</option>
+            {% endif %}
           </select>
 
           <select class="form-control input-sm" name="status" value="{{ request.GET.status }}" style='margin-left: 5px; width:auto; display:inline-block;'>
-            <option value="Active">Active</option>
-            <option value="Expired">Expired</option>
-            <option value="Pending">Pending</option>
-            <option value="Completed">Completed</option>
+            {% if statusList %}
+              <option value={{ statusList.0 }}>{{ statusList.0 }}</option>
+              <option value={{ statusList.1 }}>{{ statusList.1 }}</option>
+              <option value={{ statusList.2 }}>{{ statusList.2 }}</option>
+              <option value={{ statusList.3 }}>{{ statusList.3 }}</option>
+            {% else %}
+              <option value="Active">Active</option>
+              <option value="Expired">Expired</option>
+              <option value="Pending">Pending</option>
+              <option value="Completed">Completed</option>
+            {% endif %}
           </select>
 
           <select class="form-control input-sm" name="category" value="{{ request.GET.category }}" style='margin-left: 5px; width:auto; display:inline-block;'>
+          {% if categoryList %}
+            <option value={{ categoryList.0 }}>{{ categoryList.0 }}</option>
+            <option value={{ categoryList.1 }}>{{ categoryList.1 }}</option>
+            <option value={{ categoryList.2 }}>{{ categoryList.2 }}</option>
+            <option value={{ categoryList.3 }}>{{ categoryList.3 }}</option>
+            <option value={{ categoryList.4 }}>{{ categoryList.4 }}</option>
+            <option value={{ categoryList.5 }}>{{ categoryList.5 }}</option>
+            <option value={{ categoryList.6 }}>{{ categoryList.6 }}</option>
+            <option value={{ categoryList.7 }}>{{ categoryList.7 }}</option>
+            <option value={{ categoryList.8 }}>{{ categoryList.8 }}</option>
+          {% else %}
             <option value="All">All</option>
             <option value="Academics">Academics</option>
-            <option value="Athletics">Athletics & Recreation</option>
+            <option value="Athletics">Athletics &amp; Recreation</option>
             <option value="Community Issues">Community Issues</option>
             <option value="Dining">Dining</option>
-            <option value="Housing & Facilities">Housing & Facilities</option>
+            <option value="Housing &amp; Facilities">Housing &amp; Facilities</option>
             <option value="Student Activities">Student Activities</option>
             <option value="Student Services">Student Services</option>
             <option value="Other">Other</option>
+          {% endif %}
           </select>
         </div>
         <button type="submit" class="btn btn=sm btn-primary" role="button" style='margin-left: 5px; width:auto; display:inline;'>
