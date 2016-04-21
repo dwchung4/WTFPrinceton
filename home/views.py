@@ -32,7 +32,6 @@ def index(request):
 	orderList.insert(0, order)
 	statusList.remove(status)
 	statusList.insert(0, status)
-	print category
 	categoryList.remove(category)
 	categoryList.insert(0, category)
 
@@ -66,8 +65,6 @@ def index(request):
 		petition = addRemainingTime(petition)
 		# if expired, change status to 'Expired'
 		if petition[9] < 0 and petition[7] == 'Active':
-			print petition[9]
-			print petition[7]
 			conn1 = database.connect()
 			cur1 = conn1.cursor()
 			cur1.execute("UPDATE petition SET status = 'Expired' WHERE id = %s;", (petition[0],))
@@ -77,7 +74,9 @@ def index(request):
 			petition = tuple(tempList)
 
 		# add filtered petitions to list
-		if petition[7] == status:
+		if query:
+			petitions.append(petition)
+		elif petition[7] == status:
 			petitions.append(petition)
 
 	if request.user.is_authenticated():
