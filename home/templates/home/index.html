@@ -81,8 +81,8 @@
         <div class="form-group">
           <select class="form-control input-sm" name="order" value="{{ request.GET.order }}" style='margin-left: 5px; width:auto; display:inline-block;'>
             {% if orderList %}
-              <option value={{ orderList.0 }}>{{ orderList.0 }}</option>
-              <option value={{ orderList.1 }}>{{ orderList.1 }}</option>
+              <option value="{{ orderList.0 }}">{{ orderList.0 }}</option>
+              <option value="{{ orderList.1 }}">{{ orderList.1 }}</option>
             {% else %}
               <option value="Recent">Recent</option>
               <option value="Top">Top</option>
@@ -91,10 +91,10 @@
 
           <select class="form-control input-sm" name="status" value="{{ request.GET.status }}" style='margin-left: 5px; width:auto; display:inline-block;'>
             {% if statusList %}
-              <option value={{ statusList.0 }}>{{ statusList.0 }}</option>
-              <option value={{ statusList.1 }}>{{ statusList.1 }}</option>
-              <option value={{ statusList.2 }}>{{ statusList.2 }}</option>
-              <option value={{ statusList.3 }}>{{ statusList.3 }}</option>
+              <option value="{{ statusList.0 }}">{{ statusList.0 }}</option>
+              <option value="{{ statusList.1 }}">{{ statusList.1 }}</option>
+              <option value="{{ statusList.2 }}">{{ statusList.2 }}</option>
+              <option value="{{ statusList.3 }}">{{ statusList.3 }}</option>
             {% else %}
               <option value="Active">Active</option>
               <option value="Expired">Expired</option>
@@ -105,15 +105,15 @@
 
           <select class="form-control input-sm" name="category" value="{{ request.GET.category }}" style='margin-left: 5px; width:auto; display:inline-block;'>
           {% if categoryList %}
-            <option value={{ categoryList.0 }}>{{ categoryList.0 }}</option>
-            <option value={{ categoryList.1 }}>{{ categoryList.1 }}</option>
-            <option value={{ categoryList.2 }}>{{ categoryList.2 }}</option>
-            <option value={{ categoryList.3 }}>{{ categoryList.3 }}</option>
-            <option value={{ categoryList.4 }}>{{ categoryList.4 }}</option>
-            <option value={{ categoryList.5 }}>{{ categoryList.5 }}</option>
-            <option value={{ categoryList.6 }}>{{ categoryList.6 }}</option>
-            <option value={{ categoryList.7 }}>{{ categoryList.7 }}</option>
-            <option value={{ categoryList.8 }}>{{ categoryList.8 }}</option>
+            <option value="{{ categoryList.0 }}">{{ categoryList.0 }}</option>
+            <option value="{{ categoryList.1 }}">{{ categoryList.1 }}</option>
+            <option value="{{ categoryList.2 }}">{{ categoryList.2 }}</option>
+            <option value="{{ categoryList.3 }}">{{ categoryList.3 }}</option>
+            <option value="{{ categoryList.4 }}">{{ categoryList.4 }}</option>
+            <option value="{{ categoryList.5 }}">{{ categoryList.5 }}</option>
+            <option value="{{ categoryList.6 }}">{{ categoryList.6 }}</option>
+            <option value="{{ categoryList.7 }}">{{ categoryList.7 }}</option>
+            <option value="{{ categoryList.8 }}">{{ categoryList.8 }}</option>
           {% else %}
             <option value="All">All</option>
             <option value="Academics">Academics</option>

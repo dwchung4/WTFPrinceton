@@ -27,48 +27,28 @@ def index(request):
 	if category == None:
 		category = 'All'
 
+	# move current filter to the front of list
 	orderList.remove(order)
 	orderList.insert(0, order)
 	statusList.remove(status)
 	statusList.insert(0, status)
+	print category
 	categoryList.remove(category)
 	categoryList.insert(0, category)
 
 	petitions = []
+
+	conn = database.connect()
+	cur = conn.cursor()
+
+	# search query
 	query = request.GET.get("q")
 	if query:
-		conn = database.connect()
-		cur = conn.cursor()
 		formattedquery = '%'+query+'%'
 		cur.execute("SELECT DISTINCT * FROM petition WHERE LOWER(title) LIKE LOWER(%s) \
 			OR LOWER(content) LIKE LOWER(%s) OR LOWER(netid) LIKE LOWER(%s) \
 			ORDER BY expiration DESC;", (formattedquery, formattedquery, formattedquery,))
-
-		for petition in cur.fetchall():
-			petition = addRemainingTime(petition)
-			if petition[9] < 0 and petition[7] == 'Active':
-				conn1 = database.connect()
-				cur1 = conn1.cursor()
-				cur1.execute("UPDATE petition SET status = 'Expired' WHERE id = %s;", (petition[0],))
-				conn1.commit()
-				tempList = list(petition)
-				tempList[7] = 'Expired'
-				petition = tuple(tempList)
-			petitions.append(petition)
-
-		if request.user.is_authenticated():
-			return render(request, 'home/index.html', {
-				'petitions': petitions,
-				'netid': str(request.user),
-			})
-		else:
-			return render(request, 'home/index_visitor.html', {
-				'petitions': petitions,
-			})
 	else:
-		conn = database.connect()
-		cur = conn.cursor()
-
 		if category == None or category == 'All':
 			if order == None or order == 'Recent':
 				cur.execute("SELECT * FROM petition WHERE status = %s ORDER BY expiration;", (status,))
@@ -82,34 +62,39 @@ def index(request):
 				cur.execute("SELECT * FROM petition WHERE status = %s AND category = %s ORDER BY vote DESC, expiration;", 
 					(status, category,))
 
-		for petition in cur.fetchall():
-			petition = addRemainingTime(petition)
-			if petition[9] < 0 and petition[7] == 'Active':
-				print petition[9]
-				print petition[7]
-				conn1 = database.connect()
-				cur1 = conn1.cursor()
-				cur1.execute("UPDATE petition SET status = 'Expired' WHERE id = %s;", (petition[0],))
-				conn1.commit()
-				tempList = list(petition)
-				tempList[7] = 'Expired'
-				petition = tuple(tempList)
+	for petition in cur.fetchall():
+		petition = addRemainingTime(petition)
+		# if expired, change status to 'Expired'
+		if petition[9] < 0 and petition[7] == 'Active':
+			print petition[9]
+			print petition[7]
+			conn1 = database.connect()
+			cur1 = conn1.cursor()
+			cur1.execute("UPDATE petition SET status = 'Expired' WHERE id = %s;", (petition[0],))
+			conn1.commit()
+			tempList = list(petition)
+			tempList[7] = 'Expired'
+			petition = tuple(tempList)
 
-			if petition[7] == status:
-				petitions.append(petition)
-			
-		if request.user.is_authenticated():
-			return render(request, 'home/index.html', {
-				'netid': str(request.user),
-				'petitions': petitions,
-				'orderList': orderList,
-				'statusList': statusList,
-				'categoryList': categoryList,
-			})
-		else:
-			return render(request, 'home/index_visitor.html', {
-				'petitions': petitions,
-			})
+		# add filtered petitions to list
+		if petition[7] == status:
+			petitions.append(petition)
+
+	if request.user.is_authenticated():
+		return render(request, 'home/index.html', {
+			'netid': str(request.user),
+			'petitions': petitions,
+			'orderList': orderList,
+			'statusList': statusList,
+			'categoryList': categoryList,
+		})
+	else:
+		return render(request, 'home/index_visitor.html', {
+			'petitions': petitions,
+			'orderList': orderList,
+			'statusList': statusList,
+			'categoryList': categoryList,
+		})
 
 
 def about(request):
