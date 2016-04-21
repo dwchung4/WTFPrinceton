@@ -11,6 +11,12 @@ from datetime import datetime, timedelta
 
 
 def index(request, sort):
+	order = request.GET.get("order")
+	status = request.GET.get("status")
+	if status == None:
+		status = 'Active'
+	category = request.GET.get("category")
+
 	petitions = []
 	query = request.GET.get("q")
 	if query:
@@ -57,12 +63,19 @@ def index(request, sort):
 	else:
 		conn = database.connect()
 		cur = conn.cursor()
-		if not sort:
-			cur.execute("SELECT * FROM petition ORDER BY expiration;")
-		elif sort == 'top':
-			cur.execute("SELECT * FROM petition ORDER BY vote DESC, expiration;")
+
+		if category == None or category == 'All':
+			if order == None or order == 'Recent':
+				cur.execute("SELECT * FROM petition WHERE status = %s ORDER BY expiration;", (status,))
+			else:
+				cur.execute("SELECT * FROM petition WHERE status = %s ORDER BY vote DESC, expiration;", (status,))
 		else:
-			cur.execute("SELECT * FROM petition ORDER BY expiration;")
+			if order == None or order == 'Recent':
+				cur.execute("SELECT * FROM petition WHERE status = %s AND category = %s ORDER BY expiration;", 
+					(status, category,))
+			else:
+				cur.execute("SELECT * FROM petition WHERE status = %s AND category = %s ORDER BY vote DESC, expiration;", 
+					(status, category,))
 
 		for petition in cur.fetchall():
 			petition = addRemainingTime(petition)
@@ -76,7 +89,8 @@ def index(request, sort):
 				tempList = list(petition)
 				tempList[7] = 'Expired'
 				petition = tuple(tempList)
-			if petition[7] == 'Active':
+
+			if petition[7] == status:
 				petitions.append(petition)
 			
 		if request.user.is_authenticated():
@@ -93,8 +107,6 @@ def index(request, sort):
 
 
 def about(request):
-	petitionFilter = request.GET.get("f")
-	print petitionFilter
 	if request.user.is_authenticated():
 		return render(request, 'home/about.html', {
 			'netid': str(request.user),

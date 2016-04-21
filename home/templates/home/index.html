@@ -77,23 +77,21 @@
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
       <h5>Filters</h5>
 
-
-
-      <form class = "form-inline" role="search" method="get" action="{% url 'home:about' %}">
-        <div class="form-group" name="f" value="{{ request.GET.f }}">
-          <select class="form-control input-sm" style='margin-left: 5px; width:auto; display:inline-block;'>
+      <form class = "form-inline" role="search" method="get" action="{% url 'home:index' "" %}">
+        <div class="form-group">
+          <select class="form-control input-sm" name="order" value="{{ request.GET.order }}" style='margin-left: 5px; width:auto; display:inline-block;'>
             <option value="Recent">Recent</option>
             <option value="Top">Top</option>
           </select>
 
-          <select class="form-control input-sm" style='margin-left: 5px; width:auto; display:inline-block;'>
+          <select class="form-control input-sm" name="status" value="{{ request.GET.status }}" style='margin-left: 5px; width:auto; display:inline-block;'>
             <option value="Active">Active</option>
             <option value="Expired">Expired</option>
             <option value="Pending">Pending</option>
             <option value="Completed">Completed</option>
           </select>
 
-          <select class="form-control input-sm" style='margin-left: 5px; width:auto; display:inline-block;'>
+          <select class="form-control input-sm" name="category" value="{{ request.GET.category }}" style='margin-left: 5px; width:auto; display:inline-block;'>
             <option value="All">All</option>
             <option value="Academics">Academics</option>
             <option value="Athletics">Athletics & Recreation</option>
@@ -109,10 +107,6 @@
           Filter
         </button>
       </form>
-
-
-
-
 
     </div>
   </div>
