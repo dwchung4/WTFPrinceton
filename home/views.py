@@ -24,7 +24,7 @@ def index(request, sort):
 		elif sort == 'top':
 			cur.execute("SELECT DISTINCT * FROM petition WHERE LOWER(title) LIKE LOWER(%s) \
 				OR LOWER(content) LIKE LOWER(%s) OR LOWER(netid) LIKE LOWER(%s) \
-				ORDER BY vote DESC;", (formattedquery, formattedquery, formattedquery,))
+				ORDER BY vote DESC, expiration;", (formattedquery, formattedquery, formattedquery,))
 		else:
 			cur.execute("SELECT DISTINCT * FROM petition WHERE LOWER(title) LIKE LOWER(%s) \
 				OR LOWER(content) LIKE LOWER(%s) OR LOWER(netid) LIKE LOWER(%s) \
@@ -60,7 +60,7 @@ def index(request, sort):
 		if not sort:
 			cur.execute("SELECT * FROM petition ORDER BY expiration;")
 		elif sort == 'top':
-			cur.execute("SELECT * FROM petition ORDER BY vote DESC;")
+			cur.execute("SELECT * FROM petition ORDER BY vote DESC, expiration;")
 		else:
 			cur.execute("SELECT * FROM petition ORDER BY expiration;")
 
@@ -149,8 +149,8 @@ def add_comment(request, id):
 		for petition in cur.fetchall():
 			petitions.append(petition)
 		context = {
-			"netid": request.user,
-			"petitions": petitions
+			'netid': request.user,
+			'petitions': petitions,
 		}
 		return render(request, 'home/index.html', context)
 
@@ -162,7 +162,7 @@ def my_petitions(request, netid):
 		petitions = []
 		conn = database.connect()
 		cur = conn.cursor()
-		cur.execute("SELECT * FROM petition WHERE netid = %s ORDER BY expiration", (str(netid),))
+		cur.execute("SELECT * FROM petition WHERE netid = %s ORDER BY expiration DESC", (str(netid),))
 		for petition in cur.fetchall():
 			petition = addRemainingTime(petition)
 			if petition[9] < 0 and petition[7] == 'Active':
@@ -222,7 +222,7 @@ def delete_petition(request, petitionid):
 
 def vote(request, petitionid, netid):
 	if request.META.get('HTTP_REFERER') == None:
-		return HttpResponseRedirect('../')
+		return HttpResponseRedirect('../../')
 
 	conn = database.connect()
 	cur = conn.cursor()
@@ -242,6 +242,6 @@ def vote(request, petitionid, netid):
 			conn.commit()
 
 	if netid:
-		return HttpResponseRedirect('../'+netid)
+		return HttpResponseRedirect('../../my_petitions/'+netid)
 	else:
-		return HttpResponseRedirect('../')
+		return HttpResponseRedirect('../../')
