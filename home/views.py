@@ -93,6 +93,8 @@ def index(request, sort):
 
 
 def about(request):
+	petitionFilter = request.GET.get("f")
+	print petitionFilter
 	if request.user.is_authenticated():
 		return render(request, 'home/about.html', {
 			'netid': str(request.user),
@@ -138,7 +140,7 @@ def add_comment(request, id):
 			formattedquery = '{'+query+'}'
 			cur.execute("UPDATE petition SET comments = comments || %s WHERE id = %s;", (formattedquery, str(id),))
 			conn.commit()
-			return HttpResponseRedirect('/')
+			return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 		petitions = []
 		conn = database.connect()
 		cur = conn.cursor()
@@ -152,7 +154,7 @@ def add_comment(request, id):
 			'netid': request.user,
 			'petitions': petitions,
 		}
-		return render(request, 'home/index.html', context)
+		return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 def my_petitions(request, netid):
@@ -245,3 +247,12 @@ def vote(request, petitionid, netid):
 		return HttpResponseRedirect('../../my_petitions/'+netid)
 	else:
 		return HttpResponseRedirect('../../')
+
+
+def howtouse(request):
+	if request.user.is_authenticated():
+		return render(request, 'home/howtouse.html', {
+			'netid': request.user,
+		})
+	else:
+		return render(request, 'home/howtouse_visitor.html')
