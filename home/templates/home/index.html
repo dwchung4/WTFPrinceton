@@ -41,14 +41,14 @@
       <h1><span class="text-black"><a href="{% url 'home:index' "" %}" style='color:white; text-decoration: inherit;'>What To Fix: Princeton</a></span></h1>
   	</div>
 
-  <div class="container">
-  	<a href="{% url 'home:create_petition' %}" class="btn btn-lg btn-default" role="button">
+    <div class="container">
+  	 <a href="{% url 'home:create_petition' %}" class="btn btn-lg btn-default" role="button">
   		<span class="glyphicon glyphicon-plus">
   		</span>
   		Create new petition
-  	</a>
-  </div>
-  <div class='spacer'></div>
+  	 </a>
+    </div>
+    <div class='spacer'></div>
   </div>
 </div>
 
@@ -61,7 +61,7 @@
           <div class="form-group">
               <input type="text" class="form-control" name="q" value="{{ request.GET.q }}" placeholder="Search for..." size="50" autofocus>
           </div>
-          <button type="submit" class="btn btn-default pull-right">Search</button>
+          <button type="submit" class="btn btn-primary pull-right">Search</button>
         </form>
       </div>
 		</div>
@@ -70,27 +70,52 @@
 
 </br>
 
-<!-- sort -->
+<!-- sort thru petitions -->
 <div class="container">
   <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-      <p>Currently active petitions:</p>
-      <p>
-        <a href='{% url 'home:index' "" %}' class='btn btn-xs btn-primary' role='button'>
+      <h5>Filters</h5>
+      <div class='btn-toolbar btn-xs' role='toolbar'>
+        <div class='btn-group'>
+        <button href='{% url 'home:index' "" %}' class='btn btn-sm btn-default'>
           Recent
-        </a>
-        <a href='{% url 'home:index' "top" %}' class='btn btn-xs btn-primary' role='button'>
+        </button>
+        </div>
+        <div class='btn-group'>
+        <button href='{% url 'home:index' "top" %}' type='button' class='btn btn-sm btn-default' role='button'>
           Top
-        </a>
-      </p>
+        </button>
+        </div>
+
+        <select class="form-control input-sm" style='margin-left: 5px; width:auto; display:inline-block;'>
+          <option value="Active">Active</option>
+          <option value="Expired">Expired</option>
+          <option value="Pending">Pending</option>
+          <option value="Completed">Completed</option>
+        </select>
+
+        <select class="form-control input-sm" style='margin-left: 5px; width:auto; display:inline-block;'>
+          <option value="All">All</option>
+          <option value="Academics">Academics</option>
+          <option value="Athletics">Athletics & Recreation</option>
+          <option value="Community Issues">Community Issues</option>
+          <option value="Dining">Dining</option>
+          <option value="Housing & Facilities">Housing & Facilities</option>
+          <option value="Student Activities">Student Activities</option>
+          <option value="Student Services">Student Services</option>
+          <option value="Other">Other</option>
+        </select>
+        
+        <button type='button' href='{% url 'home:index' "" %}' class='btn btn-sm btn-primary' role='button'>
+          Filter
+        </button>
+        
+      </div>
     </div>
   </div>
 </div>
 
 </br>
-
-<!-- space for sections to be added later -->
-
 
 <!-- display petitions -->
 {% for petition in petitions %}
@@ -143,9 +168,8 @@
           {% endif %}
 
           <h1 class="panel-title">{{ petition.2 }}</h1>
-          <p>
-            By <a href='{% url 'home:my_petitions' petition.1 %}' style='color:inherit;'>{{ petition.1 }}</a>
-          </p>
+          By <a href='{% url 'home:my_petitions' petition.1 %}' style='color:inherit;'>{{ petition.1 }}</a> </br>
+          <i>{{petition.4}}</i>
         </div>
         <div class="panel-body">
             {{ petition.3 }}
@@ -155,23 +179,21 @@
       <!-- delete_petition confirmation -->
       <div class='collapse' id={{ petition.0 }}>
         <p>Please confirm that you want to delete this petition</p>
-        <a href='{% url 'home:delete_petition' petition.0 %}' class='btn btn-default' role='button'>
+        <a href='{% url 'home:delete_petition' petition.0 %}' class='btn btn-success' role='button'>
           <span class='glyphicon glyphicon-ok-circle' style='font-size: 1.5vw'>
-          </span>
+          </span> Yes, delete this petition
         </a>
-        <button href=#{{ petition.0 }} type='button' class='btn btn-default' data-toggle='collapse'>
+        <button href=#{{ petition.0 }} type='button' class='btn btn-danger' data-toggle='collapse'>
           <span class='glyphicon glyphicon-remove-circle' style='font-size: 1.5vw'>
-          </span>
+          </span> No, don't delete this petition
         </button>
         </br>
         </br>
       </div>
-
     </div>
-
   </div>
 
-  <!-- comments -->
+  <!-- write comments -->
   <div class='row'>
     <div class='col-lg-offset-1 col-lg-11 col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11 col-xs-offset-2 col-xs-10'>
       <div class="input-group">
@@ -187,33 +209,33 @@
     </div>
   </div>
 
-  {% for comment in petition.8  %}
-  <div class="panel-body">
-      {{ comment }}
-  </div>
-  {% endfor %}
-
-
+  <!-- show comments -->
   <div class='row'>
     <div class='col-lg-offset-1 col-lg-1 col-md-offset-1 col-md-1 col-sm-offset-1 col-sm-1 col-xs-offset-2 col-xs-1'>
-      <button href='#' type="button" class="btn btn-default" data-toggle='collapse'>View other comments
-        <span class='caret'></span>
+      <!-- no comments to show-->
+      {% if petition.8|length == 0 %}
+      <button href='#com{{petition.0}}' type="button" class="btn btn-default disabled" data-toggle='collapse'>View other comments
+        </span><span class="badge">{{petition.8|length}}</span>
       </button>
+
+      <!-- otherwise-->
+      {% else %}
+      <button href='#com{{petition.0}}' type="button" class="btn btn-default" data-toggle='collapse'>View other comments
+        </span><span class="badge">{{petition.8|length}}</span>
+      </button>
+      {%endif%}
     </div>
   </div>
-  <div class='row'>
-    <div class='col-lg-offset-1 col-lg-11 col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11 col-xs-offset-2 col-xs-10 collapse' id='comments'>
-    <ul class="list-group">
-    <li class="list-group-item">Cras justo odio</li>
-    <li class="list-group-item">Dapibus ac facilisis in</li>
-    <li class="list-group-item">Morbi leo risus</li>
-    </ul>
-    </div>
-  </div>
+  <!-- list of comments-->
+  <ul class="list-group col-lg-offset-1 col-lg-11 col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11 col-xs-offset-2 col-xs-10 collapse" id=com{{petition.0}}>
+  {% for comment in petition.8  %}
+      <li class="list-group-item">
+          {{comment}}
+      </li>
+  {% endfor %}
+  </ul>
+  </br>
 </div>
-
-</br>
-
 {% endfor %}
 
 </body>
