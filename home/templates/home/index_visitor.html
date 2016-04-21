@@ -56,7 +56,7 @@
           <div class="form-group">
               <input type="text" class="form-control" name="q" value="{{ request.GET.q }}" placeholder="Search for..." size="50" autofocus>
           </div>
-          <button type="submit" class="btn btn-default pull-right">Search</button>
+          <button type="submit" class="btn btn-primary pull-right">Search</button>
         </form>
       </div>
     </div>
@@ -65,22 +65,43 @@
 
 </br>
 
-<!-- sort -->
+<!-- sort thru petitions -->
 <div class="container">
   <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-      <p>Currently active petitions:</p>
-      <p>
-        <a href='{% url 'home:index' "" %}' class='btn btn-xs btn-primary' role='button'>
-          Recent
-        </a>
-        <a href='{% url 'home:index' "top" %}' class='btn btn-xs btn-primary' role='button'>
-          Top
-        </a>
-      </p>
+      <h5>Filters</h5>
+        <select class="form-control input-sm" style='margin-left: 5px; width:auto; display:inline-block;'>
+          <option value="Recent">Recent</option>
+          <option value="Top">Top</option>
+        </select>
+
+        <select class="form-control input-sm" style='margin-left: 5px; width:auto; display:inline-block;'>
+          <option value="Active">Active</option>
+          <option value="Expired">Expired</option>
+          <option value="Pending">Pending</option>
+          <option value="Completed">Completed</option>
+        </select>
+
+        <select class="form-control input-sm" style='margin-left: 5px; width:auto; display:inline-block;'>
+          <option value="All">All</option>
+          <option value="Academics">Academics</option>
+          <option value="Athletics">Athletics & Recreation</option>
+          <option value="Community Issues">Community Issues</option>
+          <option value="Dining">Dining</option>
+          <option value="Housing & Facilities">Housing & Facilities</option>
+          <option value="Student Activities">Student Activities</option>
+          <option value="Student Services">Student Services</option>
+          <option value="Other">Other</option>
+        </select>
+        
+        <button type='button' href='{% url 'home:index' "" %}' class='btn btn-sm btn-primary' role='button'>
+          Filter
+        </button>
+        
     </div>
   </div>
 </div>
+
 
 </br>
 
@@ -91,7 +112,7 @@
   <div class='row'>
     <!-- votes and expiration-->
     <div class='col-lg-1 col-md-1 col-sm-1 col-xs-2'>
-      <a href='{% url 'home:login' "" %}'><span class='glyphicon glyphicon-thumbs-up' style='font-size:300%;font-size: 5vw' aria-hidden='true'></span></a>
+      <a href='{% url 'home:login' "" %}'><span class='glyphicon glyphicon-thumbs-up' style='font-size:300%;font-size: 4vw' aria-hidden='true'></span></a>
       <h5>{{ petition.6 }}/10</h5>
 
       {% if petition.7 == "Pending" %}
@@ -127,10 +148,9 @@
       ">
         <div class="panel-heading panel-heading-custom">
           <h1 class="panel-title">{{ petition.2 }}</h1>
-          <p>
-            By <a href='{% url 'home:login' petition.1 %}' style='color:inherit;'>{{ petition.1 }}</a>
-          </p>
-        </div>
+          By <a href='{% url 'home:my_petitions' petition.1 %}' style='color:inherit;'>{{ petition.1 }}</a> </br>
+          <i>{{petition.4}}</i>
+          </div>
         <div class="panel-body">
             {{ petition.3 }}
         </div>
@@ -138,36 +158,49 @@
     </div>
   </div>
 
-  <!-- comments -->
+  <!-- write comments -->
   <div class='row'>
     <div class='col-lg-offset-1 col-lg-11 col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11 col-xs-offset-2 col-xs-10'>
       <div class="input-group">
-        <input type="text" class="form-control" placeholder="Write a comment!">
-        <span class="input-group-btn">
-        <button class="btn btn-default" type="button">Comment</button>
+        <form class="form-inline" method="get" action="{% url 'home:login' "" %}">
+          {% csrf_token %}
+          <div class ="form-group">
+              <input type="text" class="form-control" name="r" value="{{ request.GET.r }}" placeholder="Write a comment!" size="100">
+          </div>
+          <button type="submit" class="btn btn-success">Comment</button>
+        </form>
       </span>
      </div>
     </div>
   </div>
 
+  <!-- show comments -->
   <div class='row'>
     <div class='col-lg-offset-1 col-lg-1 col-md-offset-1 col-md-1 col-sm-offset-1 col-sm-1 col-xs-offset-2 col-xs-1'>
-    <button href='#comments' type="button" class="btn btn-default" data-toggle='collapse'>View other comments <span class='caret'></span></button>
+      <!-- no comments to show-->
+      {% if petition.8|length == 0 %}
+      <button href='#com{{petition.0}}' type="button" class="btn btn-default disabled" data-toggle='collapse'>View other comments
+        </span><span class="badge">{{petition.8|length}}</span>
+      </button>
+
+      <!-- otherwise-->
+      {% else %}
+      <button href='#com{{petition.0}}' type="button" class="btn btn-default" data-toggle='collapse'>View other comments
+        </span><span class="badge">{{petition.8|length}}</span>
+      </button>
+      {%endif%}
     </div>
   </div>
-  <div class='row'>
-    <div class='col-lg-offset-1 col-lg-11 col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11 col-xs-offset-2 col-xs-10 collapse' id='comments'>
-    <ul class="list-group">
-    <li class="list-group-item">Cras justo odio</li>
-    <li class="list-group-item">Dapibus ac facilisis in</li>
-    <li class="list-group-item">Morbi leo risus</li>
-    </ul>
-    </div>
-  </div>
+  <!-- list of comments-->
+  <ul class="list-group col-lg-offset-1 col-lg-11 col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11 col-xs-offset-2 col-xs-10 collapse" id=com{{petition.0}}>
+  {% for comment in petition.8  %}
+      <li class="list-group-item">
+          {{comment}}
+      </li>
+  {% endfor %}
+  </ul>
+  </br>
 </div>
-
-</br>
-
 {% endfor %}
 
 </body>
