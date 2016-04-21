@@ -163,6 +163,14 @@ def my_petitions(request, netid):
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect('../login/'+str(netid))
 	else:
+		query = request.GET.get("r")
+		if query:
+			conn = database.connect()
+			cur = conn.cursor()
+			formattedquery = '{'+query+'}'
+			cur.execute("UPDATE petition SET comments = comments || %s WHERE id = %s;", (formattedquery, str(id),))
+			conn.commit()
+			return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 		petitions = []
 		conn = database.connect()
 		cur = conn.cursor()
