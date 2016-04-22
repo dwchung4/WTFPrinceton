@@ -63,7 +63,7 @@ def index(request):
 	for petition in cur.fetchall():
 		petition = addRemainingTime(petition)
 		# if expired, change status to 'Expired'
-		if petition[9] < 0 and petition[7] == 'Active':
+		if petition[10] < 0 and petition[7] == 'Active':
 			conn1 = database.connect()
 			cur1 = conn1.cursor()
 			cur1.execute("UPDATE petition SET status = 'Expired' WHERE id = %s;", (petition[0],))
@@ -116,8 +116,7 @@ def create_petition(request):
 			}
 			conn = database.connect()
 			cur = conn.cursor()
-			expiration = datetime.now()+timedelta(minutes=1)
-			print "why expired"
+			expiration = datetime.now()+timedelta(minutes=2)
 			cur.execute("INSERT INTO petition(netid, title, content, category, status, expiration, vote) \
 				VALUES (%s, %s, %s, %s, %s, %s, %s)",
 				(str(request.user), str(petition.title), str(petition.content), str(petition.category),
