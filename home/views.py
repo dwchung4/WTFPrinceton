@@ -11,7 +11,6 @@ from datetime import datetime, timedelta
 
 
 def index(request):
-
 	orderList = ['Recent', 'Top']
 	statusList = ['Active', 'Expired', 'Pending', 'Completed']
 	categoryList = ['All', 'Academics', 'Athletics & Recreation', 'Community Issues', 'Dining', 
@@ -131,6 +130,9 @@ def create_petition(request):
 
 
 def add_comment(request, id):
+	if request.META.get('HTTP_REFERER') == None:
+		return HttpResponseRedirect('../../')
+
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect('../login/')
 	else:
@@ -238,16 +240,19 @@ def vote(request, petitionid, netid):
 	userid = request.user
 	conn = database.connect()
 	cur = conn.cursor()
+
+	# when user is trying to vote his own petition
 	cur.execute("SELECT netid FROM petition WHERE id = %s;", (petitionid,))
 	netid = cur.fetchone()[0]
 	if (str(userid) == netid):
-		return HttpResponseRedirect('../../')
+		return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+	# when user is trying to vote again
 	cur.execute("SELECT voteid FROM petition WHERE id = %s;", (petitionid,))
 	voteid = cur.fetchone()
 	for listid in voteid:
 		if listid != None and str(userid) in listid:
-			return HttpResponseRedirect('../../')
+			return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 	cur.execute("SELECT vote FROM petition WHERE id = %s;", (petitionid,))
 	vote = cur.fetchone()[0]
@@ -255,7 +260,7 @@ def vote(request, petitionid, netid):
 	cur.execute("SELECT expiration FROM petition WHERE id = %s;", (petitionid,))
 	timeleft = cur.fetchone()[0].replace(tzinfo=None)-now
 
-
+	# user votes successfully
 	if vote < 10 and timeleft.days >= 0:
 		formattedid = '{'+str(userid)+'}'
 		cur.execute("UPDATE petition SET vote = vote+1, voteid = voteid || %s WHERE id = %s;", (formattedid, petitionid,))
@@ -266,10 +271,7 @@ def vote(request, petitionid, netid):
 			cur.execute("UPDATE petition SET status = 'Pending' WHERE id = %s;", (petitionid,))
 			conn.commit()
 
-	if netid:
-		return HttpResponseRedirect('../../my_petitions/'+netid)
-	else:
-		return HttpResponseRedirect('../../')
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 def howtouse(request):

@@ -1,7 +1,15 @@
 1. Email to user when status changes, USG comments, etc.
 
-2. Error message when user double votes, etc.
+2. Error message when user double votes, post successfully deleted, etc.
 
-3. Post time for each petition, comment
+3. Post time for each petition, comment?
 
 4. When reach the goal, display “reached the goal in * days”
+
+5. favicon
+
+6. How To Use page
+
+7. netid for each comment
+
+8. Create page / scroll when there are lots of petitions
