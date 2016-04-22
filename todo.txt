@@ -1,14 +1,7 @@
-1. Messages
-- When search field is empty
-- When a petition has been submitted successfully
-- When some fields are empty when creating a new petition
+1. Email to user when status changes, USG comments, etc.
 
-2. About page: improve “Contact USG” section
+2. Error message when user double votes, etc.
 
-3. May be create “How to use” page?
+3. Post time for each petition, comment
 
-4. Make commenting possible
-
-5. Buttons to sort by recent, category, expired, etc.
-
-6. Ability to delete/edit own petitions
+4. When reach the goal, display “reached the goal in * days”
