@@ -235,11 +235,16 @@ def vote(request, petitionid, netid):
 	if request.META.get('HTTP_REFERER') == None:
 		return HttpResponseRedirect('../../')
 
+	userid = request.user
 	conn = database.connect()
 	cur = conn.cursor()
+	cur.execute("SELECT netid FROM petition WHERE id = %s;", (petitionid,))
+	netid = cur.fetchone()[0]
+	if (str(userid) == netid):
+		return HttpResponseRedirect('../../')
+
 	cur.execute("SELECT voteid FROM petition WHERE id = %s;", (petitionid,))
 	voteid = cur.fetchone()
-	userid = request.user
 	for listid in voteid:
 		if listid != None and str(userid) in listid:
 			return HttpResponseRedirect('../../')
