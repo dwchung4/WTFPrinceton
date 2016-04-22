@@ -22,7 +22,7 @@ def index(request):
 		order = 'Recent'
 	status = request.GET.get("status")
 	if status == None:
-		status = 'Active'
+		status = 'Expired'
 	category = request.GET.get("category")
 	if category == None:
 		category = 'All'
@@ -36,7 +36,6 @@ def index(request):
 	categoryList.insert(0, category)
 
 	petitions = []
-
 	conn = database.connect()
 	cur = conn.cursor()
 
@@ -118,6 +117,7 @@ def create_petition(request):
 			conn = database.connect()
 			cur = conn.cursor()
 			expiration = datetime.now()+timedelta(minutes=1)
+			print "why expired"
 			cur.execute("INSERT INTO petition(netid, title, content, category, status, expiration, vote) \
 				VALUES (%s, %s, %s, %s, %s, %s, %s)",
 				(str(request.user), str(petition.title), str(petition.content), str(petition.category),
@@ -238,14 +238,23 @@ def vote(request, petitionid, netid):
 
 	conn = database.connect()
 	cur = conn.cursor()
+	cur.execute("SELECT voteid FROM petition WHERE id = %s;", (petitionid,))
+	voteid = cur.fetchone()
+	userid = request.user
+	for listid in voteid:
+		if listid != None and str(userid) in listid:
+			return HttpResponseRedirect('../../')
+
 	cur.execute("SELECT vote FROM petition WHERE id = %s;", (petitionid,))
 	vote = cur.fetchone()[0]
 	now = datetime.now()
 	cur.execute("SELECT expiration FROM petition WHERE id = %s;", (petitionid,))
 	timeleft = cur.fetchone()[0].replace(tzinfo=None)-now
 
+
 	if vote < 10 and timeleft.days >= 0:
-		cur.execute("UPDATE petition SET vote = vote+1 WHERE id = %s;", (petitionid,))
+		formattedid = '{'+str(userid)+'}'
+		cur.execute("UPDATE petition SET vote = vote+1, voteid = voteid || %s WHERE id = %s;", (formattedid, petitionid,))
 		conn.commit()
 		vote += 1
 
