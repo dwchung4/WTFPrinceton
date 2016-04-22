@@ -57,12 +57,12 @@
 	<h1>Petitions</h1>
 	<div class="row">
 		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-			<div class="input-group">
+			<div class="input-group" style='max-height: 50px'>
         <form class = "form-inline" role="search" method="get" action="{% url 'home:index' %}">
-          <div class="form-group">
-              <input type="text" class="form-control" name="q" value="{{ request.GET.q }}" placeholder="Search by title, content, and NetID" size="50" autofocus>
+          <div class="form-group" style='display:inline-block'>
+              <input type="text" class="form-control" name="q" value="{{ request.GET.q }}" placeholder="Search by title, content, and NetID" size="35" autofocus>
           </div>
-          <button type="submit" class="btn btn-primary pull-right">Search</button>
+          <button type="submit" class="btn btn-primary pull-right" style='display:inline-block'>Search</button>
         </form>
       </div>
 		</div>
@@ -73,13 +73,12 @@
 
 <!-- sort thru petitions -->
 <div class="container">
+  <h5>Filters</h5>
   <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-      <h5>Filters</h5>
-
       <form class = "form-inline" role="search" method="get" action="{% url 'home:index' %}">
         <div class="form-group">
-          <select class="form-control input-sm" name="order" value="{{ request.GET.order }}" style='margin-left: 5px; width:auto; display:inline-block;'>
+          <select class="form-control input-sm" name="order" value="{{ request.GET.order }}" style='width:auto; display:inline-block;'>
             {% if orderList %}
               <option value="{{ orderList.0 }}">{{ orderList.0 }}</option>
               <option value="{{ orderList.1 }}">{{ orderList.1 }}</option>
@@ -127,7 +126,7 @@
           {% endif %}
           </select>
         </div>
-        <button type="submit" class="btn btn=sm btn-primary" role="button" style='margin-left: 5px; width:auto; display:inline;'>
+        <button type="submit" class="btn btn=sm btn-primary" role="button" style='margin-left: 5px; width:auto; display:inline-block;'>
           Filter
         </button>
       </form>
@@ -154,12 +153,12 @@
       {% elif petition.7 == "Active" %}
 
         <h6>Expires in:</h6>
-        {% if petition.10 == 'days' %}
-          <p>{{ petition.9 }} days</p>
-        {% elif petition.10 == 'hours' %}
-          <p> {{ petition.9 }} hours</p>
+        {% if petition.11 == 'days' %}
+          <p>{{ petition.10 }} days</p>
+        {% elif petition.11 == 'hours' %}
+          <p> {{ petition.10 }} hours</p>
         {% else %}
-          <p> {{ petition.9 }} min</p>
+          <p> {{ petition.10 }} min</p>
         {% endif %}
 
       {% elif petition.7 == "Expired" %}
@@ -255,7 +254,7 @@
   {% endfor %}
   </ul>
   </br>
-</div>
+  </div>
 {% endfor %}
 
 </body>

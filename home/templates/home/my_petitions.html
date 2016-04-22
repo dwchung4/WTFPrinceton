@@ -64,12 +64,12 @@
       {% elif petition.7 == "Active" %}
 
         <h6>Expires in:</h6>
-        {% if petition.10 == 'days' %}
-          <p>{{ petition.9 }} days</p>
-        {% elif petition.10 == 'hours' %}
-          <p> {{ petition.9 }} hours</p>
+        {% if petition.11 == 'days' %}
+          <p>{{ petition.10 }} days</p>
+        {% elif petition.11 == 'hours' %}
+          <p> {{ petition.10 }} hours</p>
         {% else %}
-          <p> {{ petition.9 }} min</p>
+          <p> {{ petition.10 }} min</p>
         {% endif %}
 
       {% elif petition.7 == "Expired" %}
@@ -109,13 +109,13 @@
       <!-- delete_petition confirmation -->
       <div class='collapse' id={{ petition.0 }}>
         <p>Please confirm that you want to delete this petition</p>
-        <a href='{% url 'home:delete_petition' petition.0%}' class='btn btn-default' role='button'>
+        <a href='{% url 'home:delete_petition' petition.0 %}' class='btn btn-success' role='button'>
           <span class='glyphicon glyphicon-ok-circle' style='font-size: 1.5vw'>
-          </span>
+          </span> Yes, delete this petition
         </a>
-        <button href=#{{ petition.0 }} type='button' class='btn btn-default' data-toggle='collapse'>
+        <button href=#{{ petition.0 }} type='button' class='btn btn-danger' data-toggle='collapse'>
           <span class='glyphicon glyphicon-remove-circle' style='font-size: 1.5vw'>
-          </span>
+          </span> No, don't delete this petition
         </button>
         </br>
         </br>
@@ -124,32 +124,47 @@
     </div>
   </div>
 
-  <!-- comments -->
+  <!-- write comments -->
   <div class='row'>
-    <div class='col-lg-offset-1 col-lg-11'>
+    <div class='col-lg-offset-1 col-lg-11 col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11 col-xs-offset-2 col-xs-10'>
       <div class="input-group">
-        <input type="text" class="form-control" placeholder="Write a comment!">
-        <span class="input-group-btn">
-        <button class="btn btn-default" type="button">Comment</button>
+        <form class="form-inline" method="get" action="{% url 'home:add_comment' petition.0 %}">
+          {% csrf_token %}
+          <div class ="form-group">
+              <input type="text" class="form-control" name="r" value="{{ request.GET.r }}" placeholder="Write a comment!" size="100">
+          </div>
+          <button type="submit" class="btn btn-success">Comment</button>
+        </form>
       </span>
      </div>
     </div>
   </div>
 
+  <!-- show comments -->
   <div class='row'>
-    <div class='col-lg-offset-1 col-lg-1'>
-    <button href='#comments' type="button" class="btn btn-default" data-toggle='collapse'>View other comments <span class='caret'></span></button>
+    <div class='col-lg-offset-1 col-lg-1 col-md-offset-1 col-md-1 col-sm-offset-1 col-sm-1 col-xs-offset-2 col-xs-1'>
+      <!-- no comments to show-->
+      {% if petition.8|length == 0 %}
+      <button href='#com{{petition.0}}' type="button" class="btn btn-default disabled" data-toggle='collapse'>View other comments
+        </span><span class="badge">{{petition.8|length}}</span>
+      </button>
+
+      <!-- otherwise-->
+      {% else %}
+      <button href='#com{{petition.0}}' type="button" class="btn btn-default" data-toggle='collapse'>View other comments
+        </span><span class="badge">{{petition.8|length}}</span>
+      </button>
+      {%endif%}
     </div>
   </div>
-  <div class='row'>
-    <div class='col-lg-offset-1 col-lg-11 collapse' id='comments'>
-    <ul class="list-group">
-    <li class="list-group-item">Cras justo odio</li>
-    <li class="list-group-item">Dapibus ac facilisis in</li>
-    <li class="list-group-item">Morbi leo risus</li>
-    </ul>
-    </div>
-  </div>
+  <!-- list of comments-->
+  <ul class="list-group col-lg-offset-1 col-lg-11 col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11 col-xs-offset-2 col-xs-10 collapse" id=com{{petition.0}}>
+  {% for comment in petition.8  %}
+      <li class="list-group-item" style='word-wrap: break-word; max-height:100px; overflow:auto'>
+          {{comment}}
+      </li>
+  {% endfor %}
+  </ul>
 </div>
 
 </br>

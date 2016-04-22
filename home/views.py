@@ -36,7 +36,6 @@ def index(request):
 	categoryList.insert(0, category)
 
 	petitions = []
-
 	conn = database.connect()
 	cur = conn.cursor()
 
@@ -64,7 +63,7 @@ def index(request):
 	for petition in cur.fetchall():
 		petition = addRemainingTime(petition)
 		# if expired, change status to 'Expired'
-		if petition[9] < 0 and petition[7] == 'Active':
+		if petition[10] < 0 and petition[7] == 'Active':
 			conn1 = database.connect()
 			cur1 = conn1.cursor()
 			cur1.execute("UPDATE petition SET status = 'Expired' WHERE id = %s;", (petition[0],))
@@ -117,7 +116,7 @@ def create_petition(request):
 			}
 			conn = database.connect()
 			cur = conn.cursor()
-			expiration = datetime.now()+timedelta(minutes=1)
+			expiration = datetime.now()+timedelta(minutes=2)
 			cur.execute("INSERT INTO petition(netid, title, content, category, status, expiration, vote) \
 				VALUES (%s, %s, %s, %s, %s, %s, %s)",
 				(str(request.user), str(petition.title), str(petition.content), str(petition.category),
@@ -163,13 +162,21 @@ def my_petitions(request, netid):
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect('../login/'+str(netid))
 	else:
+		query = request.GET.get("r")
+		if query:
+			conn = database.connect()
+			cur = conn.cursor()
+			formattedquery = '{'+query+'}'
+			cur.execute("UPDATE petition SET comments = comments || %s WHERE id = %s;", (formattedquery, str(id),))
+			conn.commit()
+			return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 		petitions = []
 		conn = database.connect()
 		cur = conn.cursor()
 		cur.execute("SELECT * FROM petition WHERE netid = %s ORDER BY expiration DESC", (str(netid),))
 		for petition in cur.fetchall():
 			petition = addRemainingTime(petition)
-			if petition[9] < 0 and petition[7] == 'Active':
+			if petition[10] < 0 and petition[7] == 'Active':
 				conn1 = database.connect()
 				cur1 = conn1.cursor()
 				cur1.execute("UPDATE petition SET status = 'Expired' WHERE id = %s;", (petition[0],))
@@ -228,16 +235,30 @@ def vote(request, petitionid, netid):
 	if request.META.get('HTTP_REFERER') == None:
 		return HttpResponseRedirect('../../')
 
+	userid = request.user
 	conn = database.connect()
 	cur = conn.cursor()
+	cur.execute("SELECT netid FROM petition WHERE id = %s;", (petitionid,))
+	netid = cur.fetchone()[0]
+	if (str(userid) == netid):
+		return HttpResponseRedirect('../../')
+
+	cur.execute("SELECT voteid FROM petition WHERE id = %s;", (petitionid,))
+	voteid = cur.fetchone()
+	for listid in voteid:
+		if listid != None and str(userid) in listid:
+			return HttpResponseRedirect('../../')
+
 	cur.execute("SELECT vote FROM petition WHERE id = %s;", (petitionid,))
 	vote = cur.fetchone()[0]
 	now = datetime.now()
 	cur.execute("SELECT expiration FROM petition WHERE id = %s;", (petitionid,))
 	timeleft = cur.fetchone()[0].replace(tzinfo=None)-now
 
+
 	if vote < 10 and timeleft.days >= 0:
-		cur.execute("UPDATE petition SET vote = vote+1 WHERE id = %s;", (petitionid,))
+		formattedid = '{'+str(userid)+'}'
+		cur.execute("UPDATE petition SET vote = vote+1, voteid = voteid || %s WHERE id = %s;", (formattedid, petitionid,))
 		conn.commit()
 		vote += 1
 
