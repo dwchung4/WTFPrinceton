@@ -22,7 +22,7 @@ def index(request):
 		order = 'Recent'
 	status = request.GET.get("status")
 	if status == None:
-		status = 'Expired'
+		status = 'Active'
 	category = request.GET.get("category")
 	if category == None:
 		category = 'All'
