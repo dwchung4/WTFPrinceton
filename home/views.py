@@ -176,7 +176,7 @@ def my_petitions(request, netid):
 		cur.execute("SELECT * FROM petition WHERE netid = %s ORDER BY expiration DESC", (str(netid),))
 		for petition in cur.fetchall():
 			petition = addRemainingTime(petition)
-			if petition[9] < 0 and petition[7] == 'Active':
+			if petition[10] < 0 and petition[7] == 'Active':
 				conn1 = database.connect()
 				cur1 = conn1.cursor()
 				cur1.execute("UPDATE petition SET status = 'Expired' WHERE id = %s;", (petition[0],))
