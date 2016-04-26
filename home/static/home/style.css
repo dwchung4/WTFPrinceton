@@ -14,3 +14,8 @@ background: #FFA500; color: #fff; }
 .spacer {
     margin-top: 20px; /* define margin as you see fit */
 }
+
+.orangeblock {
+	background-color: #FFA500;
+	color: white;
+}

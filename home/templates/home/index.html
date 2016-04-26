@@ -267,7 +267,7 @@
     {% for comment_netid in petition.11 %}
       {% if forloop.counter == forloop.parentloop.counter %}
         <li class="list-group-item" style='word-wrap: break-word; max-height:100px; overflow:auto'>
-          <a href='{% url 'home:my_petitions' comment_netid %}' style='color:inherit;'>{{ comment_netid }}</a> - {{ comment }}
+          <a href='{% url 'home:my_petitions' comment_netid %}' style='color:inherit; font-weight: bold'>{{ comment_netid }}</a> - {{ comment }}
         </li>
       {% endif %}
     {% endfor %}
