@@ -140,7 +140,7 @@ def add_comment(request, id):
 		if query:
 			conn = database.connect()
 			cur = conn.cursor()
-			formattedquery = '{'+query+'}'
+			formattedquery = '{'+str(request.user)+ "- " + query+'}'
 			cur.execute("UPDATE petition SET comments = comments || %s WHERE id = %s;", (formattedquery, str(id),))
 			conn.commit()
 			return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
