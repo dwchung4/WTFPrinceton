@@ -55,19 +55,18 @@
 
 
 <!-- notifications -->
-<div class='row'>
-<div class='col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1'>
-{% if successful %}
-<div class="alert alert-success" role="alert">Success! Your petition has been added!</div>
-{%endif%}
-{% if voteOwn %}
-<div class="alert alert-warning" role="alert">You can't vote for your own!!</div>
-{%endif %}
-{% if doubleVote %}
-<div class="alert alert-warning" role="alert">You can't double vote!!</div>
-{%endif %}
-</div>
-</div>
+{% if messages %}
+<ul class="messages">
+    {% for msg in messages %}       
+    <li>
+        <div class="alert alert-{{msg.level_tag}}" role="alert">
+  {{msg.message}}
+  </div>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
 
 <div class="container">
 	<h1>Petitions</h1>

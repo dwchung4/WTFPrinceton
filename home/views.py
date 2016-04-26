@@ -1,13 +1,15 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse, HttpResponseForbidden
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.core.urlresolvers import reverse
 from .forms import PetitionForm
 from .models import Petition
 import psycopg2
 import os
 from website import database
 from datetime import datetime, timedelta
+from django.contrib import messages
 
 
 def index(request):
@@ -121,6 +123,7 @@ def create_petition(request):
 				(str(request.user), str(petition.title), str(petition.content), str(petition.category),
 				'Active', expiration, 0,))
 			conn.commit()
+			messages.success(request, 'Success! Your petition has been added!')
 			return HttpResponseRedirect('../')
 		context = {
 			"form": form,
@@ -245,6 +248,7 @@ def vote(request, petitionid, netid):
 	cur.execute("SELECT netid FROM petition WHERE id = %s;", (petitionid,))
 	netid = cur.fetchone()[0]
 	if (str(userid) == netid):
+		messages.warning(request, 'You cannot vote on your own petition.')
 		return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 	# when user is trying to vote again
@@ -252,7 +256,10 @@ def vote(request, petitionid, netid):
 	voteid = cur.fetchone()
 	for listid in voteid:
 		if listid != None and str(userid) in listid:
+			messages.warning(request, 'You already voted on this petition.')
 			return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+			#return HttpResponseRedirect(url)
+			
 
 	cur.execute("SELECT vote FROM petition WHERE id = %s;", (petitionid,))
 	vote = cur.fetchone()[0]
