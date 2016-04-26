@@ -17,7 +17,7 @@
     <div id="navbar" class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
         <li><a href="{% url 'home:about' %}">About</a></li>
-        <li><a href="{% url 'home:howtouse' %}">How To Use</a></li>
+        <li><a href="{% url 'home:howtouse' %}">Instructions</a></li>
         <li><a href="http://princetonusg.com/">USG</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -85,21 +85,21 @@
     </div>
 
     <!-- petition info -->
-    <div class='col-lg-11'>
-      <div class="panel panel-default
-      ">
+    <div class='col-lg-11 col-md-11 col-sm-11 col-xs-10'>
+      <div class="panel panel-default">
         <div class="panel-heading panel-heading-custom">
-          <h1 class="panel-title" style='word-wrap: break-word;'>{{ petition.2 }}</h1>
 
           <!-- delete button -->
-          {% if netid == user %}
+          {% if netid == petition.1 %}
             <button href=#{{ petition.0 }} type='button' class='btn btn-default pull-right' data-toggle='collapse'>
               <span class="glyphicon glyphicon-remove">
               </span>
             </button>
           {% endif %}
 
-          <p><a href='{% url 'home:my_petitions' petition.1 %}' style='color:inherit;'>{{ petition.1 }}</a></p>
+          <h1 class="panel-title" style='word-wrap: break-word;'>{{ petition.2 }}</h1>
+          By <a href='{% url 'home:my_petitions' petition.1 %}' style='color:inherit;'>{{ petition.1 }}</a> </br>
+          <i>{{petition.4}}</i>
         </div>
         <div class="panel-body" style='word-wrap: break-word;'>
             {{ petition.3 }}
@@ -120,7 +120,6 @@
         </br>
         </br>
       </div>
-
     </div>
   </div>
 

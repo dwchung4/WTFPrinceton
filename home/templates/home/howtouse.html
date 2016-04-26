@@ -17,7 +17,7 @@
     <div id="navbar" class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
         <li><a href="{% url 'home:about' %}">About</a></li>
-        <li><a href="{% url 'home:howtouse' %}">How To Use</a></li>
+        <li><a href="{% url 'home:howtouse' %}">Instructions</a></li>
         <li><a href="http://princetonusg.com/">USG</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -42,19 +42,41 @@
   </div>
 </div>
 
+<!-- how it works -->
+<div class='container text-center'>
+  <h1>How it works</h1>
+  <h3>Every petition is in one of four states: <b>Active, Expired, Pending, or Completed.</b></h3>
+  <p>An <b>active petition</b> is one that is still able to be voted on by students.</p>
+  <p>An <b>expired petition</b> is one that did not meet the required number of votes in the given time and is now unvotable.</p>
+  <p>A <b>pending petition</b> is one that met the required number of votes and is to be considered by USG.</p>
+  <p>A <b>completed petition</b> is one that USG has finished considering.</p>
+
+  <h3>So for change to happen, a petition must go from <u>Active</u> to <u>Pending</u> to <u>Completed</u>.</h3>
+</div>
+
+
+
 <!-- Create a new petition -->
 <div class='container text-center'>
   <h1>How to create a new petition</h1>
   <h3> Step 1 </h3>
+  <a href="{% url 'home:login' "" %}" ><img src="{% static "images/login.png" %}" class="img-responsive center-block" alt="Login" style="width:100px;height:50px;"/></a>
   Sign in using CAS!
 
 <!-- step 2 -->
   <h3> Step 2 </h3>
+  <a href="{% url 'home:create_petition' %}" class="btn btn-lg btn-default" role="button">
+      <span class="glyphicon glyphicon-plus">
+      </span>
+      Create new petition
+  </a></br>
   Click the 'Create new petition' button!
 
 <!-- step 3 -->
   <h3> Step 3 </h3>
-  Fill out the entries as you wish and click submit!
+  Our petition form will then ask for a <b>title, categorization, and description of your idea</b>. Feel free to elaborate as much as you need to, but
+  we can only keep track of 500 characters!
+
 </div>
 
 <!-- Vote and comment on others' petitions -->
@@ -62,11 +84,34 @@
 <div class='container text-center'>
   <h1> How to vote and comment on others' petitions </h1>
   <h3>Step 1</h3>
+  <a href="{% url 'home:login' "" %}" ><img src="{% static "images/login.png" %}" class="img-responsive center-block" alt="Login" style="width:100px;height:50px;"/></a>
   Sign in using CAS!
   <h3>Step 2</h3>
-  Click the big blue thumb to vote on petitions you support!
+  <span class='glyphicon glyphicon-thumbs-up' style='font-size:400%;color:#337ab7' aria-hidden='true'></span>
+  </br>
+  Click the big blue thumb to vote on petitions you support! <b>Note: you cannot vote for your own, nor vote for any other petition more than once!</b>
+  </br>
+  
   <h3>Step 3</h3>
-  From the homepage, write your comments and click 'Comment'
+  <div class='row'>
+    <div class='col-lg-offset-1 col-lg-11 col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11 col-xs-offset-2 col-xs-10'>
+      <div class="input-group">
+        <form class="form-inline" method="get">
+          <div class ="form-group">
+              <input type="text" class="form-control" placeholder="Write a comment!" size="100" >
+          </div>
+          <button type="submit" class="btn btn-success" disabled>Comment</button>
+        </form>
+      </span>
+     </div>
+    </div>
+  </div>
+  From the homepage, write your comments and click 'Comment'!
+</div>
+
+<!-- end-->
+<div class='container text-center'>
+<a href="{% url 'home:index' %}"><h1 style='color:#FFA500'>You are now ready to use WTF: Princeton! Go change the campus!</h1></a>
 </div>
 
 </body>
