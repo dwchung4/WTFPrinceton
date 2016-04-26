@@ -66,7 +66,7 @@ def index(request):
 	for petition in cur.fetchall():
 		petition = addRemainingTime(petition)
 		# if expired, change status to 'Expired'
-		if petition[10] < 0 and petition[7] == 'Active':
+		if petition[11] < 0 and petition[7] == 'Active':
 			conn1 = database.connect()
 			cur1 = conn1.cursor()
 			cur1.execute("UPDATE petition SET status = 'Expired' WHERE id = %s;", (petition[0],))
@@ -75,7 +75,7 @@ def index(request):
 			# notify the user that the petition expired
 			petition_link = 'wtfprinceton.herokuapp.com/my_petitions/'+petition[1]
 			email_title = 'What To Fix: Princeton - Notification'
-			email_content = 'Your petition "'+petition[2]+'" did not receive enough vote and expired. You can check your petitions at '+petition_link+'. Thank you for using What To Fix: Princeton!'
+			email_content = 'Hi '+petition[1]+',\n\nYour petition "'+petition[2]+'" did not receive enough vote and expired. You can check your petitions at '+petition_link+'.\n\nThank you for using What To Fix: Princeton!\n\nWTFPrinceton Team'
 			email_from = settings.EMAIL_HOST_USER
 			email_to = petition[1]+'@princeton.edu'
 			send_mail(email_title, email_content, email_from, [email_to], fail_silently=True)
@@ -128,7 +128,7 @@ def create_petition(request):
 			}
 			conn = database.connect()
 			cur = conn.cursor()
-			expiration = datetime.now()+timedelta(minutes=2)
+			expiration = datetime.now()+timedelta(minutes=1)
 			written_on = str(datetime.now())[0:10]
 			cur.execute("INSERT INTO petition(netid, title, content, category, status, expiration, vote, written_on) \
 				VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
@@ -192,7 +192,7 @@ def my_petitions(request, netid):
 		cur.execute("SELECT * FROM petition WHERE netid = %s ORDER BY expiration DESC", (str(netid),))
 		for petition in cur.fetchall():
 			petition = addRemainingTime(petition)
-			if petition[10] < 0 and petition[7] == 'Active':
+			if petition[11] < 0 and petition[7] == 'Active':
 				conn1 = database.connect()
 				cur1 = conn1.cursor()
 				cur1.execute("UPDATE petition SET status = 'Expired' WHERE id = %s;", (petition[0],))
@@ -201,7 +201,7 @@ def my_petitions(request, netid):
 				# notify the user that the petition expired
 				petition_link = 'wtfprinceton.herokuapp.com/my_petitions/'+petition[1]
 				email_title = 'What To Fix: Princeton - Notification'
-				email_content = 'Your petition "'+petition[2]+'" did not receive enough vote and expired. You can check your petitions at '+petition_link+'. Thank you for using What To Fix: Princeton!'
+				email_content = 'Hi '+petition[1]+',\n\nYour petition "'+petition[2]+'" did not receive enough vote and expired. You can check your petitions at '+petition_link+'.\n\nThank you for using What To Fix: Princeton!\n\nWTFPrinceton Team'
 				email_from = settings.EMAIL_HOST_USER
 				email_to = petition[1]+'@princeton.edu'
 				send_mail(email_title, email_content, email_from, [email_to], fail_silently=True)
@@ -293,11 +293,10 @@ def vote(request, petitionid, netid):
 		if vote == 10:
 			cur.execute("UPDATE petition SET status = 'Pending' WHERE id = %s;", (petitionid,))
 			conn.commit()
-
 			# notify the user that the petition reached the goal
-			petition_link = 'wtfprinceton.herokuapp.com/my_petitions/'+petition[1]
+			petition_link = 'wtfprinceton.herokuapp.com/my_petitions/'+netid
 			email_title = 'What To Fix: Princeton - Notification'
-			email_content = 'Congratulations! Many students agreed with your petition "'+petition[2]+'", and your petition reached the goal. USG will soon reach out. You can check your petitions at '+petition_link+'. Thank you for using What To Fix: Princeton!'
+			email_content = 'Hi '+netid+',\n\nCongratulations! Many students agreed with your petition "'+petition[2]+'", and your petition reached the goal. USG will soon reach out. You can check your petitions at '+petition_link+'.\n\nThank you for using What To Fix: Princeton!\n\nWTFPrinceton Team'
 			email_from = settings.EMAIL_HOST_USER
 			email_to = petition[1]+'@princeton.edu'
 			send_mail(email_title, email_content, email_from, [email_to], fail_silently=True)
