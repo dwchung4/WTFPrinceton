@@ -165,6 +165,7 @@ def add_comment(request, id):
 			comment_netid = '{'+str(request.user)+'}'
 			cur.execute("UPDATE petition SET comment_netid = comment_netid || %s WHERE id = %s;", (comment_netid, str(id),))
 			conn.commit()
+			messages.success(request, 'Success! Your comment has been added!')
 			return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 		petitions = []
 		conn = database.connect()
@@ -286,6 +287,13 @@ def vote(request, petitionid, netid):
 		if listid != None and str(userid) in listid:
 			messages.warning(request, 'You already voted on this petition.')
 			return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+	# when user is trying to vote on a petition that is not active
+	cur.execute("SELECT status FROM petition WHERE id = %s;", (petitionid, ))
+	status = cur.fetchone()[0]
+	if (str(status) != "Active"):
+		messages.warning(request, 'This petition is not an active petition.')
+		return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 			
 	cur.execute("SELECT vote FROM petition WHERE id = %s;", (petitionid,))
 	vote = cur.fetchone()[0]

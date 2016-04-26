@@ -48,6 +48,19 @@
   <h1 align='center'>This user has written no petitions. :(</h1>
 {%else%}
 
+<!-- notifications -->
+{% if messages %}
+<ul class="messages">
+    {% for msg in messages %}       
+    <li>
+        <div class="alert alert-{{msg.level_tag}}" role="alert">
+  {{msg.message}}
+  </div>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
 	<!-- display petitions -->
 {% for petition in petitions %}
 <div class="container">
