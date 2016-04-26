@@ -160,7 +160,7 @@ def add_comment(request, id):
 		if query:
 			conn = database.connect()
 			cur = conn.cursor()
-			formattedquery = '{'+str(request.user)+ "- " + query+'}'
+			formattedquery = '{'+query+'}'
 			cur.execute("UPDATE petition SET comments = comments || %s WHERE id = %s;", (formattedquery, str(id),))
 			comment_netid = '{'+str(request.user)+'}'
 			cur.execute("UPDATE petition SET comment_netid = comment_netid || %s WHERE id = %s;", (comment_netid, str(id),))
