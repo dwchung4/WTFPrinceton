@@ -286,9 +286,7 @@ def vote(request, petitionid, netid):
 		if listid != None and str(userid) in listid:
 			messages.warning(request, 'You already voted on this petition.')
 			return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-			#return HttpResponseRedirect(url)
 			
-
 	cur.execute("SELECT vote FROM petition WHERE id = %s;", (petitionid,))
 	vote = cur.fetchone()[0]
 	now = datetime.now()
