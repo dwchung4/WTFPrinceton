@@ -66,7 +66,7 @@ def index(request):
 	for petition in cur.fetchall():
 		petition = addRemainingTime(petition)
 		# if expired, change status to 'Expired'
-		if petition[11] < 0 and petition[7] == 'Active':
+		if petition[12] < 0 and petition[7] == 'Active':
 			conn1 = database.connect()
 			cur1 = conn1.cursor()
 			cur1.execute("UPDATE petition SET status = 'Expired' WHERE id = %s;", (petition[0],))
@@ -156,6 +156,8 @@ def add_comment(request, id):
 			cur = conn.cursor()
 			formattedquery = '{'+query+'}'
 			cur.execute("UPDATE petition SET comments = comments || %s WHERE id = %s;", (formattedquery, str(id),))
+			comment_netid = '{'+str(request.user)+'}'
+			cur.execute("UPDATE petition SET comment_netid = comment_netid || %s WHERE id = %s;", (comment_netid, str(id),))
 			conn.commit()
 			return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 		petitions = []
@@ -192,7 +194,7 @@ def my_petitions(request, netid):
 		cur.execute("SELECT * FROM petition WHERE netid = %s ORDER BY expiration DESC", (str(netid),))
 		for petition in cur.fetchall():
 			petition = addRemainingTime(petition)
-			if petition[11] < 0 and petition[7] == 'Active':
+			if petition[12] < 0 and petition[7] == 'Active':
 				conn1 = database.connect()
 				cur1 = conn1.cursor()
 				cur1.execute("UPDATE petition SET status = 'Expired' WHERE id = %s;", (petition[0],))

@@ -32,7 +32,3 @@ class Petition(models.Model):
 
 	class Meta:
 		db_table = 'petition'
-
-class Comment(models.Model):
-	petition = models.ForeignKey(Petition)
-	content = models.CharField(max_length=500)

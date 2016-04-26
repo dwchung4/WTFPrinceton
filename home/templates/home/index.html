@@ -169,12 +169,12 @@
       {% elif petition.7 == "Active" %}
 
         <h6>Expires in:</h6>
-        {% if petition.12 == 'days' %}
-          <p>{{ petition.11 }} days</p>
-        {% elif petition.12 == 'hours' %}
-          <p> {{ petition.11 }} hours</p>
+        {% if petition.13 == 'days' %}
+          <p>{{ petition.12 }} days</p>
+        {% elif petition.13 == 'hours' %}
+          <p> {{ petition.12 }} hours</p>
         {% else %}
-          <p> {{ petition.11 }} min</p>
+          <p> {{ petition.12 }} min</p>
         {% endif %}
 
       {% elif petition.7 == "Expired" %}
@@ -265,8 +265,11 @@
   <ul class="list-group col-lg-offset-1 col-lg-11 col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11 col-xs-offset-2 col-xs-10 collapse" id=com{{petition.0}}>
   {% for comment in petition.8  %}
       <li class="list-group-item" style='word-wrap: break-word; max-height:100px; overflow:auto'>
-          {{comment}}
+          {{ comment }}
       </li>
+  {% endfor %}
+  {% for comment_netid in petition.11  %}
+      <a href='{% url 'home:my_petitions' petition.1 %}' style='color:inherit;'>{{ comment_netid }}</a>
   {% endfor %}
   </ul>
   </br>
