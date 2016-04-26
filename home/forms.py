@@ -2,7 +2,6 @@ from django import forms
 from django.contrib.auth.models import User
 
 from .models import Petition
-from .models import Comment
 
 
 class PetitionForm(forms.ModelForm):
@@ -16,4 +15,3 @@ class PetitionForm(forms.ModelForm):
         }
 
         fields = ['title', 'category', 'content']
-

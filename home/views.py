@@ -1,7 +1,13 @@
+import psycopg2
+import os
+from website import database
+from datetime import datetime, timedelta
+
+from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse, HttpResponseForbidden
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
 from .forms import PetitionForm
 from .models import Petition
@@ -10,6 +16,7 @@ import os
 from website import database
 from datetime import datetime, timedelta
 from django.contrib import messages
+from django.conf import settings
 
 
 def index(request):
@@ -50,25 +57,34 @@ def index(request):
 	else:
 		if category == None or category == 'All':
 			if order == None or order == 'Recent':
-				cur.execute("SELECT * FROM petition WHERE status = %s ORDER BY expiration;", (status,))
+				cur.execute("SELECT * FROM petition WHERE status = %s ORDER BY expiration DESC;", (status,))
 			else:
-				cur.execute("SELECT * FROM petition WHERE status = %s ORDER BY vote DESC, expiration;", (status,))
+				cur.execute("SELECT * FROM petition WHERE status = %s ORDER BY vote DESC, expiration DESC;", (status,))
 		else:
 			if order == None or order == 'Recent':
-				cur.execute("SELECT * FROM petition WHERE status = %s AND category = %s ORDER BY expiration;", 
+				cur.execute("SELECT * FROM petition WHERE status = %s AND category = %s ORDER BY expiration DESC;", 
 					(status, category,))
 			else:
-				cur.execute("SELECT * FROM petition WHERE status = %s AND category = %s ORDER BY vote DESC, expiration;", 
+				cur.execute("SELECT * FROM petition WHERE status = %s AND category = %s ORDER BY vote DESC, expiration DESC;", 
 					(status, category,))
 
 	for petition in cur.fetchall():
 		petition = addRemainingTime(petition)
 		# if expired, change status to 'Expired'
-		if petition[10] < 0 and petition[7] == 'Active':
+		if petition[12] < 0 and petition[7] == 'Active':
 			conn1 = database.connect()
 			cur1 = conn1.cursor()
 			cur1.execute("UPDATE petition SET status = 'Expired' WHERE id = %s;", (petition[0],))
 			conn1.commit()
+
+			# notify the user that the petition expired
+			petition_link = 'wtfprinceton.herokuapp.com/my_petitions/'+petition[1]
+			email_title = 'What To Fix: Princeton - Notification'
+			email_content = 'Hi '+petition[1]+',\n\nYour petition "'+petition[2]+'" did not receive enough vote and expired. You can check your petitions at '+petition_link+'.\n\nThank you for using What To Fix: Princeton!\n\nWTFPrinceton Team'
+			email_from = settings.EMAIL_HOST_USER
+			email_to = petition[1]+'@princeton.edu'
+			send_mail(email_title, email_content, email_from, [email_to], fail_silently=True)
+
 			tempList = list(petition)
 			tempList[7] = 'Expired'
 			petition = tuple(tempList)
@@ -117,11 +133,12 @@ def create_petition(request):
 			}
 			conn = database.connect()
 			cur = conn.cursor()
-			expiration = datetime.now()+timedelta(minutes=2)
-			cur.execute("INSERT INTO petition(netid, title, content, category, status, expiration, vote) \
-				VALUES (%s, %s, %s, %s, %s, %s, %s)",
+			expiration = datetime.now()+timedelta(minutes=1)
+			written_on = str(datetime.now())[0:10]
+			cur.execute("INSERT INTO petition(netid, title, content, category, status, expiration, vote, written_on) \
+				VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
 				(str(request.user), str(petition.title), str(petition.content), str(petition.category),
-				'Active', expiration, 0,))
+				'Active', expiration, 0, written_on,))
 			conn.commit()
 			messages.success(request, 'Success! Your petition has been added!')
 			return HttpResponseRedirect('../')
@@ -145,6 +162,8 @@ def add_comment(request, id):
 			cur = conn.cursor()
 			formattedquery = '{'+str(request.user)+ "- " + query+'}'
 			cur.execute("UPDATE petition SET comments = comments || %s WHERE id = %s;", (formattedquery, str(id),))
+			comment_netid = '{'+str(request.user)+'}'
+			cur.execute("UPDATE petition SET comment_netid = comment_netid || %s WHERE id = %s;", (comment_netid, str(id),))
 			conn.commit()
 			return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 		petitions = []
@@ -181,11 +200,20 @@ def my_petitions(request, netid):
 		cur.execute("SELECT * FROM petition WHERE netid = %s ORDER BY expiration DESC", (str(netid),))
 		for petition in cur.fetchall():
 			petition = addRemainingTime(petition)
-			if petition[10] < 0 and petition[7] == 'Active':
+			if petition[12] < 0 and petition[7] == 'Active':
 				conn1 = database.connect()
 				cur1 = conn1.cursor()
 				cur1.execute("UPDATE petition SET status = 'Expired' WHERE id = %s;", (petition[0],))
 				conn1.commit()
+
+				# notify the user that the petition expired
+				petition_link = 'wtfprinceton.herokuapp.com/my_petitions/'+petition[1]
+				email_title = 'What To Fix: Princeton - Notification'
+				email_content = 'Hi '+petition[1]+',\n\nYour petition "'+petition[2]+'" did not receive enough vote and expired. You can check your petitions at '+petition_link+'.\n\nThank you for using What To Fix: Princeton!\n\nWTFPrinceton Team'
+				email_from = settings.EMAIL_HOST_USER
+				email_to = petition[1]+'@princeton.edu'
+				send_mail(email_title, email_content, email_from, [email_to], fail_silently=True)
+
 				tempList = list(petition)
 				tempList[7] = 'Expired'
 				petition = tuple(tempList)
@@ -277,6 +305,13 @@ def vote(request, petitionid, netid):
 		if vote == 10:
 			cur.execute("UPDATE petition SET status = 'Pending' WHERE id = %s;", (petitionid,))
 			conn.commit()
+			# notify the user that the petition reached the goal
+			petition_link = 'wtfprinceton.herokuapp.com/my_petitions/'+netid
+			email_title = 'What To Fix: Princeton - Notification'
+			email_content = 'Hi '+netid+',\n\nCongratulations! Many students agreed with your petition "'+petition[2]+'", and your petition reached the goal. USG will soon reach out. You can check your petitions at '+petition_link+'.\n\nThank you for using What To Fix: Princeton!\n\nWTFPrinceton Team'
+			email_from = settings.EMAIL_HOST_USER
+			email_to = petition[1]+'@princeton.edu'
+			send_mail(email_title, email_content, email_from, [email_to], fail_silently=True)
 
 	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 

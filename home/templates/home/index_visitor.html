@@ -17,7 +17,7 @@
     <div id="navbar" class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
         <li><a href="{% url 'home:about' %}">About</a></li>
-        <li><a href="{% url 'home:howtouse' %}">How To Use</a></li>
+        <li><a href="{% url 'home:howtouse' %}">Instructions</a></li>
         <li><a href="http://princetonusg.com/">USG</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -135,6 +135,8 @@
 <!-- display petitions -->
 {% for petition in petitions %}
 
+<p>{{ petition.10 }}</p>
+
 <div class="container">
   <div class='row'>
     <!-- votes and expiration-->
@@ -149,12 +151,12 @@
       {% elif petition.7 == "Active" %}
 
         <h6>Expires in:</h6>
-        {% if petition.11 == 'days' %}
-          <p>{{ petition.10 }} days</p>
-        {% elif petition.11 == 'hours' %}
-          <p> {{ petition.10 }} hours</p>
+        {% if petition.13 == 'days' %}
+          <p>{{ petition.12 }} days</p>
+        {% elif petition.13 == 'hours' %}
+          <p> {{ petition.12 }} hours</p>
         {% else %}
-          <p> {{ petition.10 }} min</p>
+          <p> {{ petition.12 }} min</p>
         {% endif %}
 
       {% elif petition.7 == "Expired" %}
@@ -176,7 +178,7 @@
         <div class="panel-heading panel-heading-custom">
           <h1 class="panel-title" style='word-wrap: break-word;'>{{ petition.2 }}</h1>
           By <a href='{% url 'home:my_petitions' petition.1 %}' style='color:inherit;'>{{ petition.1 }}</a> </br>
-          <i>{{petition.4}}</i>
+          <i>{{petition.4}} ({{petition.10}})</i>
           </div>
         <div class="panel-body" style='word-wrap: break-word;'>
             {{ petition.3 }}
@@ -224,6 +226,9 @@
       <li class="list-group-item" style='word-wrap: break-word; max-height:100px; overflow:auto'>
           {{comment}}
       </li>
+  {% endfor %}
+  {% for comment_netid in petition.11  %}
+    <a href='{% url 'home:my_petitions' petition.1 %}' style='color:inherit;'>{{ comment_netid }}</a>
   {% endfor %}
   </ul>
   </br>
