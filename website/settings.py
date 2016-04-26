@@ -33,6 +33,12 @@ CAS_SERVER_URL = 'https://fed.princeton.edu/cas/'
 CAS_LOGOUT_COMPLETELY = True
 CAS_PROVIDE_URL_TO_LOGOUT = True
 
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'teamwtfprinceton@gmail.com'
+EMAIL_HOST_PASSWORD = 'whattofixprinceton'
+EMAIL_PORT = 587
+
 # Application definition
 
 INSTALLED_APPS = (
