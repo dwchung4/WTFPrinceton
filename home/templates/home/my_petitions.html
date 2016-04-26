@@ -89,7 +89,7 @@
       <div class="panel panel-default
       ">
         <div class="panel-heading panel-heading-custom">
-          <h1 class="panel-title">{{ petition.2 }}</h1>
+          <h1 class="panel-title" style='word-wrap: break-word;'>{{ petition.2 }}</h1>
 
           <!-- delete button -->
           {% if netid == user %}
@@ -101,7 +101,7 @@
 
           <p><a href='{% url 'home:my_petitions' petition.1 %}' style='color:inherit;'>{{ petition.1 }}</a></p>
         </div>
-        <div class="panel-body">
+        <div class="panel-body" style='word-wrap: break-word;'>
             {{ petition.3 }}
         </div>
       </div>
