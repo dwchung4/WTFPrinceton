@@ -292,7 +292,7 @@ def vote(request, petitionid, netid):
 	cur.execute("SELECT status FROM petition WHERE id = %s;", (petitionid, ))
 	status = cur.fetchone()[0]
 	if (str(status) != "Active"):
-		messages.warning(request, 'This petition is not an active petition.')
+		messages.warning(request, 'You cannot vote because this petition is not an active petition.')
 		return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 			
 	cur.execute("SELECT vote FROM petition WHERE id = %s;", (petitionid,))
