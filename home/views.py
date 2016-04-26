@@ -75,7 +75,7 @@ def index(request):
 			# notify the user that the petition expired
 			petition_link = 'wtfprinceton.herokuapp.com/my_petitions/'+petition[1]
 			email_title = 'What To Fix: Princeton - Notification'
-			email_content = 'Your petition did not receive enough vote and expired. You can check your petitions at '+petition_link+'. Thank you for using What To Fix: Princeton!'
+			email_content = 'Your petition "'+petition[2]+'" did not receive enough vote and expired. You can check your petitions at '+petition_link+'. Thank you for using What To Fix: Princeton!'
 			email_from = settings.EMAIL_HOST_USER
 			email_to = petition[1]+'@princeton.edu'
 			send_mail(email_title, email_content, email_from, [email_to], fail_silently=True)
@@ -129,10 +129,11 @@ def create_petition(request):
 			conn = database.connect()
 			cur = conn.cursor()
 			expiration = datetime.now()+timedelta(minutes=2)
-			cur.execute("INSERT INTO petition(netid, title, content, category, status, expiration, vote) \
-				VALUES (%s, %s, %s, %s, %s, %s, %s)",
+			written_on = str(datetime.now())[0:10]
+			cur.execute("INSERT INTO petition(netid, title, content, category, status, expiration, vote, written_on) \
+				VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
 				(str(request.user), str(petition.title), str(petition.content), str(petition.category),
-				'Active', expiration, 0,))
+				'Active', expiration, 0, written_on,))
 			conn.commit()
 			return HttpResponseRedirect('../')
 		context = {
@@ -200,7 +201,7 @@ def my_petitions(request, netid):
 				# notify the user that the petition expired
 				petition_link = 'wtfprinceton.herokuapp.com/my_petitions/'+petition[1]
 				email_title = 'What To Fix: Princeton - Notification'
-				email_content = 'Your petition did not receive enough vote and expired. You can check your petitions at '+petition_link+'. Thank you for using What To Fix: Princeton!'
+				email_content = 'Your petition "'+petition[2]+'" did not receive enough vote and expired. You can check your petitions at '+petition_link+'. Thank you for using What To Fix: Princeton!'
 				email_from = settings.EMAIL_HOST_USER
 				email_to = petition[1]+'@princeton.edu'
 				send_mail(email_title, email_content, email_from, [email_to], fail_silently=True)
@@ -296,7 +297,7 @@ def vote(request, petitionid, netid):
 			# notify the user that the petition reached the goal
 			petition_link = 'wtfprinceton.herokuapp.com/my_petitions/'+petition[1]
 			email_title = 'What To Fix: Princeton - Notification'
-			email_content = 'Congratulations! Many students agreed with your petition and your petition reached the goal. USG will soon reach out. You can check your petitions at '+petition_link+'. Thank you for using What To Fix: Princeton!'
+			email_content = 'Congratulations! Many students agreed with your petition "'+petition[2]+'", and your petition reached the goal. USG will soon reach out. You can check your petitions at '+petition_link+'. Thank you for using What To Fix: Princeton!'
 			email_from = settings.EMAIL_HOST_USER
 			email_to = petition[1]+'@princeton.edu'
 			send_mail(email_title, email_content, email_from, [email_to], fail_silently=True)

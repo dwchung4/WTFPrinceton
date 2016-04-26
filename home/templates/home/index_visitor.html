@@ -135,6 +135,8 @@
 <!-- display petitions -->
 {% for petition in petitions %}
 
+<p>{{ petition.10 }}</p>
+
 <div class="container">
   <div class='row'>
     <!-- votes and expiration-->
@@ -149,12 +151,12 @@
       {% elif petition.7 == "Active" %}
 
         <h6>Expires in:</h6>
-        {% if petition.11 == 'days' %}
-          <p>{{ petition.10 }} days</p>
-        {% elif petition.11 == 'hours' %}
-          <p> {{ petition.10 }} hours</p>
+        {% if petition.12 == 'days' %}
+          <p>{{ petition.11 }} days</p>
+        {% elif petition.12 == 'hours' %}
+          <p> {{ petition.11 }} hours</p>
         {% else %}
-          <p> {{ petition.10 }} min</p>
+          <p> {{ petition.11 }} min</p>
         {% endif %}
 
       {% elif petition.7 == "Expired" %}
