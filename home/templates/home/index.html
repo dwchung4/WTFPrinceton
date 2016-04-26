@@ -155,8 +155,6 @@
 <!-- display petitions -->
 {% for petition in petitions %}
 
-<p>{{ petition.10 }}</p>
-
 <div class="container" style=''>
   <div class='row'>
     <!-- votes and expiration-->
@@ -206,7 +204,7 @@
 
           <h1 class="panel-title" style='word-wrap: break-word;'>{{ petition.2 }}</h1>
           By <a href='{% url 'home:my_petitions' petition.1 %}' style='color:inherit;'>{{ petition.1 }}</a> </br>
-          <i>{{petition.4}}</i>
+          <i>{{petition.4}} ({{petition.10}})</i>
         </div>
         <div class="panel-body" style='word-wrap: break-word;'>
             {{ petition.3 }}
