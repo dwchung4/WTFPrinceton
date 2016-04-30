@@ -233,15 +233,24 @@
       <div class="input-group">
         <form class="form-inline" method="get" action="{% url 'home:add_comment' petition.0 %}">
           {% csrf_token %}
-          <div class ="form-group">
-              <input type="text" class="form-control" name="r" value="{{ request.GET.r }}" placeholder="Write a comment!" size="100">
+          <div class ="form-group form-inline">
+              <input type="text" class="form-control" name="r" value="{{ request.GET.r }}" placeholder="Write a comment!" style='max-width: 15em ;display:inline-block'>
           </div>
-          <button type="submit" class="btn btn-success">Comment</button>
+          <button type="submit" class="btn btn-success" style='display:inline-block'>Comment</button>
         </form>
       </span>
      </div>
     </div>
   </div>
+
+<!-- trying to redo commenting
+  <div class='row'>
+  <div class='form-inline col-lg-offset-1 col-lg-11 col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11 col-xs-offset-2 col-xs-10' method="get" action="{% url 'home:add_comment' petition.0 %}">
+  {% csrf_token %}
+  <input type="text" class="form-control" placeholder="Write a comment!" name="r" value="{{ request.GET.r }}" style='max-width: 15em ;display:inline-block'>
+  <button type="submit" class="btn btn-success" style='display:inline-block'>Comment</button>
+  </div>
+  </div>-->
 
   <!-- show comments -->
   <div class='row'>

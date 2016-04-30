@@ -47,12 +47,13 @@
   <p>A <b>completed petition</b> is one that USG has finished considering.</p>
 
   <h3>So for change to happen, a petition must go from <u>Active</u> to <u>Pending</u> to <u>Completed</u>.</h3>
+  </br>
 </div>
 
 
 
 <!-- Create a new petition -->
-<div class='container text-center'>
+<div class='container-fluid text-center orangeblock'>
   <h1>How to create a new petition</h1>
   <h3> Step 1 </h3>
   <a href="{% url 'home:login' "" %}" ><img src="{% static "images/login.png" %}" class="img-responsive center-block" alt="Login" style="width:100px;height:50px;"/></a>
@@ -69,8 +70,10 @@
 
 <!-- step 3 -->
   <h3> Step 3 </h3>
-  Our petition form will then ask for a <b>title, categorization, and description of your idea</b>. Feel free to elaborate as much as you need to, but
+  Our petition form will then ask for a <b><u>title, categorization, and description of your idea</u></b>. Feel free to elaborate as much as you need to, but
   we can only keep track of 500 characters!
+</br>
+</br>
 
 </div>
 
@@ -89,24 +92,21 @@
   
   <h3>Step 3</h3>
   <div class='row'>
-    <div class='col-lg-offset-1 col-lg-11 col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11 col-xs-offset-2 col-xs-10'>
-      <div class="input-group">
-        <form class="form-inline" method="get">
-          <div class ="form-group">
-              <input type="text" class="form-control" placeholder="Write a comment!" size="100" >
-          </div>
-          <button type="submit" class="btn btn-success" disabled>Comment</button>
-        </form>
-      </span>
-     </div>
-    </div>
+  <div class='form-inline col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-3 col-sm-6 col-xs-offset-1 col-xs-10'>
+  <input type="text" class="form-control" placeholder="Write a comment!" style='max-width: 15em ;display:inline-block'>
+  <button type="submit" class="btn btn-success" style='display:inline-block' disabled>Comment</button>
   </div>
+  </div>
+
   From the homepage, write your comments and click 'Comment'!
+  </br>
+</br>
 </div>
 
 <!-- end-->
-<div class='container text-center'>
-<a href="{% url 'home:index' %}"><h1 style='color:#FFA500'>You are now ready to use WTF: Princeton! Go change the campus!</h1></a>
+<div class='container-fluid text-center orangeblock'>
+<a href="{% url 'home:index' %}"><h1 style='color:white'>You are now ready to use WTF: Princeton! Go change the campus!</h1></a>
+</br>
 </div>
 
 </body>
