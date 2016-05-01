@@ -17,7 +17,7 @@
     <div id="navbar" class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
         <li><a href="{% url 'home:about' %}">About</a></li>
-        <li><a href="{% url 'home:howtouse' %}">Instructions</a></li>
+        <li><a href="{% url 'home:instructions' %}">Instructions</a></li>
         <li><a href="http://princetonusg.com/">USG</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -76,13 +76,13 @@
 
       {% elif petition.7 == "Active" %}
 
-        <h6>Expires in:</h6>
+        <h5>Expires in:</h5>
         {% if petition.13 == 'days' %}
-          <p>{{ petition.12 }} days</p>
+          <h5>{{ petition.12 }} days</h5>
         {% elif petition.13 == 'hours' %}
-          <p> {{ petition.12 }} hours</p>
+          <h5> {{ petition.12 }} hours</h5>
         {% else %}
-          <p> {{ petition.12 }} min</p>
+          <h5> {{ petition.12 }} min</h5>
         {% endif %}
 
       {% elif petition.7 == "Expired" %}
@@ -91,7 +91,7 @@
 
       {% else %}
 
-        <h6>Completed</h6>
+        <h5>Completed</h5>
 
       {% endif %}
 
@@ -110,12 +110,19 @@
             </button>
           {% endif %}
 
-          <h1 class="panel-title" style='word-wrap: break-word;'>{{ petition.2 }}</h1>
+          <!-- complete petition (for USG) -->
+          {% if netid == 'dcfive' and petition.7 == 'Pending' %}
+            <a href="{% url 'home:complete_petition' petition.0 %}" class="btn btn-default pull-right" role="button">Complete this petition</a>
+          {% endif %}
+
+          <h1 class="panel-title" style='word-wrap: break-word;'>{{ petition.2 }}</h1></br>
           By <a href='{% url 'home:my_petitions' petition.1 %}' style='color:inherit;'>{{ petition.1 }}</a> </br>
-          <i>{{petition.4}}</i>
         </div>
         <div class="panel-body" style='word-wrap: break-word;'>
             {{ petition.3 }}
+        </div>
+        <div class="panel-body" style='word-wrap: break-word; font-size:12px;'>
+            <i>{{ petition.4 }}, {{ petition.10 }} (#{{ petition.0 }})</i>
         </div>
       </div>
 

@@ -17,7 +17,7 @@
     <div id="navbar" class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
         <li><a href="{% url 'home:about' %}">About</a></li>
-        <li><a href="{% url 'home:howtouse' %}">Instructions</a></li>
+        <li><a href="{% url 'home:instructions' %}">Instructions</a></li>
         <li><a href="http://princetonusg.com/">USG</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -55,7 +55,7 @@
       <div class="input-group" style='max-height: 50px'>
         <form class = "form-inline" role="search" method="get" action="{% url 'home:index' %}">
           <div class="form-group" style='display:inline-block'>
-              <input type="text" class="form-control" name="q" value="{{ request.GET.q }}" placeholder="Search by title, content, and NetID" size="35" autofocus>
+              <input type="text" class="form-control" name="q" value="{{ request.GET.q }}" placeholder="Search by title, content, NetID, and petition#" size="50" autofocus>
           </div>
           <button type="submit" class="btn btn-primary pull-right" style='display:inline-block'>Search</button>
         </form>
@@ -148,13 +148,13 @@
 
       {% elif petition.7 == "Active" %}
 
-        <h6>Expires in:</h6>
+        <h5>Expires in:</h5>
         {% if petition.13 == 'days' %}
-          <p>{{ petition.12 }} days</p>
+          <h5>{{ petition.12 }} days</h5>
         {% elif petition.13 == 'hours' %}
-          <p> {{ petition.12 }} hours</p>
+          <h5> {{ petition.12 }} hours</h5>
         {% else %}
-          <p> {{ petition.12 }} min</p>
+          <h5> {{ petition.12 }} min</h5>
         {% endif %}
 
       {% elif petition.7 == "Expired" %}
@@ -163,7 +163,7 @@
 
       {% else %}
 
-        <h6>Completed</h6>
+        <h5>Completed</h5>
 
       {% endif %}
       
@@ -174,12 +174,14 @@
       <div class="panel panel-default
       ">
         <div class="panel-heading panel-heading-custom">
-          <h1 class="panel-title" style='word-wrap: break-word;'>{{ petition.2 }}</h1>
+          <h1 class="panel-title" style='word-wrap: break-word;'>{{ petition.2 }}</h1></br>
           By <a href='{% url 'home:my_petitions' petition.1 %}' style='color:inherit;'>{{ petition.1 }}</a> </br>
-          <i>{{petition.4}} ({{petition.10}})</i>
           </div>
         <div class="panel-body" style='word-wrap: break-word;'>
             {{ petition.3 }}
+        </div>
+        <div class="panel-body" style='word-wrap: break-word; font-size:12px;'>
+            <i>{{ petition.4 }}, {{ petition.10 }} (#{{ petition.0 }})</i>
         </div>
       </div>
     </div>

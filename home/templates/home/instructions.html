@@ -17,13 +17,18 @@
     <div id="navbar" class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
         <li><a href="{% url 'home:about' %}">About</a></li>
-        <li><a href="{% url 'home:howtouse' %}">Instructions</a></li>
+        <li><a href="{% url 'home:instructions' %}">Instructions</a></li>
         <li><a href="http://princetonusg.com/">USG</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-          <a href="{% url 'home:login' "" %}">
-            <span class="glyphicon glyphicon-off"></span>&nbsp; Login
+          <a href="{% url 'home:my_petitions' netid %}">
+            <span class="glyphicon glyphicon-th-list"></span>&nbsp; My Petitions
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'home:logout' %}">
+            <span class="glyphicon glyphicon-off"></span>&nbsp; Logout
           </a>
         </li>
       </ul>

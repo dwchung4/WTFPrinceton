@@ -11,7 +11,8 @@ class PetitionForm(forms.ModelForm):
 
         # Set the size of content textbox
         widgets = {
-          'content': forms.Textarea(attrs={'rows':'16','cols':'45','style':'resize:none'}),
+        	'title': forms.Textarea(attrs={'rows':'1','cols':'45','style':'resize:none'}),
+        	'content': forms.Textarea(attrs={'rows':'16','cols':'45','style':'resize:none'}),
         }
 
         fields = ['title', 'category', 'content']

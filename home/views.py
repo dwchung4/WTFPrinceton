@@ -21,7 +21,7 @@ from django.conf import settings
 
 def index(request):
 	orderList = ['Recent', 'Top']
-	statusList = ['Active', 'Expired', 'Pending', 'Completed']
+	statusList = ['All', 'Active', 'Expired', 'Pending', 'Completed']
 	categoryList = ['All', 'Academics', 'Athletics & Recreation', 'Community Issues', 'Dining', 
 		'Housing & Facilities', 'Student Activities', 'Student Services', 'Other']
 
@@ -30,7 +30,7 @@ def index(request):
 		order = 'Recent'
 	status = request.GET.get("status")
 	if status == None:
-		status = 'Active'
+		status = 'All'
 	category = request.GET.get("category")
 	if category == None:
 		category = 'All'
@@ -50,23 +50,41 @@ def index(request):
 	# search query
 	query = request.GET.get("q")
 	if query:
-		formattedquery = '%'+query+'%'
-		cur.execute("SELECT DISTINCT * FROM petition WHERE LOWER(title) LIKE LOWER(%s) \
-			OR LOWER(content) LIKE LOWER(%s) OR LOWER(netid) LIKE LOWER(%s) \
-			ORDER BY expiration DESC;", (formattedquery, formattedquery, formattedquery,))
-	else:
-		if category == None or category == 'All':
-			if order == None or order == 'Recent':
-				cur.execute("SELECT * FROM petition WHERE status = %s ORDER BY expiration DESC;", (status,))
-			else:
-				cur.execute("SELECT * FROM petition WHERE status = %s ORDER BY vote DESC, expiration DESC;", (status,))
+		if query.isdigit():
+			formattedquery = '%'+query+'%'
+			cur.execute("SELECT DISTINCT * FROM petition WHERE LOWER(title) LIKE LOWER(%s) \
+				OR LOWER(content) LIKE LOWER(%s) OR LOWER(netid) LIKE LOWER(%s) OR id = %s \
+				ORDER BY expiration DESC;", (formattedquery, formattedquery, formattedquery, query,))
 		else:
-			if order == None or order == 'Recent':
-				cur.execute("SELECT * FROM petition WHERE status = %s AND category = %s ORDER BY expiration DESC;", 
-					(status, category,))
+			formattedquery = '%'+query+'%'
+			cur.execute("SELECT DISTINCT * FROM petition WHERE LOWER(title) LIKE LOWER(%s) \
+				OR LOWER(content) LIKE LOWER(%s) OR LOWER(netid) LIKE LOWER(%s) \
+				ORDER BY expiration DESC;", (formattedquery, formattedquery, formattedquery,))
+	else:
+		if category == 'All':
+			if order == 'Recent':
+				if status == 'All':
+					cur.execute("SELECT * FROM petition ORDER BY expiration DESC;")
+				else:
+					cur.execute("SELECT * FROM petition WHERE status = %s ORDER BY expiration DESC;", (status,))
 			else:
-				cur.execute("SELECT * FROM petition WHERE status = %s AND category = %s ORDER BY vote DESC, expiration DESC;", 
-					(status, category,))
+				if status == 'All':
+					cur.execute("SELECT * FROM petition ORDER BY vote DESC, expiration DESC;")
+				else:
+					cur.execute("SELECT * FROM petition WHERE status = %s ORDER BY vote DESC, expiration DESC;", (status,))
+		else:
+			if order == 'Recent':
+				if status == 'All':
+					cur.execute("SELECT * FROM petition WHERE category = %s ORDER BY expiration DESC;", (category,))
+				else:
+					cur.execute("SELECT * FROM petition WHERE status = %s AND category = %s ORDER BY expiration DESC;", 
+						(status, category,))
+			else:
+				if status == 'All':
+					cur.execute("SELECT * FROM petition WHERE category = %s ORDER BY vote DESC, expiration DESC;", (status, category,))
+				else:
+					cur.execute("SELECT * FROM petition WHERE status = %s AND category = %s ORDER BY vote DESC, expiration DESC;", 
+						(status, category,))
 
 	for petition in cur.fetchall():
 		petition = addRemainingTime(petition)
@@ -91,6 +109,8 @@ def index(request):
 
 		# add filtered petitions to list
 		if query:
+			petitions.append(petition)
+		elif status == 'All':
 			petitions.append(petition)
 		elif petition[7] == status:
 			petitions.append(petition)
@@ -322,10 +342,22 @@ def vote(request, petitionid, netid):
 	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
-def howtouse(request):
+def instructions(request):
 	if request.user.is_authenticated():
-		return render(request, 'home/howtouse.html', {
+		return render(request, 'home/instructions.html', {
 			'netid': request.user,
 		})
 	else:
-		return render(request, 'home/howtouse_visitor.html')
+		return render(request, 'home/instructions_visitor.html')
+
+
+def complete_petition(request, petitionid):
+	if request.META.get('HTTP_REFERER') == None:
+		return HttpResponseRedirect('../')
+
+	conn = database.connect()
+	cur = conn.cursor()
+	cur.execute("UPDATE petition SET status = 'Completed' WHERE id = %s;", (petitionid,))
+	conn.commit()
+
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

@@ -5,6 +5,8 @@ import os
 def connect():
 	BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+
+	# local
 	if 'WTFPrinceton' in BASE_DIR:
 		conn = psycopg2.connect(
 	    database='d8qajk44a19ere',
@@ -14,7 +16,7 @@ def connect():
 	    port='',
 		)
 		return conn
-	else:
+	else: # heroku
 		urlparse.uses_netloc.append("postgres")
 		url = urlparse.urlparse(os.environ["DATABASE_URL"])
 		conn = psycopg2.connect(
@@ -29,6 +31,7 @@ def connect():
 def set_database():
 	BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+	# local
 	if 'WTFPrinceton' in BASE_DIR:
 		DATABASES = {
 		    'default': {
@@ -41,7 +44,7 @@ def set_database():
 		    }
 		}
 		return DATABASES
-	else:
+	else: # heroku
 		DATABASES = {
 		    'default': {
 		        'ENGINE': 'django.db.backends.postgresql_psycopg2',
