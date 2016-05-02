@@ -323,6 +323,7 @@ def vote(request, petitionid, netid):
 
 	# user votes successfully
 	if vote < 10 and timeleft.days >= 0:
+		messages.success(request, 'Success! Your vote has been added!')
 		formattedid = '{'+str(userid)+'}'
 		cur.execute("UPDATE petition SET vote = vote+1, voteid = voteid || %s WHERE id = %s;", (formattedid, petitionid,))
 		conn.commit()
