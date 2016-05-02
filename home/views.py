@@ -153,7 +153,7 @@ def create_petition(request):
 			}
 			conn = database.connect()
 			cur = conn.cursor()
-			expiration = datetime.now()+timedelta(minutes=1)
+			expiration = datetime.now()+timedelta(days=1)
 			written_on = str(datetime.now())[0:10]
 			cur.execute("INSERT INTO petition(netid, title, content, category, status, expiration, vote, written_on) \
 				VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
@@ -255,12 +255,12 @@ def addRemainingTime(petition):
 		if hours == 0:
 			minutes = (timeleft.total_seconds()%3600)//60
 			petitionlist = list(petition)
-			petitionlist.append(int(minutes))
+			petitionlist.append(int(minutes+1))
 			petitionlist.append("minutes")
 			petition = tuple(petitionlist)
 		else:
 			petitionlist = list(petition)
-			petitionlist.append(int(hours))
+			petitionlist.append(int(hours+1))
 			petitionlist.append("hours")
 			petition = tuple(petitionlist)
 	else:
