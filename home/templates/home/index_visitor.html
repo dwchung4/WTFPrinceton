@@ -55,7 +55,7 @@
       <div class="input-group" style='max-height: 50px'>
         <form class = "form-inline" role="search" method="get" action="{% url 'home:index' %}">
           <div class="form-group" style='display:inline-block'>
-              <input type="text" class="form-control" name="q" value="{{ request.GET.q }}" placeholder="Search by title, content, NetID, and petition#" size="50" autofocus>
+              <input type="text" class="form-control" name="q" value="{{ request.GET.q }}" placeholder="Search by title, content, NetID, and petition #" size="50" autofocus>
           </div>
           <button type="submit" class="btn btn-primary pull-right" style='display:inline-block'>Search</button>
         </form>
@@ -90,7 +90,9 @@
               <option value="{{ statusList.1 }}">{{ statusList.1 }}</option>
               <option value="{{ statusList.2 }}">{{ statusList.2 }}</option>
               <option value="{{ statusList.3 }}">{{ statusList.3 }}</option>
+              <option value="{{ statusList.3 }}">{{ statusList.4 }}</option>
             {% else %}
+              <option value="Active">All</option>
               <option value="Active">Active</option>
               <option value="Expired">Expired</option>
               <option value="Pending">Pending</option>
@@ -153,9 +155,17 @@
 
         <h5>Expires in:</h5>
         {% if petition.13 == 'days' %}
-          <h5>{{ petition.12 }} days</h5>
+          {% if petition.12 == 1 %}
+            <h5>1 day</h5>
+          {% else %}
+            <h5>{{ petition.12 }} days</h5>
+          {% endif %}
         {% elif petition.13 == 'hours' %}
-          <h5> {{ petition.12 }} hours</h5>
+          {% if petition.12 == 1 %}
+            <h5>1 hour</h5>
+          {% else %}
+            <h5>{{ petition.12 }} hours</h5>
+          {% endif %}
         {% else %}
           <h5> {{ petition.12 }} min</h5>
         {% endif %}
@@ -177,7 +187,7 @@
       <div class="panel panel-default
       ">
         <div class="panel-heading panel-heading-custom">
-          <h1 class="panel-title" style='word-wrap: break-word;'>{{ petition.2 }}</h1>
+          <h1 class="panel-title" style='word-wrap: break-word;'><a href="{% url 'home:petition' petition.0 %}">{{ petition.2 }}</a></h1>
           By <a href='{% url 'home:my_petitions' petition.1 %}' style='color:inherit;'>{{ petition.1 }}</a> </br>
           </div>
         <div class="panel-body" style='word-wrap: break-word;'>
@@ -199,7 +209,7 @@
           <div class ="form-group">
               <input type="text" class="form-control" name="r" value="{{ request.GET.r }}" placeholder="Write a comment!" size="100">
           </div>
-          <button type="submit" class="btn btn-success">Comment</button>
+          <button type="submit" class="btn btn-success disabled">Comment</button>
         </form>
       </span>
      </div>

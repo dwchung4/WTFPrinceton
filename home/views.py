@@ -169,7 +169,7 @@ def create_petition(request):
 		return render(request, 'home/create_petition.html', context)
 
 
-def add_comment(request, id):
+def add_comment(request, petitionid):
 	if request.META.get('HTTP_REFERER') == None:
 		return HttpResponseRedirect('../../')
 
@@ -181,9 +181,9 @@ def add_comment(request, id):
 			conn = database.connect()
 			cur = conn.cursor()
 			formattedquery = '{'+query+'}'
-			cur.execute("UPDATE petition SET comments = comments || %s WHERE id = %s;", (formattedquery, str(id),))
+			cur.execute("UPDATE petition SET comments = comments || %s WHERE id = %s;", (formattedquery, str(petitionid),))
 			comment_netid = '{'+str(request.user)+'}'
-			cur.execute("UPDATE petition SET comment_netid = comment_netid || %s WHERE id = %s;", (comment_netid, str(id),))
+			cur.execute("UPDATE petition SET comment_netid = comment_netid || %s WHERE id = %s;", (comment_netid, str(petitionid),))
 			conn.commit()
 			messages.success(request, 'Success! Your comment has been added!')
 			return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
@@ -314,7 +314,7 @@ def vote(request, petitionid, netid):
 	if (str(status) != "Active"):
 		messages.warning(request, 'You cannot vote because this petition is not an active petition.')
 		return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-			
+	
 	cur.execute("SELECT vote FROM petition WHERE id = %s;", (petitionid,))
 	vote = cur.fetchone()[0]
 	now = datetime.now()
@@ -332,6 +332,8 @@ def vote(request, petitionid, netid):
 		if vote == 10:
 			cur.execute("UPDATE petition SET status = 'Pending' WHERE id = %s;", (petitionid,))
 			conn.commit()
+			cur.execute("SELECT * FROM petition WHERE id = %s;", (petitionid,))
+			petition = cur.fetchone()
 			# notify the user that the petition reached the goal
 			petition_link = 'wtfprinceton.herokuapp.com/my_petitions/'+netid
 			email_title = 'What To Fix: Princeton - Notification'
@@ -346,7 +348,7 @@ def vote(request, petitionid, netid):
 def instructions(request):
 	if request.user.is_authenticated():
 		return render(request, 'home/instructions.html', {
-			'netid': request.user,
+			'netid': str(request.user),
 		})
 	else:
 		return render(request, 'home/instructions_visitor.html')
@@ -360,5 +362,71 @@ def complete_petition(request, petitionid):
 	cur = conn.cursor()
 	cur.execute("UPDATE petition SET status = 'Completed' WHERE id = %s;", (petitionid,))
 	conn.commit()
+	cur.execute("SELECT * FROM petition WHERE id = %s;", (petitionid,))
+	petition = cur.fetchone()
+	# notify the user that USG took an action to the pending petition
+	petition_link = 'wtfprinceton.herokuapp.com/my_petitions/'+petition[1]
+	email_title = 'What To Fix: Princeton - Notification'
+	email_content = 'Hi '+petition[1]+',\n\nCongratulations! USG took an action to your petition "'+petition[2]+'". You can check your petitions at '+petition_link+'.\n\nThank you for using What To Fix: Princeton!\n\nWTFPrinceton Team'
+	email_from = settings.EMAIL_HOST_USER
+	email_to = petition[1]+'@princeton.edu'
+	send_mail(email_title, email_content, email_from, [email_to], fail_silently=True)
+
+	messages.success(request, 'The status has been changed to "Completed"')
+
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+def petition(request, petitionid):
+	conn = database.connect()
+	cur = conn.cursor()
+	cur.execute("SELECT * FROM petition WHERE id = %s;", (petitionid,))
+	petition = cur.fetchone()
+
+	if petition is None:
+		if request.user.is_authenticated():
+			return render(request, 'home/petition.html', {
+				'user': str(request.user),
+			})
+		else:
+			return render(request, 'home/petition_visitor.html')
+	else:
+		petition = addRemainingTime(petition)
+		if request.user.is_authenticated():
+			return render(request, 'home/petition.html', {
+				'petition': petition,
+				'user': str(request.user),
+			})
+		else:
+			return render(request, 'home/petition_visitor.html', {
+				'petition': petition,
+				'petitionid': str(petition[0]),
+		})
+
+
+def delete_comment(request, petitionid, commentnum):
+	if request.META.get('HTTP_REFERER') == None:
+		return HttpResponseRedirect('../../')
+
+	conn = database.connect()
+	cur = conn.cursor()
+	cur.execute("SELECT array_length(comments, 1) FROM petition WHERE id = %s;", (petitionid,))
+	commentLength = int(cur.fetchone()[0])
+
+	commentIndex = int(commentnum)
+	if commentIndex == 1:
+		cur.execute("UPDATE petition SET comments = comments[2:%s] WHERE id = %s;", (commentIndex, petitionid,))
+		cur.execute("UPDATE petition SET comment_netid = comment_netid[2:%s] WHERE id = %s;", (commentIndex, petitionid,))
+		conn.commit()
+	elif commentIndex == commentLength:
+		cur.execute("UPDATE petition SET comments = comments[1:%s] WHERE id = %s;", (commentIndex-1, petitionid))
+		cur.execute("UPDATE petition SET comment_netid = comment_netid[1:%s] WHERE id = %s;", (commentIndex-1, petitionid,))
+		conn.commit()
+	else:
+		cur.execute("UPDATE petition SET comments = comments[1:%s]||comments[%s:%s] WHERE id = %s;", (commentIndex-1, commentIndex+1, commentLength, petitionid,))
+		cur.execute("UPDATE petition SET comment_netid = comment_netid[1:%s]||comment_netid[%s:%s] WHERE id = %s;", (commentIndex-1, commentIndex+1, commentLength, petitionid,))
+		conn.commit()
+
+	messages.success(request, 'Success! Your comment has been removed!')
 
 	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

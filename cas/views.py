@@ -158,7 +158,8 @@ def login(request, next_page=None, required=False, gateway=False):
     :param: gateway Gatewayed response
 
     """
-
+    print 'next page: ',
+    print next_page
     next_page = '../../../'+next_page
 
     if not next_page:

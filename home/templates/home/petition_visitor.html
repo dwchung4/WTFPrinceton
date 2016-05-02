@@ -22,13 +22,8 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-          <a href="{% url 'home:my_petitions' user %}">
-            <span class="glyphicon glyphicon-th-list"></span>&nbsp; My Petitions
-          </a>
-        </li>
-        <li>
-          <a href="{% url 'home:logout' %}">
-            <span class="glyphicon glyphicon-off"></span>&nbsp; Logout
+          <a href="{% url 'home:login' "" %}">
+            <span class="glyphicon glyphicon-off"></span>&nbsp; Login
           </a>
         </li>
       </ul>
@@ -37,15 +32,15 @@
 </nav>
 
 <div class='jumbotron text-center'>
-<div class='container' id='box'>
-<h1 style='color:white'>Petitions {{netid}}@ has written!</h1>
-</div>
+  <div class='container' id='box'>
+    <h1 style='color:white'>Petition by {{ petition.1 }}</h1>
+  </div>
 </div>
 
 <div class="container-fluid songs-container">
 
-{% if not petitions %}
-  <h1 align='center'>This user has written no petitions. :(</h1>
+{% if not petition %}
+  <h1 align='center'>There is no petition with this petition #</h1>
 {%else%}
 
 <!-- notifications -->
@@ -61,13 +56,12 @@
 </ul>
 {% endif %}
 
-	<!-- display petitions -->
-{% for petition in petitions %}
+<!-- display petition -->
 <div class="container">
   <div class='row'>
     <!-- votes and expiration-->
-    <div class='col-lg-1'>
-      <a href='{% url 'home:vote' petition.0 petition.1 %}'><span class='glyphicon glyphicon-thumbs-up' style='font-size:300%' aria-hidden='true'></span></a>
+    <div class='col-lg-1 col-md-1 col-sm-1 col-xs-2'>
+      <a href='{% url 'home:login' "petition/"|add:petitionid %}'><span class='glyphicon glyphicon-thumbs-up' style='font-size:300%;font-size: 4vw' aria-hidden='true'></span></a>
       <h5>{{ petition.6 }}/10</h5>
 
       {% if petition.7 == "Pending" %}
@@ -78,9 +72,17 @@
 
         <h5>Expires in:</h5>
         {% if petition.13 == 'days' %}
-          <h5>{{ petition.12 }} days</h5>
+          {% if petition.12 == 1 %}
+            <h5>1 day</h5>
+          {% else %}
+            <h5>{{ petition.12 }} days</h5>
+          {% endif %}
         {% elif petition.13 == 'hours' %}
-          <h5> {{ petition.12 }} hours</h5>
+          {% if petition.12 == 1 %}
+            <h5>1 hour</h5>
+          {% else %}
+            <h5>{{ petition.12 }} hours</h5>
+          {% endif %}
         {% else %}
           <h5> {{ petition.12 }} min</h5>
         {% endif %}
@@ -94,51 +96,23 @@
         <h5>Completed</h5>
 
       {% endif %}
-
+      
     </div>
 
     <!-- petition info -->
     <div class='col-lg-11 col-md-11 col-sm-11 col-xs-10'>
-      <div class="panel panel-default">
+      <div class="panel panel-default
+      ">
         <div class="panel-heading panel-heading-custom">
-
-          <!-- delete button -->
-          {% if user == petition.1 %}
-            <button href=#{{ petition.0 }} type='button' class='btn btn-default pull-right' data-toggle='collapse'>
-              <span class="glyphicon glyphicon-remove">
-              </span>
-            </button>
-          {% endif %}
-
-          <!-- complete petition (for USG) -->
-          {% if netid == 'dcfive' and petition.7 == 'Pending' %}
-            <a href="{% url 'home:complete_petition' petition.0 %}" class="btn btn-default pull-right" role="button">Complete this petition</a>
-          {% endif %}
-
           <h1 class="panel-title" style='word-wrap: break-word;'><a href="{% url 'home:petition' petition.0 %}">{{ petition.2 }}</a></h1>
           By <a href='{% url 'home:my_petitions' petition.1 %}' style='color:inherit;'>{{ petition.1 }}</a> </br>
-        </div>
+          </div>
         <div class="panel-body" style='word-wrap: break-word;'>
             {{ petition.3 }}
         </div>
         <div class="panel-body" style='word-wrap: break-word; font-size:12px;'>
             <i>{{ petition.4 }}, {{ petition.10 }} (#{{ petition.0 }})</i>
         </div>
-      </div>
-
-      <!-- delete_petition confirmation -->
-      <div class='collapse' id={{ petition.0 }}>
-        <p>Please confirm that you want to delete this petition</p>
-        <a href='{% url 'home:delete_petition' petition.0 %}' class='btn btn-success' role='button'>
-          <span class='glyphicon glyphicon-ok-circle' style='font-size: 1.5vw'>
-          </span> Yes, delete this petition
-        </a>
-        <button href=#{{ petition.0 }} type='button' class='btn btn-danger' data-toggle='collapse'>
-          <span class='glyphicon glyphicon-remove-circle' style='font-size: 1.5vw'>
-          </span> No, don't delete this petition
-        </button>
-        </br>
-        </br>
       </div>
     </div>
   </div>
@@ -147,12 +121,12 @@
   <div class='row'>
     <div class='col-lg-offset-1 col-lg-11 col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11 col-xs-offset-2 col-xs-10'>
       <div class="input-group">
-        <form class="form-inline" method="get" action="{% url 'home:add_comment' petition.0 %}">
+        <form class="form-inline" method="get" action="{% url 'home:login' "" %}">
           {% csrf_token %}
           <div class ="form-group">
               <input type="text" class="form-control" name="r" value="{{ request.GET.r }}" placeholder="Write a comment!" size="100">
           </div>
-          <button type="submit" class="btn btn-success">Comment</button>
+          <button type="submit" class="btn btn-success disabled">Comment</button>
         </form>
       </span>
      </div>
@@ -182,23 +156,16 @@
     {% for comment_netid in petition.11 %}
       {% if forloop.counter == forloop.parentloop.counter %}
         <li class="list-group-item" style='word-wrap: break-word; max-height:100px; overflow:auto'>
-          <a href='{% url 'home:my_petitions' comment_netid %}' style='color:inherit; font-weight: bold'>{{ comment_netid }}</a> - {{ comment }}
-          {% if user == comment_netid %}
-            <a href='{% url 'home:delete_comment' petition.0 forloop.counter %}' class='btn btn-default pull-right btn-xs' role='button'>
-              <span class='glyphicon glyphicon-remove'>
-              </span>
-            </a>
-          {%endif%}
+          <a href='{% url 'home:login' "my_petitions/"|add:comment_netid %}' style='color:inherit; font-weight: bold'>{{ comment_netid }}</a> - {{ comment }}
         </li>
       {% endif %}
     {% endfor %}
   {% endfor %}
   </ul>
+  </br>
 </div>
-
-</br>
-{% endfor %}
 {%endif%}
-</div>
+</body>
+</html>
 
 {% endblock %}

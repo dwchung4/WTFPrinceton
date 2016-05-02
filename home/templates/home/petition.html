@@ -22,7 +22,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-          <a href="{% url 'home:my_petitions' netid %}">
+          <a href="{% url 'home:my_petitions' user %}">
             <span class="glyphicon glyphicon-th-list"></span>&nbsp; My Petitions
           </a>
         </li>
@@ -36,23 +36,17 @@
   </div>
 </nav>
 
-<div class="jumbotron text-center">
-  <div class='cover panel center-block ' id='box'>
-  	<div class="page-header">
-      <h1><span class="text-black"><a href="{% url 'home:index' %}" style='color:white; text-decoration: inherit;'>What To Fix: Princeton</a></span></h1>
-  	</div>
-
-    <div class="container">
-  	 <a href="{% url 'home:create_petition' %}" class="btn btn-lg btn-default" role="button">
-  		<span class="glyphicon glyphicon-plus">
-  		</span>
-  		Create new petition
-  	 </a>
-    </div>
-    <div class='spacer'></div>
+<div class='jumbotron text-center'>
+  <div class='container' id='box'>
+    <h1 style='color:white'>Petition by {{ petition.1 }}</h1>
   </div>
 </div>
 
+<div class="container-fluid songs-container">
+
+{% if not petition %}
+  <h1 align='center'>There is no petition with this petition #</h1>
+{%else%}
 
 <!-- notifications -->
 {% if messages %}
@@ -67,103 +61,12 @@
 </ul>
 {% endif %}
 
-
+	<!-- display petitions -->
 <div class="container">
-	<h1>Petitions</h1>
-	<div class="row">
-		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-			<div class="input-group" style='max-height: 50px'>
-        <form class = "form-inline" role="search" method="get" action="{% url 'home:index' %}">
-          <div class="form-group" style='display:inline-block'>
-              <input type="text" class="form-control" name="q" value="{{ request.GET.q }}" placeholder="Search by title, content, NetID, and petition #" size="50" autofocus>
-          </div>
-          <button type="submit" class="btn btn-primary pull-right" style='display:inline-block'>Search</button>
-        </form>
-      </div>
-		</div>
-	</div>
-</div>
-
-</br>
-
-<!-- sort thru petitions -->
-<div class="container">
-  <h5>Filters</h5>
-  <div class="row">
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-      <form class = "form-inline" role="search" method="get" action="{% url 'home:index' %}">
-        <div class="form-group">
-          <select class="form-control input-sm" name="order" value="{{ request.GET.order }}" style='width:auto; display:inline-block;'>
-            {% if orderList %}
-              <option value="{{ orderList.0 }}">{{ orderList.0 }}</option>
-              <option value="{{ orderList.1 }}">{{ orderList.1 }}</option>
-            {% else %}
-              <option value="Recent">Recent</option>
-              <option value="Top">Top</option>
-            {% endif %}
-          </select>
-
-          <select class="form-control input-sm" name="status" value="{{ request.GET.status }}" style='margin-left: 5px; width:auto; display:inline-block;'>
-            {% if statusList %}
-              <option value="{{ statusList.0 }}">{{ statusList.0 }}</option>
-              <option value="{{ statusList.1 }}">{{ statusList.1 }}</option>
-              <option value="{{ statusList.2 }}">{{ statusList.2 }}</option>
-              <option value="{{ statusList.3 }}">{{ statusList.3 }}</option>
-              <option value="{{ statusList.4 }}">{{ statusList.4 }}</option>
-            {% else %}
-              <option value="Active">All</option>
-              <option value="Active">Active</option>
-              <option value="Expired">Expired</option>
-              <option value="Pending">Pending</option>
-              <option value="Completed">Completed</option>
-            {% endif %}
-          </select>
-
-          <select class="form-control input-sm" name="category" value="{{ request.GET.category }}" style='margin-left: 5px; width:auto; display:inline-block;'>
-          {% if categoryList %}
-            <option value="{{ categoryList.0 }}">{{ categoryList.0 }}</option>
-            <option value="{{ categoryList.1 }}">{{ categoryList.1 }}</option>
-            <option value="{{ categoryList.2 }}">{{ categoryList.2 }}</option>
-            <option value="{{ categoryList.3 }}">{{ categoryList.3 }}</option>
-            <option value="{{ categoryList.4 }}">{{ categoryList.4 }}</option>
-            <option value="{{ categoryList.5 }}">{{ categoryList.5 }}</option>
-            <option value="{{ categoryList.6 }}">{{ categoryList.6 }}</option>
-            <option value="{{ categoryList.7 }}">{{ categoryList.7 }}</option>
-            <option value="{{ categoryList.8 }}">{{ categoryList.8 }}</option>
-          {% else %}
-            <option value="All">All</option>
-            <option value="Academics">Academics</option>
-            <option value="Athletics">Athletics &amp; Recreation</option>
-            <option value="Community Issues">Community Issues</option>
-            <option value="Dining">Dining</option>
-            <option value="Housing &amp; Facilities">Housing &amp; Facilities</option>
-            <option value="Student Activities">Student Activities</option>
-            <option value="Student Services">Student Services</option>
-            <option value="Other">Other</option>
-          {% endif %}
-          </select>
-        </div>
-        <button type="submit" class="btn btn=sm btn-primary" role="button" style='margin-left: 5px; width:auto; display:inline-block;'>
-          Filter
-        </button>
-      </form>
-
-    </div>
-  </div>
-</div>
-</br>
-
-<!-- display petitions -->
-{%if petitions|length == 0 %}
-<h1 style='text-align: center;'>There are no relevant petitions to show :(</h1>
-{%else%}
-{% for petition in petitions %}
-
-<div class="container" style=''>
   <div class='row'>
     <!-- votes and expiration-->
-    <div class='col-lg-1 col-md-1 col-sm-1 col-xs-2'>
-      <a href='{% url 'home:vote' petition.0 "" %}'><span class='glyphicon glyphicon-thumbs-up' style='font-size:300%;font-size: 4vw' aria-hidden='true'></span></a>
+    <div class='col-lg-1'>
+      <a href='{% url 'home:vote' petition.0 petition.1 %}'><span class='glyphicon glyphicon-thumbs-up' style='font-size:300%' aria-hidden='true'></span></a>
       <h5>{{ petition.6 }}/10</h5>
 
       {% if petition.7 == "Pending" %}
@@ -206,8 +109,8 @@
       <div class="panel panel-default">
         <div class="panel-heading panel-heading-custom">
 
-          <!-- delete_petition button -->
-          {% if netid == petition.1 %}
+          <!-- delete button -->
+          {% if user == petition.1 %}
             <button href=#{{ petition.0 }} type='button' class='btn btn-default pull-right' data-toggle='collapse'>
               <span class="glyphicon glyphicon-remove">
               </span>
@@ -219,11 +122,9 @@
             <a href="{% url 'home:complete_petition' petition.0 %}" class="btn btn-default pull-right" role="button">Complete this petition</a>
           {% endif %}
 
-          <!-- petition title, author, category, date -->
           <h1 class="panel-title" style='word-wrap: break-word;'><a href="{% url 'home:petition' petition.0 %}">{{ petition.2 }}</a></h1>
           By <a href='{% url 'home:my_petitions' petition.1 %}' style='color:inherit;'>{{ petition.1 }}</a> </br>
         </div>
-        <!-- petition content -->
         <div class="panel-body" style='word-wrap: break-word;'>
             {{ petition.3 }}
         </div>
@@ -246,7 +147,6 @@
         </br>
         </br>
       </div>
-
     </div>
   </div>
 
@@ -261,19 +161,9 @@
           </div>
           <button type="submit" class="btn btn-success">Comment</button>
         </form>
-      </span>
      </div>
     </div>
   </div>
-
-  <!-- trying to redo commenting
-  <div class='row'>
-  <div class='form-inline col-lg-offset-1 col-lg-11 col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11 col-xs-offset-2 col-xs-10' method="get" action="{% url 'home:add_comment' petition.0 %}">
-  {% csrf_token %}
-  <input type="text" class="form-control" placeholder="Write a comment!" name="r" value="{{ request.GET.r }}" style='max-width: 15em ;display:inline-block'>
-  <button type="submit" class="btn btn-success" style='display:inline-block'>Comment</button>
-  </div>
-  </div>-->
 
   <!-- show comments -->
   <div class='row'>
@@ -294,13 +184,12 @@
   </div>
   <!-- list of comments-->
   <ul class="list-group col-lg-offset-1 col-lg-11 col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11 col-xs-offset-2 col-xs-10 collapse" id=com{{petition.0}}>
-
   {% for comment in petition.8 %}
     {% for comment_netid in petition.11 %}
       {% if forloop.counter == forloop.parentloop.counter %}
         <li class="list-group-item" style='word-wrap: break-word; max-height:100px; overflow:auto'>
           <a href='{% url 'home:my_petitions' comment_netid %}' style='color:inherit; font-weight: bold'>{{ comment_netid }}</a> - {{ comment }}
-          {% if netid == comment_netid %}
+          {% if user == comment_netid %}
             <a href='{% url 'home:delete_comment' petition.0 forloop.counter %}' class='btn btn-default pull-right btn-xs' role='button'>
               <span class='glyphicon glyphicon-remove'>
               </span>
@@ -310,13 +199,11 @@
       {% endif %}
     {% endfor %}
   {% endfor %}
-
   </ul>
-  </br>
-  </div>
-{% endfor %}
+</div>
+
+</br>
 {%endif%}
-</body>
-</html>
+</div>
 
 {% endblock %}
