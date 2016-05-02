@@ -154,6 +154,9 @@
 </br>
 
 <!-- display petitions -->
+{%if petitions|length == 0 %}
+<h1 style='text-align: center;'>There are no relevant petitions to show :(</h1>
+{%else%}
 {% for petition in petitions %}
 
 <div class="container" style=''>
@@ -303,7 +306,7 @@
   </br>
   </div>
 {% endfor %}
-
+{%endif%}
 </body>
 </html>
 
