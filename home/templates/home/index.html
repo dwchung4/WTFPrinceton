@@ -288,6 +288,12 @@
       {% if forloop.counter == forloop.parentloop.counter %}
         <li class="list-group-item" style='word-wrap: break-word; max-height:100px; overflow:auto'>
           <a href='{% url 'home:my_petitions' comment_netid %}' style='color:inherit; font-weight: bold'>{{ comment_netid }}</a> - {{ comment }}
+          {% if netid == comment_netid %}
+            <button href=#{{ petition.0 }} type='button' class='btn btn-default pull-right btn-xs' data-toggle='collapse'>
+              <span class="glyphicon glyphicon-remove">
+              </span>
+            </button>
+          {%endif%}
         </li>
       {% endif %}
     {% endfor %}
