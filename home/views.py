@@ -427,6 +427,6 @@ def delete_comment(request, petitionid, commentnum):
 		cur.execute("UPDATE petition SET comment_netid = comment_netid[1:%s]||comment_netid[%s:%s] WHERE id = %s;", (commentIndex-1, commentIndex+1, commentLength, petitionid,))
 		conn.commit()
 
-	messages.success(request, 'Success! Your comment has been removed!')
+	messages.success(request, 'Your comment has been removed')
 
 	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
