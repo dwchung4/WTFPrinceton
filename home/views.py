@@ -205,7 +205,7 @@ def add_comment(request, id):
 
 def my_petitions(request, netid):
 	if not request.user.is_authenticated():
-		return HttpResponseRedirect('../login/'+str(netid))
+		return HttpResponseRedirect('../../login/my_petitions/'+str(netid))
 	else:
 		query = request.GET.get("r")
 		if query:
