@@ -6,7 +6,7 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 from django.views.generic.base import RedirectView
 
 urlpatterns = [
-	url(r'^', include('home.urls')),
+	url(r'^', include('home.urls', namespace="home")),
     url(r'^admin/', admin.site.urls),
 ]
 
