@@ -94,7 +94,7 @@ def complete_petition(request, petitionid):
 	conn.commit()
 	cur.execute("SELECT * FROM petition WHERE id = %s;", (petitionid,))
 	petition = cur.fetchone()
-	
+
 	# notify the user that USG took an action to the pending petition
 	petition_link = 'wtfprinceton.herokuapp.com/my_petitions/'+petition[1]
 	email_title = 'What To Fix: Princeton - Notification'
@@ -358,6 +358,24 @@ def petition(request, petitionid):
 			return render(request, 'home/petition_visitor.html')
 	else:
 		petition = addRemainingTime(petition)
+		if petition[12] < 0 and petition[7] == 'Active':
+			conn1 = database.connect()
+			cur1 = conn1.cursor()
+			cur1.execute("UPDATE petition SET status = 'Expired' WHERE id = %s;", (petition[0],))
+			conn1.commit()
+
+			# notify the user that the petition expired
+			petition_link = 'wtfprinceton.herokuapp.com/my_petitions/'+petition[1]
+			email_title = 'What To Fix: Princeton - Notification'
+			email_content = 'Hi '+petition[1]+',\n\nYour petition "'+petition[2]+'" did not receive enough vote and expired. You can check your petitions at '+petition_link+'.\n\nThank you for using What To Fix: Princeton!\n\nWTFPrinceton Team'
+			email_from = settings.EMAIL_HOST_USER
+			email_to = petition[1]+'@princeton.edu'
+			send_mail(email_title, email_content, email_from, [email_to], fail_silently=True)
+
+			tempList = list(petition)
+			tempList[7] = 'Expired'
+			petition = tuple(tempList)
+
 		if request.user.is_authenticated():
 			return render(request, 'home/petition.html', {
 				'petition': petition,
